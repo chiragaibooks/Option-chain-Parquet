@@ -1,57 +1,65 @@
 import sqlite3
+import pandas as pd
 
-conn = sqlite3.connect("data/market_data.db")
-cur = conn.cursor()
+DB = "data/market_data.db"
 
-# All (symbol, date) pairs with NULL pivots
-cur.execute("SELECT DISTINCT stock_name, substr(datetime,1,10) FROM indexes WHERE pivot IS NULL")
-nulls = cur.fetchall()
-print(f"NULL pivot (symbol, date) pairs: {len(nulls)}")
+conn = sqlite3.connect(DB)
+df = pd.read_sql("SELECT stock_name, datetime, high, low, close FROM indexes ORDER BY stock_name, datetime", conn)
+print(f"Loaded {len(df)} rows")
 
-updated = 0
-skipped = []
-for symbol, date in nulls:
-    row = cur.execute("""
-        SELECT MAX(high), MIN(low)
-        FROM indexes
-        WHERE stock_name=? AND substr(datetime,1,10)=(
-            SELECT MAX(substr(datetime,1,10)) FROM indexes
-            WHERE stock_name=? AND substr(datetime,1,10)<?)
-    """, (symbol, symbol, date)).fetchone()
+df["_date"] = df["datetime"].str[:10]
+total_updated = 0
 
-    last_close = cur.execute("""
-        SELECT close FROM indexes
-        WHERE stock_name=? AND substr(datetime,1,10)=(
-            SELECT MAX(substr(datetime,1,10)) FROM indexes
-            WHERE stock_name=? AND substr(datetime,1,10)<?)
-        ORDER BY datetime DESC LIMIT 1
-    """, (symbol, symbol, date)).fetchone()
+for sym, sym_df in df.groupby("stock_name"):
+    daily = (
+        sym_df.groupby("_date")
+        .agg(d_high=("high", "max"), d_low=("low", "min"), d_close=("close", "last"))
+        .reset_index()
+        .sort_values("_date")
+    )
+    daily["ph"] = daily["d_high"].shift(1)
+    daily["pl"] = daily["d_low"].shift(1)
+    daily["pc"] = daily["d_close"].shift(1)
+    daily = daily.dropna(subset=["ph"])
 
-    if not row or row[0] is None or not last_close:
-        skipped.append((symbol, date))
-        continue
+    daily["pivot"]    = (daily["ph"] + daily["pl"] + daily["pc"]) / 3
+    daily["pivot_r1"] = 2 * daily["pivot"] - daily["pl"]
+    daily["pivot_r2"] = daily["pivot"] + (daily["ph"] - daily["pl"])
+    daily["pivot_r3"] = daily["ph"] + 2 * (daily["pivot"] - daily["pl"])
+    daily["pivot_s1"] = 2 * daily["pivot"] - daily["ph"]
+    daily["pivot_s2"] = daily["pivot"] - (daily["ph"] - daily["pl"])
+    daily["pivot_s3"] = daily["pl"] - 2 * (daily["ph"] - daily["pivot"])
 
-    ph, pl, pc = row[0], row[1], last_close[0]
-    pivot    = (ph + pl + pc) / 3
-    pivot_r1 = 2*pivot - pl
-    pivot_r2 = pivot + (ph - pl)
-    pivot_r3 = ph + 2*(pivot - pl)
-    pivot_s1 = 2*pivot - ph
-    pivot_s2 = pivot - (ph - pl)
-    pivot_s3 = pl - 2*(ph - pivot)
+    rows_updated = 0
+    for _, row in daily.iterrows():
+        conn.execute("""
+            UPDATE indexes SET
+                pivot=?, pivot_r1=?, pivot_r2=?, pivot_r3=?,
+                pivot_s1=?, pivot_s2=?, pivot_s3=?
+            WHERE stock_name=? AND substr(datetime,1,10)=?
+        """, (
+            row["pivot"], row["pivot_r1"], row["pivot_r2"], row["pivot_r3"],
+            row["pivot_s1"], row["pivot_s2"], row["pivot_s3"],
+            sym, row["_date"]
+        ))
+        rows_updated += conn.execute("SELECT changes()").fetchone()[0]
 
-    cur.execute("""
-        UPDATE indexes SET pivot=?,pivot_r1=?,pivot_r2=?,pivot_r3=?,
-        pivot_s1=?,pivot_s2=?,pivot_s3=?
-        WHERE stock_name=? AND substr(datetime,1,10)=? AND pivot IS NULL
-    """, (pivot,pivot_r1,pivot_r2,pivot_r3,pivot_s1,pivot_s2,pivot_s3,symbol,date))
-    updated += cur.rowcount
+    print(f"  {sym}: {rows_updated} rows updated")
+    total_updated += rows_updated
 
 conn.commit()
-print(f"Updated : {updated} rows")
-print(f"Skipped (no prev day in DB): {skipped}")
-
-cur.execute("SELECT stock_name, substr(datetime,1,10), COUNT(*) FROM indexes WHERE pivot IS NULL GROUP BY 1,2 ORDER BY 2 DESC,1")
-remaining = cur.fetchall()
-print(f"Remaining NULL rows: {remaining if remaining else 'None — all clear'}")
 conn.close()
+print(f"\nTotal updated: {total_updated} rows")
+
+# verify
+conn = sqlite3.connect(DB)
+rows = conn.execute("""
+    SELECT stock_name,
+           SUM(CASE WHEN pivot IS NULL THEN 1 ELSE 0 END) AS null_pivots,
+           SUM(CASE WHEN pivot IS NOT NULL THEN 1 ELSE 0 END) AS filled
+    FROM indexes GROUP BY stock_name
+""").fetchall()
+conn.close()
+print("\nFinal status:")
+for r in rows:
+    print(f"  {r[0]}: filled={r[2]}, null={r[1]}")

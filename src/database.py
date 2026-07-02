@@ -154,6 +154,36 @@ CREATE TABLE IF NOT EXISTS {table} (
 _MARKET_OPEN  = "09:15"
 _MARKET_CLOSE = "15:45"
 
+_PIVOT_COLS = ("pivot", "pivot_r1", "pivot_r2", "pivot_r3", "pivot_s1", "pivot_s2", "pivot_s3")
+
+
+def _fetch_existing_pivots(db: str, symbol: str, trade_date: str) -> dict:
+    """
+    Return pivot values already stored in DB for symbol+date.
+    Returns empty dict if none found.
+    """
+    try:
+        with sqlite3.connect(db) as conn:
+            row = conn.execute(
+                """
+                SELECT pivot, pivot_r1, pivot_r2, pivot_r3,
+                       pivot_s1, pivot_s2, pivot_s3
+                FROM indexes
+                WHERE stock_name = ?
+                  AND substr(datetime,1,10) = ?
+                  AND pivot IS NOT NULL
+                LIMIT 1
+                """,
+                (symbol, trade_date),
+            ).fetchone()
+        if row:
+            return dict(zip(_PIVOT_COLS, row))
+    except Exception:
+        logger.exception("_fetch_existing_pivots failed for %s", symbol)
+    return {}
+
+
+
 
 def init_db(market_db: str, option_db: str) -> None:
     """Create all tables if they don't exist, and migrate pivot columns if needed."""
@@ -196,7 +226,7 @@ def _is_market_hours(df: pd.DataFrame) -> pd.Series:
 def insert_data(db: str, symbol: str, df: pd.DataFrame) -> None:
     """
     Compute indicators and store all Mon-Fri 09:15-15:45 candles.
-    Uses INSERT OR REPLACE to upsert — re-fetched candles overwrite stale rows.
+    Pivot values already in DB are reused — INSERT OR REPLACE never erases them.
     """
     from src.indicators import compute_indicators
     from src.signals import generate_signal
@@ -213,6 +243,19 @@ def insert_data(db: str, symbol: str, df: pd.DataFrame) -> None:
         return
 
     df["signal"] = df.apply(generate_signal, axis=1)
+
+    # ── Protect existing pivot values from being overwritten by NULL ──────────
+    # Group by trading date and stamp DB-cached pivots onto rows that have NULL
+    dt_series = pd.to_datetime(df["datetime"])
+    for trade_date in dt_series.dt.strftime("%Y-%m-%d").unique():
+        existing = _fetch_existing_pivots(db, symbol, trade_date)
+        if existing:
+            mask = dt_series.dt.strftime("%Y-%m-%d") == trade_date
+            for col, val in existing.items():
+                # Only fill NULLs — never overwrite a freshly computed value
+                null_mask = mask & df[col].isna()
+                df.loc[null_mask, col] = val
+            logger.debug("[%s] Reused DB pivots for %s", symbol, trade_date)
 
     for col in _MARKET_COLS:
         if col not in df.columns:

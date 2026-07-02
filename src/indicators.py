@@ -1,6 +1,7 @@
 """indicators.py — Technical indicators using the `ta` library."""
 import logging
 
+import numpy as np
 import pandas as pd
 from ta.trend import (
     SMAIndicator, EMAIndicator, WMAIndicator, MACD, ADXIndicator,
@@ -156,7 +157,43 @@ def compute_indicators(df: pd.DataFrame, db: str = "", symbol: str = "") -> pd.D
 
     df = compute_pivots(df, db=db, symbol=symbol)
 
+    # Replace inf/-inf with NaN across numeric columns only, then convert NaN to None for SQLite
+    num_cols = df.select_dtypes(include="number").columns
+    df[num_cols] = df[num_cols].replace([np.inf, -np.inf], np.nan)
+    df = df.where(pd.notnull(df), None)
+
     return df
+
+
+def _get_today_pivot_from_db(db: str, symbol: str, trade_date: str) -> dict:
+    """
+    Return today's pivot values from DB if already stored, else empty dict.
+    trade_date: 'YYYY-MM-DD'
+    """
+    if not db or not symbol:
+        return {}
+    try:
+        import sqlite3
+        with sqlite3.connect(db) as conn:
+            row = conn.execute(
+                """
+                SELECT pivot, pivot_r1, pivot_r2, pivot_r3,
+                       pivot_s1, pivot_s2, pivot_s3
+                FROM indexes
+                WHERE stock_name = ?
+                  AND substr(datetime,1,10) = ?
+                  AND pivot IS NOT NULL
+                LIMIT 1
+                """,
+                (symbol, trade_date),
+            ).fetchone()
+        if row:
+            keys = ("pivot", "pivot_r1", "pivot_r2", "pivot_r3",
+                    "pivot_s1", "pivot_s2", "pivot_s3")
+            return dict(zip(keys, row))
+    except Exception:
+        logger.exception("_get_today_pivot_from_db failed for %s", symbol)
+    return {}
 
 
 def _prev_day_ohlc_from_db(db: str, symbol: str, before_date: str):
@@ -210,9 +247,12 @@ def _prev_day_ohlc_from_db(db: str, symbol: str, before_date: str):
 def compute_pivots(df: pd.DataFrame, db: str = "", symbol: str = "") -> pd.DataFrame:
     """
     Standard Pivot Point levels using the previous trading day's H, L, C.
-    When the first date in the DataFrame has no prior day in the batch,
-    falls back to querying the DB directly so no candle is left with NULL pivots.
+    - If today's pivot already exists in DB, reuse it (never recompute from partial intraday data).
+    - For dates not in DB, compute from previous day's OHLC.
+    - Every candle of the same day gets identical pivot values.
     """
+    _PIVOT_COLS = ("pivot", "pivot_r1", "pivot_r2", "pivot_r3",
+                   "pivot_s1", "pivot_s2", "pivot_s3")
     try:
         df = df.copy()
         dt = pd.to_datetime(df["datetime"])
@@ -226,6 +266,14 @@ def compute_pivots(df: pd.DataFrame, db: str = "", symbol: str = "") -> pd.DataF
             .reset_index()
             .sort_values("_date")
         )
+
+        # Check DB for already-stored pivot values for each date
+        db_pivots = {}
+        if db and symbol:
+            for d in daily["_date"]:
+                cached = _get_today_pivot_from_db(db, symbol, str(d))
+                if cached:
+                    db_pivots[d] = cached
 
         daily["prev_high"]  = daily["d_high"].shift(1)
         daily["prev_low"]   = daily["d_low"].shift(1)
@@ -253,11 +301,19 @@ def compute_pivots(df: pd.DataFrame, db: str = "", symbol: str = "") -> pd.DataF
         daily["pivot_s2"] = daily["pivot"] - (ph - pl)
         daily["pivot_s3"] = pl - 2 * (ph - daily["pivot"])
 
-        pivot_cols = ["_date", "pivot", "pivot_r1", "pivot_r2", "pivot_r3",
-                      "pivot_s1", "pivot_s2", "pivot_s3"]
+        # Override computed values with DB-cached pivots (never recompute from partial data)
+        for col in _PIVOT_COLS:
+            daily[col] = daily.apply(
+                lambda row, c=col: db_pivots[row["_date"]][c]
+                if row["_date"] in db_pivots else row[c],
+                axis=1,
+            )
+
+        pivot_cols = ["_date"] + list(_PIVOT_COLS)
         df = df.merge(daily[pivot_cols], on="_date", how="left")
         df.drop(columns=["_date"], inplace=True)
-        logger.debug("Pivot levels computed for %d candles", len(df))
+        logger.debug("[%s] Pivot levels computed for %d candles (%d dates from DB cache)",
+                     symbol, len(df), len(db_pivots))
     except Exception:
         logger.exception("compute_pivots failed — pivot columns will be None")
         for col in ("pivot", "pivot_r1", "pivot_r2", "pivot_r3",
