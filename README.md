@@ -1,16 +1,16 @@
-<!-- Auto-generated — 2026-07-02 15:46:54 IST -->
+<!-- Auto-generated — 2026-07-02 16:02:11 IST -->
 
-**Last updated:** 2026-07-02 15:46:54 IST
+**Last updated:** 2026-07-02 16:02:11 IST
 
 ## 📊 Market Indexes
 
 <table>
 <tr><th>Symbol</th><th>Time (IST)</th><th>Close</th><th>Volume</th><th>RSI(14)</th><th>EMA20</th><th>MACD</th><th>ATR</th><th>ADX</th><th>Signal</th></tr>
-<tr><td><b>NIFTY50</b></td><td>2026-07-02 15:29</td><td>24167.95</td><td>26,480</td><td>48.52</td><td>24168.65</td><td>-2.40</td><td>7.90</td><td>16.90</td><td>🟡 HOLD</td></tr>
-<tr><td><b>BANKNIFTY</b></td><td>2026-07-02 15:29</td><td>57967.85</td><td>13,242</td><td>37.12</td><td>57999.68</td><td>-20.78</td><td>27.87</td><td>27.28</td><td>🔴 SELL</td></tr>
-<tr><td><b>SENSEX</b></td><td>2026-07-02 15:29</td><td>77502.19</td><td>523</td><td>52.14</td><td>77498.79</td><td>2.07</td><td>15.75</td><td>8.44</td><td>🟡 HOLD</td></tr>
-<tr><td><b>MIDCAPNIFTY</b></td><td>2026-07-02 15:29</td><td>17800.00</td><td>406</td><td>42.74</td><td>17803.69</td><td>-2.36</td><td>5.36</td><td>24.80</td><td>🔴 SELL</td></tr>
-<tr><td><b>FINNIFTY</b></td><td>2026-07-02 15:29</td><td>26845.35</td><td>244</td><td>44.15</td><td>26849.81</td><td>-7.58</td><td>11.83</td><td>17.75</td><td>🟡 HOLD</td></tr>
+<tr><td><b>NIFTY50</b></td><td>2026-07-02 09:59</td><td>24167.95</td><td>3,348,191</td><td>48.52</td><td>24168.65</td><td>-2.40</td><td>7.91</td><td>16.90</td><td>🟡 HOLD</td></tr>
+<tr><td><b>BANKNIFTY</b></td><td>2026-07-02 09:59</td><td>57967.85</td><td>1,533,685</td><td>37.12</td><td>57999.68</td><td>-20.78</td><td>27.87</td><td>27.27</td><td>🔴 SELL</td></tr>
+<tr><td><b>SENSEX</b></td><td>2026-07-02 09:59</td><td>77449.86</td><td>70,825</td><td>46.31</td><td>77467.14</td><td>-9.10</td><td>35.30</td><td>15.43</td><td>🟡 HOLD</td></tr>
+<tr><td><b>MIDCAPNIFTY</b></td><td>2026-07-02 15:29</td><td>17800.00</td><td>996</td><td>42.74</td><td>17803.69</td><td>-2.36</td><td>5.36</td><td>24.80</td><td>🔴 SELL</td></tr>
+<tr><td><b>FINNIFTY</b></td><td>2026-07-02 15:29</td><td>26845.35</td><td>52</td><td>44.15</td><td>26849.81</td><td>-7.58</td><td>11.83</td><td>17.75</td><td>🟡 HOLD</td></tr>
 </table>
 
 ---
