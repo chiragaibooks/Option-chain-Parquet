@@ -174,6 +174,7 @@ def _get_today_pivot_from_db(db: str, symbol: str, trade_date: str) -> dict:
         return {}
     try:
         import sqlite3
+        date_key = trade_date.replace("-", "")  # yyyyMMdd
         with sqlite3.connect(db) as conn:
             row = conn.execute(
                 """
@@ -181,11 +182,11 @@ def _get_today_pivot_from_db(db: str, symbol: str, trade_date: str) -> dict:
                        pivot_s1, pivot_s2, pivot_s3
                 FROM indexes
                 WHERE stock_name = ?
-                  AND substr(datetime,1,10) = ?
+                  AND substr(datetime,1,8) = ?
                   AND pivot IS NOT NULL
                 LIMIT 1
                 """,
-                (symbol, trade_date),
+                (symbol, date_key),
             ).fetchone()
         if row:
             keys = ("pivot", "pivot_r1", "pivot_r2", "pivot_r3",
@@ -200,43 +201,43 @@ def _prev_day_ohlc_from_db(db: str, symbol: str, before_date: str):
     """
     Query the DB for the most recent trading day's H/L/C strictly before before_date.
     Returns (high, low, close) or None if not found.
+    before_date: 'YYYY-MM-DD'
     """
     if not db or not symbol:
         return None
     try:
         import sqlite3
+        date_key = before_date.replace("-", "")  # yyyyMMdd
         with sqlite3.connect(db) as conn:
             row = conn.execute(
                 """
-                SELECT MAX(high), MIN(low),
-                       close
+                SELECT MAX(high), MIN(low), close
                 FROM   indexes
                 WHERE  stock_name = ?
-                  AND  substr(datetime,1,10) = (
-                           SELECT MAX(substr(datetime,1,10))
+                  AND  substr(datetime,1,8) = (
+                           SELECT MAX(substr(datetime,1,8))
                            FROM   indexes
                            WHERE  stock_name = ?
-                             AND  substr(datetime,1,10) < ?
+                             AND  substr(datetime,1,8) < ?
                        )
                 """,
-                (symbol, symbol, before_date),
+                (symbol, symbol, date_key),
             ).fetchone()
         if row and row[0] is not None:
-            # close = last candle of that day
             with sqlite3.connect(db) as conn:
                 last = conn.execute(
                     """
                     SELECT close FROM indexes
                     WHERE  stock_name = ?
-                      AND  substr(datetime,1,10) = (
-                               SELECT MAX(substr(datetime,1,10))
+                      AND  substr(datetime,1,8) = (
+                               SELECT MAX(substr(datetime,1,8))
                                FROM   indexes
                                WHERE  stock_name = ?
-                                 AND  substr(datetime,1,10) < ?
+                                 AND  substr(datetime,1,8) < ?
                            )
                     ORDER  BY datetime DESC LIMIT 1
                     """,
-                    (symbol, symbol, before_date),
+                    (symbol, symbol, date_key),
                 ).fetchone()
             return (row[0], row[1], last[0]) if last else None
     except Exception:

@@ -47,7 +47,7 @@ from src.database                    import init_db, insert_data, insert_option_
 from src.tradingview_client          import get_tv
 from src.fetch_data                  import fetch_all
 from src.readme_generator            import update_readme
-from src.option_chain.nse_scraper    import get_expiry_dates, get_spot, _fetch_live_option_chain, fetch_option_chain
+from src.option_chain.nse_scraper    import get_expiry_dates, get_spot, _fetch_live_option_chain, fetch_option_chain, fetch_sensex_option_chain, get_sensex_expiry_dates
 
 
 def _load_symbols():
@@ -133,6 +133,25 @@ def main() -> None:
 
     # 4. Fetch option chains from NSE (next 4 expiries per symbol)
     option_data = _fetch_option_chains(index_cfgs)
+
+    # 4b. Fetch SENSEX option chain from BSE
+    try:
+        sensex_spot     = get_spot("SENSEX") or 0.0
+        sensex_expiries = get_sensex_expiry_dates()
+        df_sensex_all   = fetch_sensex_option_chain(sensex_spot)
+        sensex_fetched  = []
+        if not df_sensex_all.empty:
+            for expiry in sensex_expiries:
+                df_exp = df_sensex_all[df_sensex_all["expiry"] == expiry].copy()
+                if not df_exp.empty:
+                    sensex_fetched.append((df_exp, expiry, sensex_spot))
+                    logger.info("[SENSEX] %s — %d rows", expiry, len(df_exp))
+        if sensex_fetched:
+            option_data["SENSEX"] = sensex_fetched
+        else:
+            logger.warning("[SENSEX] No option chain data fetched")
+    except Exception:
+        logger.exception("[SENSEX] Option chain fetch error")
 
     # 5. Store option chain data into symbol-specific tables
     for sym, fetched_list in option_data.items():

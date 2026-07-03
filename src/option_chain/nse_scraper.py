@@ -35,6 +35,12 @@ _NSE_LIVE_SYM = {
 }
 _MONTHLY_EXPIRY_SYMS = {"MIDCPNIFTY"}
 
+_BSE_HEADERS = {
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
+    "Accept": "application/json, text/plain, */*",
+    "Referer": "https://www.bseindia.com/",
+}
+
 _NSE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     "Accept-Language": "en-US,en;q=0.9",
@@ -343,6 +349,97 @@ def fetch_option_chain(
 
     logger.error("[%s] All option chain sources failed", symbol)
     return pd.DataFrame()
+
+
+# ── BSE SENSEX Option Chain ───────────────────────────────────────────────────
+
+def fetch_sensex_option_chain(spot: float) -> pd.DataFrame:
+    """
+    Fetch SENSEX option chain from BSE API.
+    Returns standardised DataFrame matching NSE option chain format.
+    """
+    try:
+        import requests
+        s = requests.Session()
+        s.headers.update(_BSE_HEADERS)
+        s.get("https://www.bseindia.com", timeout=10)
+        time.sleep(1)
+
+        url = "https://api.bseindia.com/BseIndiaAPI/api/getOptionChain/w?scripcode=BSE_SENSEX&expirydate=&optiontype=&strikeprice="
+        resp = s.get(url, timeout=15)
+        data = resp.json()
+
+        rows = []
+        for item in data.get("optionChain", []):
+            expiry_raw = item.get("ExpiryDate", "")
+            try:
+                expiry = datetime.strptime(expiry_raw[:10], "%Y-%m-%d").strftime("%d-%b-%Y")
+                tte = max((datetime.strptime(expiry, "%d-%b-%Y").date() - date.today()).days, 1) / 365.0
+            except Exception:
+                continue
+
+            strike = float(item.get("StrikePrice", 0))
+
+            for otype, ltp_key, oi_key, vol_key, iv_key in [
+                ("CE", "CallLTP", "CallOI", "CallVolume", "CallIV"),
+                ("PE", "PutLTP",  "PutOI",  "PutVolume",  "PutIV"),
+            ]:
+                ltp    = float(item.get(ltp_key) or 0)
+                oi     = float(item.get(oi_key)  or 0)
+                vol    = float(item.get(vol_key) or 0)
+                iv_raw = float(item.get(iv_key)  or 0)
+                iv     = iv_raw / 100 if iv_raw > 0 else 0.18
+                flag   = "c" if otype == "CE" else "p"
+                greeks = _greeks(flag, spot, strike, tte, iv) if spot > 0 and ltp > 0 else \
+                         {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+
+                rows.append({
+                    "expiry":      expiry,
+                    "strike":      strike,
+                    "option_type": otype,
+                    "ltp":         ltp,
+                    "volume":      vol,
+                    "oi":          oi,
+                    "oi_chg":      float(item.get("CallOIChange" if otype == "CE" else "PutOIChange") or 0),
+                    "iv":          round(iv_raw, 2),
+                    **greeks,
+                })
+
+        df = pd.DataFrame(rows)
+        logger.info("[SENSEX] BSE live: %d rows (spot=%.2f)", len(df), spot)
+        return df
+    except Exception as e:
+        logger.warning("[SENSEX] BSE fetch failed: %s", e)
+        return pd.DataFrame()
+
+
+def get_sensex_expiry_dates() -> List[str]:
+    """Return next 4 SENSEX expiry dates from BSE API."""
+    try:
+        import requests
+        s = requests.Session()
+        s.headers.update(_BSE_HEADERS)
+        s.get("https://www.bseindia.com", timeout=10)
+        time.sleep(1)
+        url = "https://api.bseindia.com/BseIndiaAPI/api/getOptionChain/w?scripcode=BSE_SENSEX&expirydate=&optiontype=&strikeprice="
+        data = s.get(url, timeout=15).json()
+        expiries = sorted(set(
+            datetime.strptime(item["ExpiryDate"][:10], "%Y-%m-%d").strftime("%d-%b-%Y")
+            for item in data.get("optionChain", [])
+            if item.get("ExpiryDate")
+        ), key=lambda e: datetime.strptime(e, "%d-%b-%Y"))
+        today = date.today()
+        upcoming = [e for e in expiries if datetime.strptime(e, "%d-%b-%Y").date() >= today]
+        return upcoming[:4]
+    except Exception as e:
+        logger.warning("[SENSEX] expiry fetch failed: %s", e)
+        # fallback: next 4 Fridays (BSE uses Friday expiry)
+        result, cursor = [], date.today()
+        while len(result) < 4:
+            cursor += timedelta(days=1)
+            if cursor.weekday() == 4:  # Friday
+                result.append(cursor.strftime("%d-%b-%Y"))
+        return result
 
 
 def get_spot(symbol: str, market_db: str = "data/market_data.db") -> Optional[float]:

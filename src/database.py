@@ -92,6 +92,7 @@ _OC_TABLES = {
     "BANKNIFTY":   "banknifty_option_chain",
     "MIDCAPNIFTY": "midcapnifty_option_chain",
     "FINNIFTY":    "finnifty_option_chain",
+    "SENSEX":      "sensex_option_chain",
 }
 
 _INDEX_LABEL = {
@@ -99,6 +100,7 @@ _INDEX_LABEL = {
     "BANKNIFTY":   "BankNifty",
     "MIDCAPNIFTY": "MidcapNifty",
     "FINNIFTY":    "FinNifty",
+    "SENSEX":      "Sensex",
 }
 
 _OC_COLS = [
@@ -170,11 +172,11 @@ def _fetch_existing_pivots(db: str, symbol: str, trade_date: str) -> dict:
                        pivot_s1, pivot_s2, pivot_s3
                 FROM indexes
                 WHERE stock_name = ?
-                  AND substr(datetime,1,10) = ?
+                  AND substr(datetime,1,8) = ?
                   AND pivot IS NOT NULL
                 LIMIT 1
                 """,
-                (symbol, trade_date),
+                (symbol, trade_date.replace("-", "")),
             ).fetchone()
         if row:
             return dict(zip(_PIVOT_COLS, row))
@@ -210,7 +212,7 @@ def _to_ist_str(series: pd.Series) -> pd.Series:
         dt = dt.dt.tz_localize(IST)
     else:
         dt = dt.dt.tz_convert(IST)
-    return dt.dt.strftime("%Y-%m-%d %H:%M")
+    return dt.dt.strftime("%Y%m%d%H%M")
 
 
 def _is_market_hours(df: pd.DataFrame) -> pd.Series:
@@ -250,7 +252,7 @@ def insert_data(db: str, symbol: str, df: pd.DataFrame) -> None:
     for trade_date in dt_series.dt.strftime("%Y-%m-%d").unique():
         existing = _fetch_existing_pivots(db, symbol, trade_date)
         if existing:
-            mask = dt_series.dt.strftime("%Y-%m-%d") == trade_date
+            mask = dt_series.dt.strftime("%Y%m%d") == trade_date.replace("-", "")  # match yyyyMMdd prefix
             for col, val in existing.items():
                 # Only fill NULLs — never overwrite a freshly computed value
                 null_mask = mask & df[col].isna()

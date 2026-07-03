@@ -3,5 +3,5 @@ __pycache__/
 .history/
 .env
 *.log
-data/market_data.db
-data/option_chain.db
+data/market_data.csv
+data/option_chain.csv
