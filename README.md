@@ -1,23 +1,23 @@
-<!-- Auto-generated — 2026-07-03 11:16:54 IST -->
+<!-- Auto-generated — 2026-07-03 11:32:30 IST -->
 
-**Last updated:** 2026-07-03 11:16:54 IST
+**Last updated:** 2026-07-03 11:32:30 IST
 
 ## 📊 Market Indexes
 
 <table>
 <tr><th>Symbol</th><th>Time (IST)</th><th>Close</th><th>Volume</th><th>RSI(14)</th><th>EMA20</th><th>MACD</th><th>ATR</th><th>ADX</th><th>Signal</th></tr>
-<tr><td><b>NIFTY50</b></td><td>2026-07-03 11:14</td><td>24323.00</td><td>5,388</td><td>29.38</td><td>24335.68</td><td>-4.76</td><td>6.32</td><td>18.90</td><td>🟡 HOLD</td></tr>
-<tr><td><b>BANKNIFTY</b></td><td>2026-07-03 11:14</td><td>57956.80</td><td>1,502</td><td>19.50</td><td>58010.39</td><td>-29.57</td><td>21.47</td><td>46.06</td><td>🔴 SELL</td></tr>
-<tr><td><b>SENSEX</b></td><td>2026-07-03 11:00</td><td>78024.24</td><td>1</td><td>52.56</td><td>78021.41</td><td>4.39</td><td>17.83</td><td>7.56</td><td>🟡 HOLD</td></tr>
-<tr><td><b>MIDCAPNIFTY</b></td><td>2026-07-03 11:13</td><td>17821.90</td><td>12</td><td>34.69</td><td>17831.00</td><td>-3.88</td><td>5.43</td><td>26.14</td><td>🔴 SELL</td></tr>
-<tr><td><b>FINNIFTY</b></td><td>2026-07-03 11:14</td><td>26948.10</td><td>2</td><td>27.47</td><td>26966.21</td><td>-10.19</td><td>8.97</td><td>42.39</td><td>🔴 SELL</td></tr>
+<tr><td><b>NIFTY50</b></td><td>2026-07-03 11:30</td><td>24331.00</td><td>8,266</td><td>51.19</td><td>24328.98</td><td>-2.29</td><td>5.82</td><td>15.21</td><td>🟡 HOLD</td></tr>
+<tr><td><b>BANKNIFTY</b></td><td>2026-07-03 11:30</td><td>58000.25</td><td>376</td><td>57.00</td><td>57971.12</td><td>-10.65</td><td>22.42</td><td>35.58</td><td>🟢 BUY</td></tr>
+<tr><td><b>SENSEX</b></td><td>2026-07-03 11:14</td><td>77960.79</td><td>199</td><td>31.79</td><td>78002.95</td><td>-13.89</td><td>19.38</td><td>18.77</td><td>🟡 HOLD</td></tr>
+<tr><td><b>MIDCAPNIFTY</b></td><td>2026-07-03 11:29</td><td>17825.15</td><td>19</td><td>40.41</td><td>17830.98</td><td>-1.08</td><td>5.29</td><td>13.95</td><td>🟡 HOLD</td></tr>
+<tr><td><b>FINNIFTY</b></td><td>2026-07-03 11:28</td><td>26954.35</td><td>34</td><td>47.88</td><td>26953.03</td><td>-5.89</td><td>8.64</td><td>39.50</td><td>🟡 HOLD</td></tr>
 </table>
 
 ---
 
 # 📋 Option Chain
 
-## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24328.55`
+## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24326.55`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -123,7 +123,7 @@
 <tr><td>998,270</td><td>52,423</td><td>18.00</td><td>0.45</td><td>-</td><td><b>26300</b></td><td>-</td><td>2313.35</td><td>18.00</td><td>0</td><td>2,600</td></tr>
 </table>
 
-## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 57971.00`
+## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 57980.25`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -299,7 +299,7 @@
 <tr><td>105,150</td><td>10,605</td><td>18.00</td><td>5.00</td><td>-</td><td><b>65500</b></td><td>-</td><td>7407.80</td><td>18.00</td><td>0</td><td>7,950</td></tr>
 </table>
 
-## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 26954.40`
+## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 26951.55`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -405,7 +405,7 @@
 <tr><td>3,420</td><td>125</td><td>18.00</td><td>3.90</td><td>-</td><td><b>30000</b></td><td>-</td><td>3795.45</td><td>18.00</td><td>0</td><td>0</td></tr>
 </table>
 
-## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17831.20`
+## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17826.80`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
