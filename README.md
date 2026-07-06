@@ -1,23 +1,23 @@
-<!-- Auto-generated — 2026-07-06 12:43:22 IST -->
+<!-- Auto-generated — 2026-07-06 12:46:59 IST -->
 
-**Last updated:** 2026-07-06 12:43:22 IST
+**Last updated:** 2026-07-06 12:46:59 IST
 
 ## 📊 Market Indexes
 
 <table>
 <tr><th>Symbol</th><th>Time (IST)</th><th>Close</th><th>Volume</th><th>RSI(14)</th><th>EMA20</th><th>MACD</th><th>ATR</th><th>ADX</th><th>Signal</th></tr>
-<tr><td><b>NIFTY50</b></td><td>202607061241</td><td>24439.10</td><td>12,767</td><td>46.31</td><td>24442.44</td><td>1.86</td><td>6.02</td><td>18.14</td><td>🟡 HOLD</td></tr>
-<tr><td><b>BANKNIFTY</b></td><td>202607061241</td><td>58405.30</td><td>208</td><td>43.87</td><td>58429.00</td><td>8.55</td><td>23.73</td><td>28.39</td><td>🔴 SELL</td></tr>
-<tr><td><b>SENSEX</b></td><td>202607061227</td><td>78334.67</td><td>1,150</td><td>62.08</td><td>78316.13</td><td>12.55</td><td>17.42</td><td>30.16</td><td>🟡 HOLD</td></tr>
-<tr><td><b>MIDCAPNIFTY</b></td><td>202607061237</td><td>17840.60</td><td>1,450</td><td>48.66</td><td>17842.76</td><td>2.74</td><td>4.95</td><td>24.44</td><td>🟡 HOLD</td></tr>
-<tr><td><b>FINNIFTY</b></td><td>202607061240</td><td>27040.20</td><td>7</td><td>42.13</td><td>27051.36</td><td>2.06</td><td>10.42</td><td>14.58</td><td>🟡 HOLD</td></tr>
+<tr><td><b>NIFTY50</b></td><td>202607061244</td><td>24442.65</td><td>25,099</td><td>52.71</td><td>24442.29</td><td>1.24</td><td>6.04</td><td>15.79</td><td>🟡 HOLD</td></tr>
+<tr><td><b>BANKNIFTY</b></td><td>202607061244</td><td>58417.15</td><td>2,136</td><td>48.99</td><td>58424.40</td><td>3.13</td><td>24.13</td><td>25.60</td><td>🟡 HOLD</td></tr>
+<tr><td><b>SENSEX</b></td><td>202607061227</td><td>78332.12</td><td>1,150</td><td>61.19</td><td>78315.89</td><td>12.34</td><td>17.82</td><td>30.33</td><td>🟡 HOLD</td></tr>
+<tr><td><b>MIDCAPNIFTY</b></td><td>202607061243</td><td>17835.60</td><td>908</td><td>42.71</td><td>17840.51</td><td>-0.08</td><td>4.51</td><td>18.57</td><td>🟡 HOLD</td></tr>
+<tr><td><b>FINNIFTY</b></td><td>202607061242</td><td>27040.60</td><td>7</td><td>43.19</td><td>27049.18</td><td>-0.03</td><td>10.00</td><td>15.98</td><td>🟡 HOLD</td></tr>
 </table>
 
 ---
 
 # 📋 Option Chain
 
-## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24442.65`
+## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24444.10`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -123,7 +123,7 @@
 <tr><td>3,623,360</td><td>254,985</td><td>18.00</td><td>0.35</td><td>-</td><td><b>26300</b></td><td>-</td><td>2313.35</td><td>18.00</td><td>0</td><td>2,600</td></tr>
 </table>
 
-## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 58410.25`
+## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 58401.15`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -299,7 +299,7 @@
 <tr><td>126,240</td><td>6,797</td><td>18.00</td><td>4.15</td><td>-</td><td><b>65500</b></td><td>-</td><td>7407.80</td><td>18.00</td><td>0</td><td>7,950</td></tr>
 </table>
 
-## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 27037.85`
+## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 27029.95`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -406,7 +406,7 @@
 <tr><td>22,440</td><td>1,013</td><td>18.00</td><td>5.55</td><td>-</td><td><b>30000</b></td><td>-</td><td>3795.45</td><td>18.00</td><td>0</td><td>0</td></tr>
 </table>
 
-## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17838.75`
+## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17837.85`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
