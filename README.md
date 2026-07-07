@@ -1,23 +1,23 @@
-<!-- Auto-generated — 2026-07-07 12:46:59 IST -->
+<!-- Auto-generated — 2026-07-07 13:02:30 IST -->
 
-**Last updated:** 2026-07-07 12:46:59 IST
+**Last updated:** 2026-07-07 13:02:30 IST
 
 ## 📊 Market Indexes
 
 <table>
 <tr><th>Symbol</th><th>Time (IST)</th><th>Close</th><th>Volume</th><th>RSI(14)</th><th>EMA20</th><th>MACD</th><th>ATR</th><th>ADX</th><th>Signal</th></tr>
-<tr><td><b>NIFTY50</b></td><td>202607071244</td><td>24472.40</td><td>4,318</td><td>45.01</td><td>24474.10</td><td>-9.13</td><td>8.55</td><td>45.71</td><td>🟡 HOLD</td></tr>
-<tr><td><b>BANKNIFTY</b></td><td>202607071244</td><td>58325.15</td><td>837</td><td>39.35</td><td>58343.35</td><td>-24.16</td><td>23.24</td><td>39.50</td><td>🟡 HOLD</td></tr>
-<tr><td><b>SENSEX</b></td><td>202607071230</td><td>78528.70</td><td>300</td><td>38.61</td><td>78558.21</td><td>-15.95</td><td>22.11</td><td>26.22</td><td>🟡 HOLD</td></tr>
-<tr><td><b>MIDCAPNIFTY</b></td><td>202607071243</td><td>17823.05</td><td>102</td><td>57.24</td><td>17813.52</td><td>-2.83</td><td>6.08</td><td>26.68</td><td>🟢 BUY</td></tr>
-<tr><td><b>FINNIFTY</b></td><td>202607071245</td><td>27020.50</td><td>2</td><td>35.40</td><td>27035.98</td><td>-9.11</td><td>11.09</td><td>42.14</td><td>🟡 HOLD</td></tr>
+<tr><td><b>NIFTY50</b></td><td>202607071300</td><td>24463.75</td><td>13,152</td><td>46.87</td><td>24465.32</td><td>-4.46</td><td>10.23</td><td>32.73</td><td>🟡 HOLD</td></tr>
+<tr><td><b>BANKNIFTY</b></td><td>202607071300</td><td>58329.75</td><td>551</td><td>49.75</td><td>58324.19</td><td>-10.23</td><td>26.00</td><td>26.04</td><td>🟡 HOLD</td></tr>
+<tr><td><b>SENSEX</b></td><td>202607071246</td><td>78416.63</td><td>190</td><td>36.00</td><td>78453.03</td><td>-34.21</td><td>25.60</td><td>44.92</td><td>🟡 HOLD</td></tr>
+<tr><td><b>MIDCAPNIFTY</b></td><td>202607071259</td><td>17828.55</td><td>20</td><td>57.01</td><td>17823.39</td><td>2.15</td><td>4.88</td><td>15.73</td><td>🟡 HOLD</td></tr>
+<tr><td><b>FINNIFTY</b></td><td>202607071300</td><td>27035.65</td><td>4</td><td>53.44</td><td>27028.54</td><td>-4.11</td><td>12.39</td><td>26.58</td><td>🟡 HOLD</td></tr>
 </table>
 
 ---
 
 # 📋 Option Chain
 
-## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24461.65`
+## 🔗 NIFTY50 Option Chain &nbsp; `Expiry: 07-Jul-2026` &nbsp; `Spot: 24462.85`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -123,7 +123,7 @@
 <tr><td>1,368,575</td><td>148,382</td><td>18.00</td><td>0.30</td><td>-</td><td><b>26300</b></td><td>-</td><td>1892.75</td><td>18.00</td><td>3</td><td>2,600</td></tr>
 </table>
 
-## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 58306.00`
+## 🔗 BANKNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 58313.65`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -299,7 +299,7 @@
 <tr><td>104,610</td><td>12,316</td><td>18.00</td><td>4.50</td><td>-</td><td><b>65500</b></td><td>-</td><td>6930.00</td><td>18.00</td><td>1</td><td>7,980</td></tr>
 </table>
 
-## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 27020.70`
+## 🔗 FINNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 27026.45`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -366,8 +366,8 @@
 <tr><td>660</td><td>4</td><td>18.00</td><td>531.30</td><td>-</td><td><b>26850</b></td><td>-</td><td>261.60</td><td>18.00</td><td>26</td><td>2,280</td></tr>
 <tr><td>3,300</td><td>70</td><td>18.00</td><td>472.05</td><td>-</td><td><b>26900</b></td><td>-</td><td>278.70</td><td>18.00</td><td>621</td><td>7,560</td></tr>
 <tr><td>1,320</td><td>33</td><td>18.00</td><td>439.40</td><td>-</td><td><b>26950</b></td><td>-</td><td>300.25</td><td>18.00</td><td>62</td><td>1,680</td></tr>
-<tr style="background:#fffde7;font-weight:bold;"><td>21,540</td><td>929</td><td>18.00</td><td>411.60</td><td>-</td><td><b>27000</b>  ← ATM</td><td>-</td><td>320.35</td><td>18.00</td><td>928</td><td>16,560</td></tr>
-<tr><td>1,920</td><td>76</td><td>18.00</td><td>379.65</td><td>-</td><td><b>27050</b></td><td>-</td><td>340.45</td><td>18.00</td><td>84</td><td>1,320</td></tr>
+<tr><td>21,540</td><td>929</td><td>18.00</td><td>411.60</td><td>-</td><td><b>27000</b></td><td>-</td><td>320.35</td><td>18.00</td><td>928</td><td>16,560</td></tr>
+<tr style="background:#fffde7;font-weight:bold;"><td>1,920</td><td>76</td><td>18.00</td><td>379.65</td><td>-</td><td><b>27050</b>  ← ATM</td><td>-</td><td>340.45</td><td>18.00</td><td>84</td><td>1,320</td></tr>
 <tr><td>4,680</td><td>207</td><td>18.00</td><td>356.50</td><td>-</td><td><b>27100</b></td><td>-</td><td>365.40</td><td>18.00</td><td>169</td><td>4,620</td></tr>
 <tr><td>720</td><td>17</td><td>18.00</td><td>332.15</td><td>-</td><td><b>27150</b></td><td>-</td><td>388.40</td><td>18.00</td><td>93</td><td>1,320</td></tr>
 <tr><td>3,000</td><td>232</td><td>18.00</td><td>302.45</td><td>-</td><td><b>27200</b></td><td>-</td><td>420.70</td><td>18.00</td><td>123</td><td>2,520</td></tr>
@@ -407,7 +407,7 @@
 <tr><td>51,060</td><td>1,807</td><td>18.00</td><td>5.65</td><td>-</td><td><b>30000</b></td><td>-</td><td>3795.45</td><td>18.00</td><td>0</td><td>0</td></tr>
 </table>
 
-## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17821.25`
+## 🔗 MIDCAPNIFTY Option Chain &nbsp; `Expiry: 28-Jul-2026` &nbsp; `Spot: 17823.90`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -562,7 +562,7 @@
 <tr><td>240</td><td>21</td><td>18.00</td><td>1.15</td><td>-</td><td><b>16200</b></td><td>-</td><td>2114.80</td><td>18.00</td><td>0</td><td>0</td></tr>
 </table>
 
-## 🔗 SENSEX Option Chain &nbsp; `Expiry: 09-Jul-2026` &nbsp; `Spot: 78499.09`
+## 🔗 SENSEX Option Chain &nbsp; `Expiry: 09-Jul-2026` &nbsp; `Spot: 78417.13`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
@@ -581,159 +581,159 @@
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68000</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68300</b></td><td>-</td><td>-</td><td>64.06</td><td>950</td><td>809</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68400</b></td><td>-</td><td>-</td><td>63.00</td><td>55</td><td>35</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68500</b></td><td>-</td><td>-</td><td>62.21</td><td>1,186</td><td>1,157</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68600</b></td><td>-</td><td>-</td><td>63.39</td><td>38</td><td>26</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68700</b></td><td>-</td><td>-</td><td>62.49</td><td>111</td><td>25</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68800</b></td><td>-</td><td>-</td><td>60.81</td><td>40</td><td>13</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68900</b></td><td>-</td><td>-</td><td>61.09</td><td>70</td><td>87</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69000</b></td><td>-</td><td>-</td><td>59.25</td><td>1,198</td><td>1,286</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69100</b></td><td>-</td><td>-</td><td>59.48</td><td>51</td><td>61</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69200</b></td><td>-</td><td>-</td><td>60.21</td><td>8</td><td>63</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69300</b></td><td>-</td><td>-</td><td>58.10</td><td>11</td><td>16</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69400</b></td><td>-</td><td>-</td><td>58.62</td><td>37</td><td>38</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69500</b></td><td>-</td><td>-</td><td>56.19</td><td>1,416</td><td>800</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69600</b></td><td>-</td><td>-</td><td>57.12</td><td>96</td><td>25</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69700</b></td><td>-</td><td>-</td><td>56.25</td><td>161</td><td>43</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69800</b></td><td>-</td><td>-</td><td>55.94</td><td>133</td><td>80</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69900</b></td><td>-</td><td>-</td><td>53.60</td><td>185</td><td>115</td></tr>
-<tr><td>714</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70000</b></td><td>-</td><td>-</td><td>52.99</td><td>11,387</td><td>20,051</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70100</b></td><td>-</td><td>-</td><td>55.17</td><td>124</td><td>191</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70200</b></td><td>-</td><td>-</td><td>54.37</td><td>137</td><td>33</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70300</b></td><td>-</td><td>-</td><td>51.94</td><td>168</td><td>88</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70400</b></td><td>-</td><td>-</td><td>52.97</td><td>131</td><td>33</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70500</b></td><td>-</td><td>-</td><td>50.52</td><td>3,439</td><td>1,154</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70600</b></td><td>-</td><td>-</td><td>52.32</td><td>0</td><td>37</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70700</b></td><td>-</td><td>-</td><td>49.36</td><td>1,011</td><td>109</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70800</b></td><td>-</td><td>-</td><td>48.81</td><td>16</td><td>19</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70900</b></td><td>-</td><td>-</td><td>49.53</td><td>114</td><td>54</td></tr>
-<tr><td>51</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71000</b></td><td>-</td><td>-</td><td>47.53</td><td>9,987</td><td>5,344</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71100</b></td><td>-</td><td>-</td><td>46.85</td><td>101</td><td>40</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71200</b></td><td>-</td><td>-</td><td>46.31</td><td>294</td><td>52</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71300</b></td><td>-</td><td>-</td><td>45.82</td><td>301</td><td>64</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71400</b></td><td>-</td><td>-</td><td>45.68</td><td>257</td><td>88</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71500</b></td><td>-</td><td>-</td><td>44.36</td><td>14,705</td><td>3,069</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71600</b></td><td>-</td><td>-</td><td>43.81</td><td>436</td><td>66</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71700</b></td><td>-</td><td>-</td><td>43.31</td><td>364</td><td>70</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71800</b></td><td>-</td><td>-</td><td>42.92</td><td>548</td><td>82</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71900</b></td><td>-</td><td>-</td><td>42.42</td><td>1,568</td><td>316</td></tr>
-<tr><td>308</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72000</b></td><td>-</td><td>-</td><td>41.77</td><td>35,612</td><td>11,763</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72100</b></td><td>-</td><td>-</td><td>40.98</td><td>932</td><td>182</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72200</b></td><td>-</td><td>-</td><td>40.64</td><td>341</td><td>113</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72300</b></td><td>-</td><td>-</td><td>40.14</td><td>362</td><td>125</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72400</b></td><td>-</td><td>-</td><td>39.89</td><td>476</td><td>192</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72500</b></td><td>-</td><td>-</td><td>39.21</td><td>21,481</td><td>3,644</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72600</b></td><td>-</td><td>-</td><td>39.33</td><td>575</td><td>266</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72700</b></td><td>-</td><td>-</td><td>37.88</td><td>1,116</td><td>319</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72800</b></td><td>-</td><td>-</td><td>37.43</td><td>790</td><td>283</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72900</b></td><td>-</td><td>-</td><td>36.89</td><td>1,486</td><td>531</td></tr>
-<tr><td>603</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73000</b></td><td>-</td><td>-</td><td>36.39</td><td>55,799</td><td>20,708</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73100</b></td><td>-</td><td>-</td><td>35.65</td><td>1,114</td><td>556</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73200</b></td><td>-</td><td>-</td><td>35.03</td><td>984</td><td>523</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73300</b></td><td>-</td><td>-</td><td>34.55</td><td>1,040</td><td>421</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73400</b></td><td>-</td><td>-</td><td>33.78</td><td>702</td><td>325</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73500</b></td><td>-</td><td>-</td><td>33.16</td><td>26,791</td><td>6,421</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73600</b></td><td>-</td><td>-</td><td>32.61</td><td>2,104</td><td>307</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73700</b></td><td>-</td><td>-</td><td>32.20</td><td>3,971</td><td>538</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73800</b></td><td>-</td><td>-</td><td>31.59</td><td>2,886</td><td>672</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73900</b></td><td>-</td><td>-</td><td>31.14</td><td>2,381</td><td>592</td></tr>
-<tr><td>298</td><td>8</td><td>0.00</td><td>-</td><td>-</td><td><b>74000</b></td><td>-</td><td>-</td><td>30.35</td><td>101,889</td><td>39,056</td></tr>
-<tr><td>2</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74100</b></td><td>-</td><td>-</td><td>30.32</td><td>2,476</td><td>673</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74200</b></td><td>-</td><td>-</td><td>29.45</td><td>9,933</td><td>1,757</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74300</b></td><td>-</td><td>-</td><td>29.35</td><td>6,706</td><td>1,135</td></tr>
-<tr><td>4</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74400</b></td><td>-</td><td>-</td><td>28.80</td><td>2,906</td><td>748</td></tr>
-<tr><td>55</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74500</b></td><td>-</td><td>-</td><td>28.12</td><td>70,375</td><td>18,082</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74600</b></td><td>-</td><td>-</td><td>27.52</td><td>4,925</td><td>740</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74700</b></td><td>-</td><td>-</td><td>27.05</td><td>16,496</td><td>5,128</td></tr>
-<tr><td>6</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74800</b></td><td>-</td><td>-</td><td>26.59</td><td>11,116</td><td>3,291</td></tr>
-<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74900</b></td><td>-</td><td>-</td><td>26.02</td><td>11,827</td><td>5,334</td></tr>
-<tr><td>590</td><td>34</td><td>45.07</td><td>-</td><td>-</td><td><b>75000</b></td><td>-</td><td>-</td><td>25.66</td><td>177,377</td><td>63,823</td></tr>
-<tr><td>26</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75100</b></td><td>-</td><td>-</td><td>25.21</td><td>14,817</td><td>2,761</td></tr>
-<tr><td>8</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75200</b></td><td>-</td><td>-</td><td>24.43</td><td>20,643</td><td>5,401</td></tr>
-<tr><td>10</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75300</b></td><td>-</td><td>-</td><td>24.18</td><td>12,817</td><td>2,429</td></tr>
-<tr><td>31</td><td>1</td><td>41.93</td><td>-</td><td>-</td><td><b>75400</b></td><td>-</td><td>-</td><td>23.50</td><td>13,425</td><td>3,129</td></tr>
-<tr><td>677</td><td>8</td><td>43.38</td><td>-</td><td>-</td><td><b>75500</b></td><td>-</td><td>-</td><td>22.76</td><td>123,784</td><td>25,481</td></tr>
-<tr><td>43</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75600</b></td><td>-</td><td>-</td><td>22.27</td><td>15,550</td><td>3,980</td></tr>
-<tr><td>37</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75700</b></td><td>-</td><td>-</td><td>21.57</td><td>22,373</td><td>5,196</td></tr>
-<tr><td>55</td><td>2</td><td>0.00</td><td>-</td><td>-</td><td><b>75800</b></td><td>-</td><td>-</td><td>21.23</td><td>25,302</td><td>5,668</td></tr>
-<tr><td>175</td><td>22</td><td>28.66</td><td>-</td><td>-</td><td><b>75900</b></td><td>-</td><td>-</td><td>20.75</td><td>39,500</td><td>7,844</td></tr>
-<tr><td>718</td><td>52</td><td>0.00</td><td>-</td><td>-</td><td><b>76000</b></td><td>-</td><td>-</td><td>20.10</td><td>195,078</td><td>58,840</td></tr>
-<tr><td>335</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>76100</b></td><td>-</td><td>-</td><td>19.62</td><td>41,475</td><td>6,202</td></tr>
-<tr><td>213</td><td>3</td><td>36.16</td><td>-</td><td>-</td><td><b>76200</b></td><td>-</td><td>-</td><td>19.20</td><td>46,504</td><td>11,263</td></tr>
-<tr><td>204</td><td>16</td><td>30.27</td><td>-</td><td>-</td><td><b>76300</b></td><td>-</td><td>-</td><td>18.77</td><td>41,894</td><td>6,667</td></tr>
-<tr><td>155</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>76400</b></td><td>-</td><td>-</td><td>18.20</td><td>41,644</td><td>9,110</td></tr>
-<tr><td>1,238</td><td>629</td><td>0.00</td><td>-</td><td>-</td><td><b>76500</b></td><td>-</td><td>-</td><td>17.83</td><td>155,212</td><td>33,077</td></tr>
-<tr><td>328</td><td>75</td><td>0.00</td><td>-</td><td>-</td><td><b>76600</b></td><td>-</td><td>-</td><td>17.28</td><td>54,958</td><td>8,134</td></tr>
-<tr><td>545</td><td>69</td><td>15.82</td><td>-</td><td>-</td><td><b>76700</b></td><td>-</td><td>-</td><td>16.83</td><td>64,694</td><td>10,851</td></tr>
-<tr><td>368</td><td>111</td><td>0.00</td><td>-</td><td>-</td><td><b>76800</b></td><td>-</td><td>-</td><td>16.36</td><td>87,019</td><td>14,411</td></tr>
-<tr><td>646</td><td>166</td><td>0.00</td><td>-</td><td>-</td><td><b>76900</b></td><td>-</td><td>-</td><td>16.10</td><td>70,522</td><td>12,183</td></tr>
-<tr><td>10,472</td><td>4,938</td><td>0.00</td><td>-</td><td>-</td><td><b>77000</b></td><td>-</td><td>-</td><td>15.71</td><td>238,095</td><td>59,858</td></tr>
-<tr><td>566</td><td>229</td><td>0.00</td><td>-</td><td>-</td><td><b>77100</b></td><td>-</td><td>-</td><td>15.49</td><td>71,605</td><td>9,004</td></tr>
-<tr><td>1,275</td><td>465</td><td>0.00</td><td>-</td><td>-</td><td><b>77200</b></td><td>-</td><td>-</td><td>15.06</td><td>97,169</td><td>11,491</td></tr>
-<tr><td>2,185</td><td>721</td><td>13.81</td><td>-</td><td>-</td><td><b>77300</b></td><td>-</td><td>-</td><td>14.66</td><td>132,578</td><td>18,986</td></tr>
-<tr><td>1,798</td><td>1,593</td><td>13.74</td><td>-</td><td>-</td><td><b>77400</b></td><td>-</td><td>-</td><td>14.56</td><td>140,127</td><td>24,132</td></tr>
-<tr><td>9,594</td><td>11,306</td><td>12.84</td><td>-</td><td>-</td><td><b>77500</b></td><td>-</td><td>-</td><td>14.18</td><td>296,213</td><td>50,602</td></tr>
-<tr><td>2,638</td><td>6,298</td><td>0.00</td><td>-</td><td>-</td><td><b>77600</b></td><td>-</td><td>-</td><td>13.96</td><td>138,202</td><td>15,819</td></tr>
-<tr><td>3,079</td><td>8,719</td><td>12.35</td><td>-</td><td>-</td><td><b>77700</b></td><td>-</td><td>-</td><td>13.93</td><td>146,964</td><td>16,510</td></tr>
-<tr><td>3,357</td><td>19,944</td><td>11.67</td><td>-</td><td>-</td><td><b>77800</b></td><td>-</td><td>-</td><td>13.64</td><td>196,800</td><td>23,237</td></tr>
-<tr><td>5,183</td><td>32,705</td><td>11.91</td><td>-</td><td>-</td><td><b>77900</b></td><td>-</td><td>-</td><td>13.41</td><td>214,090</td><td>26,098</td></tr>
-<tr><td>27,180</td><td>172,483</td><td>11.87</td><td>-</td><td>-</td><td><b>78000</b></td><td>-</td><td>-</td><td>13.25</td><td>520,546</td><td>89,539</td></tr>
-<tr><td>8,852</td><td>131,226</td><td>12.00</td><td>-</td><td>-</td><td><b>78100</b></td><td>-</td><td>-</td><td>13.09</td><td>300,446</td><td>36,988</td></tr>
-<tr><td>17,030</td><td>304,969</td><td>10.31</td><td>-</td><td>-</td><td><b>78200</b></td><td>-</td><td>-</td><td>12.91</td><td>405,408</td><td>52,145</td></tr>
-<tr><td>22,873</td><td>517,187</td><td>11.89</td><td>-</td><td>-</td><td><b>78300</b></td><td>-</td><td>-</td><td>12.79</td><td>582,226</td><td>61,537</td></tr>
-<tr><td>40,616</td><td>753,862</td><td>11.71</td><td>-</td><td>-</td><td><b>78400</b></td><td>-</td><td>-</td><td>12.79</td><td>677,742</td><td>66,566</td></tr>
-<tr style="background:#fffde7;font-weight:bold;"><td>71,953</td><td>1,071,281</td><td>11.76</td><td>-</td><td>-</td><td><b>78500</b>  ← ATM</td><td>-</td><td>-</td><td>12.66</td><td>900,270</td><td>76,204</td></tr>
-<tr><td>44,204</td><td>630,462</td><td>11.72</td><td>-</td><td>-</td><td><b>78600</b></td><td>-</td><td>-</td><td>12.68</td><td>441,301</td><td>32,073</td></tr>
-<tr><td>27,988</td><td>419,954</td><td>11.70</td><td>-</td><td>-</td><td><b>78700</b></td><td>-</td><td>-</td><td>12.69</td><td>209,095</td><td>13,410</td></tr>
-<tr><td>22,293</td><td>313,061</td><td>12.03</td><td>-</td><td>-</td><td><b>78800</b></td><td>-</td><td>-</td><td>12.75</td><td>120,119</td><td>11,777</td></tr>
-<tr><td>14,658</td><td>263,843</td><td>11.72</td><td>-</td><td>-</td><td><b>78900</b></td><td>-</td><td>-</td><td>12.85</td><td>41,080</td><td>4,129</td></tr>
-<tr><td>45,369</td><td>571,595</td><td>11.69</td><td>-</td><td>-</td><td><b>79000</b></td><td>-</td><td>-</td><td>13.28</td><td>84,408</td><td>7,691</td></tr>
-<tr><td>15,226</td><td>230,895</td><td>11.82</td><td>-</td><td>-</td><td><b>79100</b></td><td>-</td><td>-</td><td>13.60</td><td>9,988</td><td>785</td></tr>
-<tr><td>16,259</td><td>227,207</td><td>11.83</td><td>-</td><td>-</td><td><b>79200</b></td><td>-</td><td>-</td><td>13.28</td><td>6,488</td><td>677</td></tr>
-<tr><td>11,530</td><td>178,082</td><td>12.00</td><td>-</td><td>-</td><td><b>79300</b></td><td>-</td><td>-</td><td>13.86</td><td>2,916</td><td>379</td></tr>
-<tr><td>10,609</td><td>155,887</td><td>13.05</td><td>-</td><td>-</td><td><b>79400</b></td><td>-</td><td>-</td><td>13.77</td><td>2,329</td><td>218</td></tr>
-<tr><td>41,724</td><td>328,394</td><td>12.30</td><td>-</td><td>-</td><td><b>79500</b></td><td>-</td><td>-</td><td>14.27</td><td>3,942</td><td>549</td></tr>
-<tr><td>10,519</td><td>122,019</td><td>12.53</td><td>-</td><td>-</td><td><b>79600</b></td><td>-</td><td>-</td><td>10.19</td><td>625</td><td>101</td></tr>
-<tr><td>9,902</td><td>94,805</td><td>12.80</td><td>-</td><td>-</td><td><b>79700</b></td><td>-</td><td>-</td><td>16.78</td><td>279</td><td>46</td></tr>
-<tr><td>9,363</td><td>91,746</td><td>13.09</td><td>-</td><td>-</td><td><b>79800</b></td><td>-</td><td>-</td><td>17.43</td><td>146</td><td>49</td></tr>
-<tr><td>10,719</td><td>67,300</td><td>13.36</td><td>-</td><td>-</td><td><b>79900</b></td><td>-</td><td>-</td><td>27.90</td><td>0</td><td>20</td></tr>
-<tr><td>62,081</td><td>222,088</td><td>15.04</td><td>-</td><td>-</td><td><b>80000</b></td><td>-</td><td>-</td><td>19.76</td><td>1,006</td><td>760</td></tr>
-<tr><td>5,691</td><td>41,718</td><td>14.04</td><td>-</td><td>-</td><td><b>80100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>7,515</td><td>41,074</td><td>14.32</td><td>-</td><td>-</td><td><b>80200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>7,196</td><td>34,082</td><td>14.61</td><td>-</td><td>-</td><td><b>80300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>4,683</td><td>22,081</td><td>15.14</td><td>-</td><td>-</td><td><b>80400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>34,395</td><td>113,122</td><td>15.73</td><td>-</td><td>-</td><td><b>80500</b></td><td>-</td><td>-</td><td>22.07</td><td>46</td><td>34</td></tr>
-<tr><td>3,220</td><td>22,805</td><td>17.82</td><td>-</td><td>-</td><td><b>80600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>3,940</td><td>18,470</td><td>16.59</td><td>-</td><td>-</td><td><b>80700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>6,508</td><td>23,628</td><td>16.95</td><td>-</td><td>-</td><td><b>80800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>2,047</td><td>17,176</td><td>17.60</td><td>-</td><td>-</td><td><b>80900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>33,768</td><td>96,546</td><td>18.22</td><td>-</td><td>-</td><td><b>81000</b></td><td>-</td><td>-</td><td>0.00</td><td>29</td><td>229</td></tr>
-<tr><td>3,132</td><td>9,665</td><td>18.62</td><td>-</td><td>-</td><td><b>81100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>1,246</td><td>7,552</td><td>19.87</td><td>-</td><td>-</td><td><b>81200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>4,864</td><td>13,033</td><td>19.51</td><td>-</td><td>-</td><td><b>81300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>569</td><td>2,765</td><td>20.11</td><td>-</td><td>-</td><td><b>81400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>9,244</td><td>48,221</td><td>20.74</td><td>-</td><td>-</td><td><b>81500</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>979</td><td>2,292</td><td>21.18</td><td>-</td><td>-</td><td><b>81600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>439</td><td>1,755</td><td>21.74</td><td>-</td><td>-</td><td><b>81700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>726</td><td>1,834</td><td>21.89</td><td>-</td><td>-</td><td><b>81800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>743</td><td>1,213</td><td>22.40</td><td>-</td><td>-</td><td><b>81900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>17,086</td><td>66,557</td><td>22.89</td><td>-</td><td>-</td><td><b>82000</b></td><td>-</td><td>-</td><td>50.16</td><td>0</td><td>503</td></tr>
-<tr><td>212</td><td>695</td><td>23.65</td><td>-</td><td>-</td><td><b>82100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>146</td><td>515</td><td>24.08</td><td>-</td><td>-</td><td><b>82200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>636</td><td>1,629</td><td>24.71</td><td>-</td><td>-</td><td><b>82300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>388</td><td>760</td><td>26.10</td><td>-</td><td>-</td><td><b>82400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>3,793</td><td>26,046</td><td>26.02</td><td>-</td><td>-</td><td><b>82500</b></td><td>-</td><td>-</td><td>98.47</td><td>0</td><td>89</td></tr>
-<tr><td>183</td><td>466</td><td>26.37</td><td>-</td><td>-</td><td><b>82600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>2,344</td><td>5,175</td><td>26.40</td><td>-</td><td>-</td><td><b>82700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>293</td><td>816</td><td>27.25</td><td>-</td><td>-</td><td><b>82800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>525</td><td>1,805</td><td>27.95</td><td>-</td><td>-</td><td><b>82900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>13,155</td><td>51,787</td><td>27.75</td><td>-</td><td>-</td><td><b>83000</b></td><td>-</td><td>-</td><td>58.94</td><td>0</td><td>704</td></tr>
-<tr><td>1,255</td><td>16,907</td><td>28.81</td><td>-</td><td>-</td><td><b>83100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>340</td><td>1,907</td><td>29.42</td><td>-</td><td>-</td><td><b>83200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>349</td><td>2,546</td><td>29.79</td><td>-</td><td>-</td><td><b>83300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>411</td><td>1,847</td><td>30.41</td><td>-</td><td>-</td><td><b>83400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
-<tr><td>8,895</td><td>39,566</td><td>30.29</td><td>-</td><td>-</td><td><b>83500</b></td><td>-</td><td>-</td><td>64.99</td><td>0</td><td>270</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68300</b></td><td>-</td><td>-</td><td>63.23</td><td>1,001</td><td>818</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68400</b></td><td>-</td><td>-</td><td>61.46</td><td>62</td><td>35</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68500</b></td><td>-</td><td>-</td><td>62.00</td><td>1,330</td><td>1,159</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68600</b></td><td>-</td><td>-</td><td>63.24</td><td>38</td><td>26</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68700</b></td><td>-</td><td>-</td><td>62.33</td><td>111</td><td>25</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68800</b></td><td>-</td><td>-</td><td>60.33</td><td>66</td><td>14</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>68900</b></td><td>-</td><td>-</td><td>60.94</td><td>70</td><td>87</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69000</b></td><td>-</td><td>-</td><td>58.93</td><td>1,577</td><td>1,161</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69100</b></td><td>-</td><td>-</td><td>58.50</td><td>72</td><td>77</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69200</b></td><td>-</td><td>-</td><td>58.35</td><td>29</td><td>83</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69300</b></td><td>-</td><td>-</td><td>57.90</td><td>12</td><td>17</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69400</b></td><td>-</td><td>-</td><td>57.26</td><td>47</td><td>33</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69500</b></td><td>-</td><td>-</td><td>55.37</td><td>1,426</td><td>788</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69600</b></td><td>-</td><td>-</td><td>56.97</td><td>96</td><td>25</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69700</b></td><td>-</td><td>-</td><td>54.50</td><td>173</td><td>46</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69800</b></td><td>-</td><td>-</td><td>55.74</td><td>133</td><td>80</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>69900</b></td><td>-</td><td>-</td><td>54.45</td><td>186</td><td>114</td></tr>
+<tr><td>714</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70000</b></td><td>-</td><td>-</td><td>52.84</td><td>11,553</td><td>19,903</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70100</b></td><td>-</td><td>-</td><td>52.08</td><td>145</td><td>191</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70200</b></td><td>-</td><td>-</td><td>51.92</td><td>138</td><td>33</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70300</b></td><td>-</td><td>-</td><td>51.73</td><td>168</td><td>88</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70400</b></td><td>-</td><td>-</td><td>51.38</td><td>132</td><td>33</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70500</b></td><td>-</td><td>-</td><td>50.09</td><td>4,118</td><td>1,208</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70600</b></td><td>-</td><td>-</td><td>52.16</td><td>0</td><td>37</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70700</b></td><td>-</td><td>-</td><td>49.29</td><td>1,022</td><td>99</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70800</b></td><td>-</td><td>-</td><td>48.66</td><td>35</td><td>13</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>70900</b></td><td>-</td><td>-</td><td>48.35</td><td>143</td><td>77</td></tr>
+<tr><td>51</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71000</b></td><td>-</td><td>-</td><td>46.92</td><td>10,518</td><td>5,346</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71100</b></td><td>-</td><td>-</td><td>46.03</td><td>111</td><td>43</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71200</b></td><td>-</td><td>-</td><td>45.84</td><td>307</td><td>56</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71300</b></td><td>-</td><td>-</td><td>44.99</td><td>357</td><td>19</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71400</b></td><td>-</td><td>-</td><td>44.80</td><td>313</td><td>54</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71500</b></td><td>-</td><td>-</td><td>43.51</td><td>15,284</td><td>3,164</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71600</b></td><td>-</td><td>-</td><td>43.76</td><td>465</td><td>62</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71700</b></td><td>-</td><td>-</td><td>43.04</td><td>382</td><td>65</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71800</b></td><td>-</td><td>-</td><td>42.43</td><td>579</td><td>71</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>71900</b></td><td>-</td><td>-</td><td>42.15</td><td>1,589</td><td>298</td></tr>
+<tr><td>308</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72000</b></td><td>-</td><td>-</td><td>41.22</td><td>36,832</td><td>11,378</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72100</b></td><td>-</td><td>-</td><td>40.82</td><td>939</td><td>165</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72200</b></td><td>-</td><td>-</td><td>40.44</td><td>345</td><td>114</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72300</b></td><td>-</td><td>-</td><td>39.86</td><td>373</td><td>126</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72400</b></td><td>-</td><td>-</td><td>39.58</td><td>486</td><td>186</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72500</b></td><td>-</td><td>-</td><td>38.48</td><td>22,098</td><td>3,505</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72600</b></td><td>-</td><td>-</td><td>38.06</td><td>659</td><td>266</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72700</b></td><td>-</td><td>-</td><td>37.44</td><td>1,129</td><td>321</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72800</b></td><td>-</td><td>-</td><td>36.92</td><td>806</td><td>276</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>72900</b></td><td>-</td><td>-</td><td>36.39</td><td>1,509</td><td>524</td></tr>
+<tr><td>603</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73000</b></td><td>-</td><td>-</td><td>35.86</td><td>57,029</td><td>19,887</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73100</b></td><td>-</td><td>-</td><td>35.16</td><td>1,121</td><td>558</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73200</b></td><td>-</td><td>-</td><td>34.71</td><td>1,095</td><td>471</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73300</b></td><td>-</td><td>-</td><td>34.01</td><td>1,086</td><td>398</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73400</b></td><td>-</td><td>-</td><td>33.22</td><td>721</td><td>323</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73500</b></td><td>-</td><td>-</td><td>32.45</td><td>28,173</td><td>6,361</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73600</b></td><td>-</td><td>-</td><td>32.37</td><td>2,186</td><td>323</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73700</b></td><td>-</td><td>-</td><td>31.75</td><td>4,217</td><td>544</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73800</b></td><td>-</td><td>-</td><td>30.83</td><td>4,088</td><td>901</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>73900</b></td><td>-</td><td>-</td><td>30.50</td><td>2,529</td><td>601</td></tr>
+<tr><td>298</td><td>8</td><td>0.00</td><td>-</td><td>-</td><td><b>74000</b></td><td>-</td><td>-</td><td>29.74</td><td>108,395</td><td>38,940</td></tr>
+<tr><td>2</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74100</b></td><td>-</td><td>-</td><td>29.64</td><td>2,606</td><td>597</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74200</b></td><td>-</td><td>-</td><td>29.13</td><td>11,065</td><td>1,490</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74300</b></td><td>-</td><td>-</td><td>28.52</td><td>7,055</td><td>1,075</td></tr>
+<tr><td>4</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74400</b></td><td>-</td><td>-</td><td>28.15</td><td>3,037</td><td>752</td></tr>
+<tr><td>55</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74500</b></td><td>-</td><td>-</td><td>27.65</td><td>72,311</td><td>18,675</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74600</b></td><td>-</td><td>-</td><td>26.96</td><td>5,140</td><td>757</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74700</b></td><td>-</td><td>-</td><td>26.32</td><td>16,990</td><td>5,160</td></tr>
+<tr><td>6</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74800</b></td><td>-</td><td>-</td><td>25.76</td><td>11,653</td><td>3,359</td></tr>
+<tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>74900</b></td><td>-</td><td>-</td><td>25.30</td><td>12,136</td><td>5,261</td></tr>
+<tr><td>590</td><td>34</td><td>47.73</td><td>-</td><td>-</td><td><b>75000</b></td><td>-</td><td>-</td><td>25.14</td><td>183,088</td><td>63,152</td></tr>
+<tr><td>26</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75100</b></td><td>-</td><td>-</td><td>24.53</td><td>15,285</td><td>2,725</td></tr>
+<tr><td>8</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75200</b></td><td>-</td><td>-</td><td>23.82</td><td>20,981</td><td>5,388</td></tr>
+<tr><td>10</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75300</b></td><td>-</td><td>-</td><td>23.48</td><td>13,153</td><td>2,528</td></tr>
+<tr><td>31</td><td>1</td><td>44.34</td><td>-</td><td>-</td><td><b>75400</b></td><td>-</td><td>-</td><td>22.92</td><td>14,009</td><td>3,243</td></tr>
+<tr><td>677</td><td>8</td><td>45.55</td><td>-</td><td>-</td><td><b>75500</b></td><td>-</td><td>-</td><td>22.08</td><td>129,473</td><td>24,666</td></tr>
+<tr><td>43</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75600</b></td><td>-</td><td>-</td><td>21.71</td><td>15,756</td><td>4,031</td></tr>
+<tr><td>37</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>75700</b></td><td>-</td><td>-</td><td>21.08</td><td>23,166</td><td>5,196</td></tr>
+<tr><td>55</td><td>2</td><td>0.00</td><td>-</td><td>-</td><td><b>75800</b></td><td>-</td><td>-</td><td>20.71</td><td>25,768</td><td>5,570</td></tr>
+<tr><td>175</td><td>22</td><td>32.05</td><td>-</td><td>-</td><td><b>75900</b></td><td>-</td><td>-</td><td>20.20</td><td>40,568</td><td>8,016</td></tr>
+<tr><td>716</td><td>53</td><td>0.00</td><td>-</td><td>-</td><td><b>76000</b></td><td>-</td><td>-</td><td>19.48</td><td>207,882</td><td>56,340</td></tr>
+<tr><td>335</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>76100</b></td><td>-</td><td>-</td><td>19.04</td><td>42,146</td><td>6,322</td></tr>
+<tr><td>212</td><td>4</td><td>0.00</td><td>-</td><td>-</td><td><b>76200</b></td><td>-</td><td>-</td><td>18.55</td><td>47,421</td><td>11,323</td></tr>
+<tr><td>204</td><td>16</td><td>32.51</td><td>-</td><td>-</td><td><b>76300</b></td><td>-</td><td>-</td><td>18.14</td><td>43,124</td><td>7,054</td></tr>
+<tr><td>155</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>76400</b></td><td>-</td><td>-</td><td>17.73</td><td>42,780</td><td>9,084</td></tr>
+<tr><td>1,238</td><td>629</td><td>0.00</td><td>-</td><td>-</td><td><b>76500</b></td><td>-</td><td>-</td><td>17.26</td><td>163,816</td><td>33,461</td></tr>
+<tr><td>317</td><td>84</td><td>19.68</td><td>-</td><td>-</td><td><b>76600</b></td><td>-</td><td>-</td><td>16.86</td><td>56,087</td><td>8,186</td></tr>
+<tr><td>534</td><td>78</td><td>0.00</td><td>-</td><td>-</td><td><b>76700</b></td><td>-</td><td>-</td><td>16.38</td><td>67,351</td><td>10,902</td></tr>
+<tr><td>356</td><td>122</td><td>17.47</td><td>-</td><td>-</td><td><b>76800</b></td><td>-</td><td>-</td><td>16.00</td><td>89,708</td><td>13,916</td></tr>
+<tr><td>635</td><td>176</td><td>13.34</td><td>-</td><td>-</td><td><b>76900</b></td><td>-</td><td>-</td><td>15.72</td><td>73,198</td><td>12,427</td></tr>
+<tr><td>10,402</td><td>5,055</td><td>0.00</td><td>-</td><td>-</td><td><b>77000</b></td><td>-</td><td>-</td><td>15.34</td><td>248,952</td><td>61,080</td></tr>
+<tr><td>568</td><td>286</td><td>11.78</td><td>-</td><td>-</td><td><b>77100</b></td><td>-</td><td>-</td><td>15.07</td><td>75,193</td><td>9,369</td></tr>
+<tr><td>1,254</td><td>511</td><td>9.37</td><td>-</td><td>-</td><td><b>77200</b></td><td>-</td><td>-</td><td>14.74</td><td>101,857</td><td>11,986</td></tr>
+<tr><td>2,162</td><td>755</td><td>12.70</td><td>-</td><td>-</td><td><b>77300</b></td><td>-</td><td>-</td><td>14.53</td><td>137,946</td><td>18,622</td></tr>
+<tr><td>1,767</td><td>1,643</td><td>12.76</td><td>-</td><td>-</td><td><b>77400</b></td><td>-</td><td>-</td><td>14.25</td><td>146,803</td><td>24,029</td></tr>
+<tr><td>9,526</td><td>11,735</td><td>12.33</td><td>-</td><td>-</td><td><b>77500</b></td><td>-</td><td>-</td><td>14.11</td><td>318,646</td><td>50,804</td></tr>
+<tr><td>2,629</td><td>6,657</td><td>0.00</td><td>-</td><td>-</td><td><b>77600</b></td><td>-</td><td>-</td><td>13.89</td><td>144,470</td><td>15,684</td></tr>
+<tr><td>3,011</td><td>9,125</td><td>12.32</td><td>-</td><td>-</td><td><b>77700</b></td><td>-</td><td>-</td><td>13.62</td><td>155,455</td><td>16,389</td></tr>
+<tr><td>3,480</td><td>20,934</td><td>12.32</td><td>-</td><td>-</td><td><b>77800</b></td><td>-</td><td>-</td><td>13.50</td><td>208,588</td><td>22,745</td></tr>
+<tr><td>5,321</td><td>34,440</td><td>12.33</td><td>-</td><td>-</td><td><b>77900</b></td><td>-</td><td>-</td><td>13.35</td><td>230,380</td><td>26,490</td></tr>
+<tr><td>27,465</td><td>179,451</td><td>12.28</td><td>-</td><td>-</td><td><b>78000</b></td><td>-</td><td>-</td><td>13.19</td><td>550,075</td><td>88,999</td></tr>
+<tr><td>9,242</td><td>134,847</td><td>12.07</td><td>-</td><td>-</td><td><b>78100</b></td><td>-</td><td>-</td><td>13.03</td><td>316,613</td><td>37,315</td></tr>
+<tr><td>17,600</td><td>315,606</td><td>11.17</td><td>-</td><td>-</td><td><b>78200</b></td><td>-</td><td>-</td><td>12.89</td><td>428,926</td><td>52,770</td></tr>
+<tr><td>25,593</td><td>536,701</td><td>11.89</td><td>-</td><td>-</td><td><b>78300</b></td><td>-</td><td>-</td><td>12.77</td><td>617,179</td><td>62,652</td></tr>
+<tr style="background:#fffde7;font-weight:bold;"><td>43,074</td><td>798,340</td><td>12.02</td><td>-</td><td>-</td><td><b>78400</b>  ← ATM</td><td>-</td><td>-</td><td>12.61</td><td>732,016</td><td>65,702</td></tr>
+<tr><td>74,314</td><td>1,126,519</td><td>11.81</td><td>-</td><td>-</td><td><b>78500</b></td><td>-</td><td>-</td><td>12.61</td><td>964,913</td><td>73,485</td></tr>
+<tr><td>44,816</td><td>661,098</td><td>11.79</td><td>-</td><td>-</td><td><b>78600</b></td><td>-</td><td>-</td><td>12.64</td><td>466,126</td><td>27,083</td></tr>
+<tr><td>29,251</td><td>441,146</td><td>11.73</td><td>-</td><td>-</td><td><b>78700</b></td><td>-</td><td>-</td><td>12.67</td><td>221,061</td><td>12,717</td></tr>
+<tr><td>23,372</td><td>328,061</td><td>12.46</td><td>-</td><td>-</td><td><b>78800</b></td><td>-</td><td>-</td><td>12.77</td><td>127,984</td><td>11,289</td></tr>
+<tr><td>15,359</td><td>276,996</td><td>11.74</td><td>-</td><td>-</td><td><b>78900</b></td><td>-</td><td>-</td><td>12.85</td><td>43,850</td><td>3,823</td></tr>
+<tr><td>45,592</td><td>600,708</td><td>11.87</td><td>-</td><td>-</td><td><b>79000</b></td><td>-</td><td>-</td><td>12.88</td><td>88,510</td><td>6,531</td></tr>
+<tr><td>15,110</td><td>240,195</td><td>11.81</td><td>-</td><td>-</td><td><b>79100</b></td><td>-</td><td>-</td><td>13.12</td><td>10,478</td><td>796</td></tr>
+<tr><td>16,277</td><td>235,280</td><td>11.89</td><td>-</td><td>-</td><td><b>79200</b></td><td>-</td><td>-</td><td>13.45</td><td>6,810</td><td>681</td></tr>
+<tr><td>11,761</td><td>185,381</td><td>11.96</td><td>-</td><td>-</td><td><b>79300</b></td><td>-</td><td>-</td><td>13.30</td><td>3,150</td><td>341</td></tr>
+<tr><td>10,611</td><td>161,755</td><td>13.44</td><td>-</td><td>-</td><td><b>79400</b></td><td>-</td><td>-</td><td>13.67</td><td>2,443</td><td>247</td></tr>
+<tr><td>42,447</td><td>347,603</td><td>12.18</td><td>-</td><td>-</td><td><b>79500</b></td><td>-</td><td>-</td><td>13.85</td><td>4,128</td><td>557</td></tr>
+<tr><td>10,457</td><td>130,488</td><td>12.42</td><td>-</td><td>-</td><td><b>79600</b></td><td>-</td><td>-</td><td>15.49</td><td>658</td><td>133</td></tr>
+<tr><td>10,158</td><td>101,686</td><td>12.68</td><td>-</td><td>-</td><td><b>79700</b></td><td>-</td><td>-</td><td>14.03</td><td>309</td><td>75</td></tr>
+<tr><td>9,143</td><td>95,803</td><td>12.96</td><td>-</td><td>-</td><td><b>79800</b></td><td>-</td><td>-</td><td>14.31</td><td>164</td><td>75</td></tr>
+<tr><td>10,488</td><td>69,610</td><td>13.22</td><td>-</td><td>-</td><td><b>79900</b></td><td>-</td><td>-</td><td>25.81</td><td>0</td><td>20</td></tr>
+<tr><td>62,815</td><td>237,311</td><td>15.35</td><td>-</td><td>-</td><td><b>80000</b></td><td>-</td><td>-</td><td>16.73</td><td>1,029</td><td>755</td></tr>
+<tr><td>5,783</td><td>43,635</td><td>13.89</td><td>-</td><td>-</td><td><b>80100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>7,419</td><td>42,636</td><td>14.17</td><td>-</td><td>-</td><td><b>80200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>7,229</td><td>35,046</td><td>14.51</td><td>-</td><td>-</td><td><b>80300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>4,677</td><td>23,108</td><td>15.00</td><td>-</td><td>-</td><td><b>80400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>34,212</td><td>121,285</td><td>15.58</td><td>-</td><td>-</td><td><b>80500</b></td><td>-</td><td>-</td><td>0.00</td><td>47</td><td>36</td></tr>
+<tr><td>3,008</td><td>23,485</td><td>18.10</td><td>-</td><td>-</td><td><b>80600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>3,971</td><td>19,230</td><td>16.55</td><td>-</td><td>-</td><td><b>80700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>6,496</td><td>24,497</td><td>16.91</td><td>-</td><td>-</td><td><b>80800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>2,100</td><td>17,600</td><td>17.49</td><td>-</td><td>-</td><td><b>80900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>37,451</td><td>103,926</td><td>18.14</td><td>-</td><td>-</td><td><b>81000</b></td><td>-</td><td>-</td><td>0.00</td><td>34</td><td>229</td></tr>
+<tr><td>3,260</td><td>9,955</td><td>18.59</td><td>-</td><td>-</td><td><b>81100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>1,220</td><td>7,681</td><td>20.06</td><td>-</td><td>-</td><td><b>81200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>4,894</td><td>13,679</td><td>19.50</td><td>-</td><td>-</td><td><b>81300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>550</td><td>2,865</td><td>20.15</td><td>-</td><td>-</td><td><b>81400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>10,225</td><td>56,303</td><td>20.62</td><td>-</td><td>-</td><td><b>81500</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>972</td><td>2,327</td><td>21.04</td><td>-</td><td>-</td><td><b>81600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>451</td><td>1,812</td><td>21.65</td><td>-</td><td>-</td><td><b>81700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>723</td><td>1,901</td><td>22.06</td><td>-</td><td>-</td><td><b>81800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>744</td><td>1,240</td><td>22.38</td><td>-</td><td>-</td><td><b>81900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>17,070</td><td>67,698</td><td>22.75</td><td>-</td><td>-</td><td><b>82000</b></td><td>-</td><td>-</td><td>47.29</td><td>0</td><td>503</td></tr>
+<tr><td>217</td><td>720</td><td>23.69</td><td>-</td><td>-</td><td><b>82100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>146</td><td>520</td><td>24.38</td><td>-</td><td>-</td><td><b>82200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>639</td><td>1,681</td><td>24.81</td><td>-</td><td>-</td><td><b>82300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>367</td><td>784</td><td>26.27</td><td>-</td><td>-</td><td><b>82400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>3,791</td><td>26,953</td><td>25.85</td><td>-</td><td>-</td><td><b>82500</b></td><td>-</td><td>-</td><td>96.74</td><td>0</td><td>89</td></tr>
+<tr><td>188</td><td>512</td><td>26.46</td><td>-</td><td>-</td><td><b>82600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>2,343</td><td>5,218</td><td>26.39</td><td>-</td><td>-</td><td><b>82700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>292</td><td>829</td><td>27.49</td><td>-</td><td>-</td><td><b>82800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>504</td><td>1,835</td><td>27.87</td><td>-</td><td>-</td><td><b>82900</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>13,175</td><td>52,178</td><td>27.91</td><td>-</td><td>-</td><td><b>83000</b></td><td>-</td><td>-</td><td>55.22</td><td>0</td><td>704</td></tr>
+<tr><td>1,218</td><td>16,919</td><td>28.77</td><td>-</td><td>-</td><td><b>83100</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>328</td><td>1,916</td><td>29.74</td><td>-</td><td>-</td><td><b>83200</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>342</td><td>2,584</td><td>29.68</td><td>-</td><td>-</td><td><b>83300</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>435</td><td>1,914</td><td>30.48</td><td>-</td><td>-</td><td><b>83400</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
+<tr><td>8,883</td><td>39,723</td><td>30.13</td><td>-</td><td>-</td><td><b>83500</b></td><td>-</td><td>-</td><td>61.41</td><td>0</td><td>270</td></tr>
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>83600</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>83700</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
 <tr><td>0</td><td>0</td><td>0.00</td><td>-</td><td>-</td><td><b>83800</b></td><td>-</td><td>-</td><td>0.00</td><td>0</td><td>0</td></tr>
