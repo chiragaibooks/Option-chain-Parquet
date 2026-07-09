@@ -1,6 +1,6 @@
-<!-- Auto-generated — 2026-07-09 15:33:05 IST -->
+<!-- Auto-generated — 2026-07-09 15:46:20 IST -->
 
-**Last updated:** 2026-07-09 15:33:05 IST
+**Last updated:** 2026-07-09 15:46:20 IST
 
 ## 📊 Market Indexes
 
@@ -8,7 +8,7 @@
 <tr><th>Symbol</th><th>Time (IST)</th><th>Close</th><th>Volume</th><th>RSI(14)</th><th>EMA20</th><th>MACD</th><th>ATR</th><th>ADX</th><th>Signal</th></tr>
 <tr><td><b>NIFTY50</b></td><td>202607091529</td><td>23981.90</td><td>10,747</td><td>55.54</td><td>23970.66</td><td>-1.12</td><td>11.40</td><td>25.12</td><td>🟢 BUY</td></tr>
 <tr><td><b>BANKNIFTY</b></td><td>202607091529</td><td>57322.70</td><td>226</td><td>59.36</td><td>57290.43</td><td>12.43</td><td>29.05</td><td>21.07</td><td>🟢 BUY</td></tr>
-<tr><td><b>SENSEX</b></td><td>202607091509</td><td>76699.86</td><td>126</td><td>33.25</td><td>76830.54</td><td>-83.51</td><td>66.85</td><td>36.76</td><td>🔴 SELL</td></tr>
+<tr><td><b>SENSEX</b></td><td>202607091529</td><td>76741.82</td><td>221</td><td>46.11</td><td>76742.67</td><td>-19.92</td><td>24.59</td><td>31.39</td><td>🟡 HOLD</td></tr>
 <tr><td><b>MIDCAPNIFTY</b></td><td>202607091527</td><td>17860.65</td><td>4,317</td><td>60.95</td><td>17850.89</td><td>2.91</td><td>6.92</td><td>26.72</td><td>🟢 BUY</td></tr>
 <tr><td><b>FINNIFTY</b></td><td>202607091524</td><td>26501.60</td><td>3,951</td><td>55.09</td><td>26487.50</td><td>-0.27</td><td>15.76</td><td>23.22</td><td>🟢 BUY</td></tr>
 </table>
@@ -577,7 +577,7 @@
 <tr><td>19,800</td><td>195</td><td>-</td><td>1.80</td><td>-</td><td><b>16200</b></td><td>-</td><td>2114.80</td><td>-</td><td>0</td><td>0</td></tr>
 </table>
 
-## 🔗 SENSEX Option Chain &nbsp; `Expiry: 16-Jul-2026` &nbsp; `Spot: 76713.99`
+## 🔗 SENSEX Option Chain &nbsp; `Expiry: 16-Jul-2026` &nbsp; `Spot: 76741.82`
 
 <table>
 <tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
