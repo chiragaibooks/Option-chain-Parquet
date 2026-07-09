@@ -32,8 +32,13 @@ def _build_row(
     ohlcv: Optional[Dict] = None,
 ) -> dict:
     ohlcv  = ohlcv or {}
-    iv     = ohlcv.get("iv") or 0.18
-    greeks = compute_greeks(spot, strike, tte, _RISK_FREE_RATE, iv, option_type)
+    iv     = ohlcv.get("iv")  # % value e.g. 15.5 — None if unavailable
+    iv_dec = iv / 100 if (iv and iv > 0) else None
+    greeks = (
+        compute_greeks(spot, strike, tte, _RISK_FREE_RATE, iv_dec, option_type)
+        if iv_dec
+        else {k: None for k in ("delta", "gamma", "theta", "vega", "rho")}
+    )
     return {
         "datetime":    pd.Timestamp.now().floor("min").isoformat(),
         "symbol":      symbol,
@@ -46,7 +51,7 @@ def _build_row(
         "close":       ohlcv.get("close"),
         "volume":      ohlcv.get("volume"),
         "oi":          ohlcv.get("oi"),
-        "iv":          iv,
+        "iv":          iv,   # % or None
         **greeks,
     }
 
