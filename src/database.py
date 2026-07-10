@@ -290,35 +290,28 @@ def latest_row(db: str, symbol: str) -> Optional[pd.Series]:
         return None
 
 
+def prune_old_option_data(db: str, keep_days: int = 14) -> None:
+    """Delete option chain rows older than keep_days from all tables."""
+    cutoff = (datetime.now(IST) - timedelta(days=keep_days)).strftime("%Y%m%d%H%M")
+    with sqlite3.connect(db) as conn:
+        for table in _OC_TABLES.values():
+            conn.execute(f"DELETE FROM {table} WHERE timestamp < ?", (cutoff,))
+        conn.commit()
+    logger.info("Pruned option chain rows older than %d days (cutoff ts=%s)", keep_days, cutoff)
+
+
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0, trade_date: Optional[str] = None) -> None:
     """
-    Insert option chain snapshot. Run anytime — timestamp logic:
-
-    - During market hours (Mon-Fri 09:15-15:45 IST): uses actual current IST time
-      e.g. script runs at 10:32 → timestamp = yyyyMMdd1032
-    - Outside market hours: uses last trading weekday at 15:30
-      e.g. run on Sunday → timestamp = last_Friday_date + 1530
-
-    INSERT OR IGNORE: same (timestamp, option_type, expiry, strike) never duplicated.
+    Insert option chain snapshot. Always stamps with actual current IST time so
+    every run produces a unique timestamp and rows accumulate across runs.
     """
     table = _OC_TABLES.get(symbol)
     if not table:
         logger.warning("No option chain table for symbol: %s", symbol)
         return
 
-    now_ist = datetime.now(IST)
-    hhmm    = now_ist.strftime("%H:%M")
-    is_mkt  = (now_ist.weekday() < 5) and (_MARKET_OPEN <= hhmm <= _MARKET_CLOSE)
-
-    if is_mkt:
-        # Running during market hours — stamp with actual current time
-        ts = now_ist.strftime("%Y%m%d%H%M")
-    else:
-        # Outside market hours — stamp with last trading day at 15:30
-        d = now_ist.date()
-        if d.weekday() >= 5:
-            d -= timedelta(days=d.weekday() - 4)  # roll back to Friday
-        ts = d.strftime("%Y%m%d") + "1530"
+    # Always use real current time — unique per run, accumulates history
+    ts = datetime.now(IST).strftime("%Y%m%d%H%M")
 
     label = _INDEX_LABEL.get(symbol, symbol)
     df    = df.copy()

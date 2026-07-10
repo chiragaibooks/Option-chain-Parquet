@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Src imports
 # ---------------------------------------------------------------------------
-from src.database                    import init_db, insert_data, insert_option_data
+from src.database                    import init_db, insert_data, insert_option_data, prune_old_option_data
 from src.tradingview_client          import get_tv
 from src.fetch_data                  import fetch_all
 from src.readme_generator            import update_readme
@@ -167,6 +167,9 @@ def main() -> None:
                 insert_option_data(OPTION_DB, sym, df, spot)
             except Exception:
                 logger.exception("[%s] insert_option_data failed for expiry %s", sym, expiry)
+
+    # Prune snapshots older than 14 days
+    prune_old_option_data(OPTION_DB, keep_days=14)
 
     # 6. Update README
     # flatten option_data for readme_generator (just first expiry per symbol)

@@ -13,7 +13,7 @@ from typing import List, Optional
 import requests
 import pandas as pd
 
-from src.option_chain.nse_scraper import _greeks, _iv_from_price
+from src.option_chain.nse_scraper import _greeks
 
 logger = logging.getLogger(__name__)
 
@@ -79,12 +79,31 @@ def _fetch_raw(expiry: str, retries: int = 3) -> List[dict]:
     return []
 
 
-def _parse_float(val) -> float:
-    """Parse BSE numeric strings like '78,260.64' → 78260.64"""
+def _parse_float(val) -> Optional[float]:
+    """Parse BSE numeric strings like '78,260.64' → 78260.64. Returns None if missing/invalid."""
+    if val is None:
+        return None
+    s = str(val).replace(",", "").strip()
+    if s in ("", "NA", "N/A", "-", "null", "None"):
+        return None
     try:
-        return float(str(val).replace(",", "").strip())
+        return float(s)
     except (ValueError, TypeError):
-        return 0.0
+        return None
+
+
+def _parse_float_nonneg(val) -> Optional[float]:
+    """Parse to float, return None if missing or negative."""
+    f = _parse_float(val)
+    return f if (f is not None and f >= 0) else None
+
+
+def _log_iv(index: str, strike, otype: str, expiry: str, raw_iv, parsed_iv, stored_iv, reason: str) -> None:
+    logger.debug(
+        "Index: %s | Strike: %s | Type: %s | Expiry: %s\n"
+        "  Raw API IV: %s | Parsed IV: %s | Stored IV: %s | Reason: %s",
+        index, strike, otype, expiry, raw_iv, parsed_iv, stored_iv, reason,
+    )
 
 
 def _fmt_expiry_bse(expiry_str: str) -> str:
@@ -170,59 +189,71 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
         if item.get("SCRIP_ID", "") != "BSX" or item.get("comapny_name", "").strip() != "SENSEX":
             continue
 
-        strike = _parse_float(item.get("Strike_Price1", 0))
-        if strike == 0:
+        strike = _parse_float(item.get("Strike_Price1"))
+        if not strike:
             continue
 
         # Use UlaValue as spot if not provided
-        item_spot = _parse_float(item.get("UlaValue", 0)) or spot
+        item_spot = _parse_float(item.get("UlaValue")) or spot
 
         # ── PE (no prefix) ────────────────────────────────────────────────────
-        pe_ltp    = _parse_float(item.get("Last_Trd_Price"))
-        pe_oi     = _parse_float(item.get("Open_Interest"))
+        pe_ltp    = _parse_float_nonneg(item.get("Last_Trd_Price"))
+        pe_oi     = _parse_float_nonneg(item.get("Open_Interest"))
         pe_oi_chg = _parse_float(item.get("Absolute_Change_OI"))
-        pe_vol    = _parse_float(item.get("Vol_Traded"))
+        pe_vol    = _parse_float_nonneg(item.get("Vol_Traded"))
         pe_iv_raw = _parse_float(item.get("IV"))
-        pe_iv     = pe_iv_raw / 100 if pe_iv_raw > 1 else (pe_iv_raw if pe_iv_raw > 0 else
-                    (_iv_from_price("p", item_spot, strike, tte, pe_ltp) or 0.18))
-        pe_greeks = _greeks("p", item_spot, strike, tte, pe_iv) if item_spot > 0 and pe_ltp > 0 \
-                    else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+
+        if pe_iv_raw is None:
+            pe_iv_pct = None
+            _log_iv("SENSEX", strike, "PE", expiry, item.get("IV"), None, None, "API did not provide IV")
+        elif pe_iv_raw == 0.0:
+            pe_iv_pct = 0.0
+            _log_iv("SENSEX", strike, "PE", expiry, 0, 0.0, 0.0, "API explicitly returned zero")
+        else:
+            pe_iv_pct = pe_iv_raw
+
+        pe_iv_dec = pe_iv_pct / 100 if (pe_iv_pct is not None and pe_iv_pct > 0) else None
+        pe_greeks = (
+            _greeks("p", item_spot, strike, tte, pe_iv_dec)
+            if (pe_iv_dec and item_spot > 0 and pe_ltp and pe_ltp > 0)
+            else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+        )
 
         rows.append({
-            "expiry":           expiry,
-            "strike":           strike,
-            "option_type":      "PE",
-            "ltp":              pe_ltp,
-            "volume":           pe_vol,
-            "oi":               pe_oi,
-            "oi_chg":           pe_oi_chg,
-            "iv":               round(pe_iv_raw, 2),
-            "underlying_value": item_spot,
-            **pe_greeks,
+            "expiry": expiry, "strike": strike, "option_type": "PE",
+            "ltp": pe_ltp if pe_ltp is not None else 0.0,
+            "volume": pe_vol, "oi": pe_oi, "oi_chg": pe_oi_chg,
+            "iv": pe_iv_pct, "spot": item_spot, **pe_greeks,
         })
 
         # ── CE (C_ prefix) ────────────────────────────────────────────────────
-        ce_ltp    = _parse_float(item.get("C_Last_Trd_Price"))
-        ce_oi     = _parse_float(item.get("C_Open_Interest"))
+        ce_ltp    = _parse_float_nonneg(item.get("C_Last_Trd_Price"))
+        ce_oi     = _parse_float_nonneg(item.get("C_Open_Interest"))
         ce_oi_chg = _parse_float(item.get("C_Absolute_Change_OI"))
-        ce_vol    = _parse_float(item.get("C_Vol_Traded"))
+        ce_vol    = _parse_float_nonneg(item.get("C_Vol_Traded"))
         ce_iv_raw = _parse_float(item.get("C_IV"))
-        ce_iv     = ce_iv_raw / 100 if ce_iv_raw > 1 else (ce_iv_raw if ce_iv_raw > 0 else
-                    (_iv_from_price("c", item_spot, strike, tte, ce_ltp) or 0.18))
-        ce_greeks = _greeks("c", item_spot, strike, tte, ce_iv) if item_spot > 0 and ce_ltp > 0 \
-                    else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+
+        if ce_iv_raw is None:
+            ce_iv_pct = None
+            _log_iv("SENSEX", strike, "CE", expiry, item.get("C_IV"), None, None, "API did not provide IV")
+        elif ce_iv_raw == 0.0:
+            ce_iv_pct = 0.0
+            _log_iv("SENSEX", strike, "CE", expiry, 0, 0.0, 0.0, "API explicitly returned zero")
+        else:
+            ce_iv_pct = ce_iv_raw
+
+        ce_iv_dec = ce_iv_pct / 100 if (ce_iv_pct is not None and ce_iv_pct > 0) else None
+        ce_greeks = (
+            _greeks("c", item_spot, strike, tte, ce_iv_dec)
+            if (ce_iv_dec and item_spot > 0 and ce_ltp and ce_ltp > 0)
+            else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+        )
 
         rows.append({
-            "expiry":           expiry,
-            "strike":           strike,
-            "option_type":      "CE",
-            "ltp":              ce_ltp,
-            "volume":           ce_vol,
-            "oi":               ce_oi,
-            "oi_chg":           ce_oi_chg,
-            "iv":               round(ce_iv_raw, 2),
-            "underlying_value": item_spot,
-            **ce_greeks,
+            "expiry": expiry, "strike": strike, "option_type": "CE",
+            "ltp": ce_ltp if ce_ltp is not None else 0.0,
+            "volume": ce_vol, "oi": ce_oi, "oi_chg": ce_oi_chg,
+            "iv": ce_iv_pct, "spot": item_spot, **ce_greeks,
         })
 
     df = pd.DataFrame(rows)
