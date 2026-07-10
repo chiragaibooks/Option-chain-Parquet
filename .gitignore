@@ -3,4 +3,6 @@ __pycache__/
 .history/
 .env
 *.log
-data/
+data/logs/
+data/*.csv
+data/*.log
