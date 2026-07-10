@@ -1,8 +1,9 @@
+import os
 import sqlite3
 import pandas as pd
 
-DB = r"C:\Users\91984\Desktop\Indexes-TA\stock-data-cornjob\data\option_chain.db"
-OUT = r"C:\Users\91984\Desktop\Indexes-TA\option_chain.csv"
+DB  = os.path.join(os.path.dirname(__file__), "data", "option_chain.db")
+OUT = os.path.join(os.path.dirname(__file__), "data", "option_chain.csv")
 
 conn = sqlite3.connect(DB)
 tables = [

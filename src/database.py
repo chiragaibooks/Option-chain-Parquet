@@ -324,10 +324,16 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
             df[col] = None
 
     sql = (
-        f"INSERT OR REPLACE INTO {table} ({', '.join(_OC_COLS)}) "
+        f"INSERT OR IGNORE INTO {table} ({', '.join(_OC_COLS)}) "
         f"VALUES ({', '.join(['?'] * len(_OC_COLS))})"
     )
     with sqlite3.connect(db) as conn:
+        cur = conn.execute("SELECT COUNT(*) FROM " + table + " WHERE timestamp = ?", (ts,))
+        before = cur.fetchone()[0]
         conn.executemany(sql, df[_OC_COLS].values.tolist())
         conn.commit()
-    logger.info("[%s] Option chain: %d rows at ts=%s into %s", symbol, len(df), ts, table)
+        after = conn.execute("SELECT COUNT(*) FROM " + table + " WHERE timestamp = ?", (ts,)).fetchone()[0]
+    inserted  = after - before
+    duplicate = len(df) - inserted
+    logger.info("[%s] ts=%s inserted=%d duplicates_ignored=%d table_ts_rows=%d",
+                symbol, ts, inserted, duplicate, after)
