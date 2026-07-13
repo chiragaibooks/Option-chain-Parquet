@@ -219,12 +219,16 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
             else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
         )
 
-        rows.append({
-            "expiry": expiry, "strike": strike, "option_type": "PE",
-            "ltp": pe_ltp if pe_ltp is not None else 0.0,
-            "volume": pe_vol, "oi": pe_oi, "oi_chg": pe_oi_chg,
-            "iv": pe_iv_pct, "spot": item_spot, **pe_greeks,
-        })
+        # Skip PE rows with no trade
+        if not pe_ltp or pe_ltp <= 0:
+            pass
+        else:
+            rows.append({
+                "expiry": expiry, "strike": strike, "option_type": "PE",
+                "ltp": pe_ltp,
+                "volume": pe_vol, "oi": pe_oi, "oi_chg": pe_oi_chg,
+                "iv": pe_iv_pct, "spot": item_spot, **pe_greeks,
+            })
 
         # ── CE (C_ prefix) ────────────────────────────────────────────────────
         ce_ltp    = _parse_float_nonneg(item.get("C_Last_Trd_Price"))
@@ -249,12 +253,16 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
             else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
         )
 
-        rows.append({
-            "expiry": expiry, "strike": strike, "option_type": "CE",
-            "ltp": ce_ltp if ce_ltp is not None else 0.0,
-            "volume": ce_vol, "oi": ce_oi, "oi_chg": ce_oi_chg,
-            "iv": ce_iv_pct, "spot": item_spot, **ce_greeks,
-        })
+        # Skip CE rows with no trade
+        if not ce_ltp or ce_ltp <= 0:
+            pass
+        else:
+            rows.append({
+                "expiry": expiry, "strike": strike, "option_type": "CE",
+                "ltp": ce_ltp,
+                "volume": ce_vol, "oi": ce_oi, "oi_chg": ce_oi_chg,
+                "iv": ce_iv_pct, "spot": item_spot, **ce_greeks,
+            })
 
     df = pd.DataFrame(rows)
     logger.info("[SENSEX] Parsed %d rows for expiry %s (spot=%.2f)", len(df), expiry, spot or

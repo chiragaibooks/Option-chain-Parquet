@@ -71,8 +71,8 @@ def _validate_record(row: dict, source: str) -> bool:
         logger.debug("[%s] Skipping record: invalid spot=%s strike=%s", source, spot, strike)
         return False
     ltp = row.get("ltp")
-    if ltp is None or ltp < 0:
-        logger.debug("[%s] Skipping record: invalid ltp=%s strike=%s", source, ltp, strike)
+    if ltp is None or ltp <= 0:
+        logger.debug("[%s] Skipping record: zero/invalid ltp=%s strike=%s", source, ltp, strike)
         return False
     oi = row.get("oi")
     if oi is not None and oi < 0:
