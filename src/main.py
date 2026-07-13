@@ -91,7 +91,7 @@ def _fetch_option_chains(index_cfgs) -> dict:
                 logger.warning("[%s] No expiries found", sym)
                 continue
 
-            # Try live API first — returns all expiries in one call
+            # Live API only during market hours — bhav is stale EOD data, skip it here
             df_all = _fetch_live_option_chain(sym, spot)
             fetched = []
             if not df_all.empty:
@@ -100,17 +100,8 @@ def _fetch_option_chains(index_cfgs) -> dict:
                     if not df_exp.empty:
                         fetched.append((df_exp, expiry, spot))
                         logger.info("[%s] %s — %d rows (live)", sym, expiry, len(df_exp))
-
-            # Fallback to bhav per expiry if live failed
-            if not fetched:
-                for expiry in expiries:
-                    try:
-                        df = fetch_option_chain(sym, expiry, spot)
-                        if not df.empty:
-                            fetched.append((df, expiry, spot))
-                            logger.info("[%s] %s — %d rows (bhav)", sym, expiry, len(df))
-                    except Exception:
-                        logger.exception("[%s] %s fetch error", sym, expiry)
+            else:
+                logger.warning("[%s] Live API returned empty — skipping this run (no bhav fallback during market hours)", sym)
 
             if fetched:
                 option_data[sym] = fetched
