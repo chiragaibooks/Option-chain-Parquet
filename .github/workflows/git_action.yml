@@ -2,9 +2,9 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    - cron: "*/5 3-10 * * 1-5"  # every 5 min, 09:15-15:30 IST (03:45-10:00 UTC) Mon-Fri
-    - cron: "45 3 * * 1-5"       # 09:15 IST — market open
-    - cron: "0 10 * * 1-5"       # 15:30 IST — market close
+    - cron: "45,50,55 3 * * 1-5"  # 09:15, 09:20, 09:25 IST
+    - cron: "*/5 4-9 * * 1-5"     # every 5 min, 09:30-15:25 IST (04:00-09:55 UTC)
+    - cron: "0,5 10 * * 1-5"      # 15:30, 15:35 IST — market close
   workflow_dispatch:
 
 permissions:

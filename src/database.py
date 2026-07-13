@@ -310,8 +310,19 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
         logger.warning("No option chain table for symbol: %s", symbol)
         return
 
+    # Guard: skip weekends and outside market hours
+    now = datetime.now(IST)
+    if now.weekday() >= 5:
+        logger.info("Weekend (%s) — skipping option chain insert for %s", now.strftime("%A"), symbol)
+        return
+    hm = now.hour * 100 + now.minute
+    if not (915 <= hm <= 1530):
+        logger.info("Outside market hours (%s %02d:%02d IST)  skipping option chain insert",
+                    now.strftime("%a"), now.hour, now.minute)
+        return
+
     # Always use real current time — unique per run, accumulates history
-    ts = datetime.now(IST).strftime("%Y%m%d%H%M")
+    ts = now.strftime("%Y%m%d%H%M")
 
     label = _INDEX_LABEL.get(symbol, symbol)
     df    = df.copy()

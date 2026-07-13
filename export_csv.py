@@ -3,7 +3,7 @@ import sqlite3
 import pandas as pd
 
 DB  = os.path.join(os.path.dirname(__file__), "data", "option_chain.db")
-OUT = os.path.join(os.path.dirname(__file__), "data", "option_chain.csv")
+OUT = os.path.join(os.path.expanduser("~"), "Desktop", "option_chain.csv")
 
 conn = sqlite3.connect(DB)
 tables = [

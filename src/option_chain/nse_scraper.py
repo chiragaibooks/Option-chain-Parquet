@@ -349,12 +349,18 @@ def get_expiry_dates(symbol: str = "NIFTY50") -> List[str]:
 def _expiries_from_bhav(nse_sym: str) -> List[str]:
     try:
         from nselib import derivatives
+        import concurrent.futures
         for i in range(5):
             d = date.today() - timedelta(days=i)
             if d.weekday() >= 5:
                 continue
             try:
-                bhav = derivatives.fno_bhav_copy(d.strftime("%d-%m-%Y"))
+                with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                    future = ex.submit(derivatives.fno_bhav_copy, d.strftime("%d-%m-%Y"))
+                    bhav = future.result(timeout=20)
+            except concurrent.futures.TimeoutError:
+                logger.warning("bhav expiry fetch timed out for %s", d)
+                continue
             except Exception:
                 continue
             if bhav is None or bhav.empty:
@@ -416,6 +422,7 @@ def fetch_option_chain(
                 break
 
     from nselib import derivatives
+    import concurrent.futures
     bhav = None
     for i in range(5):
         try_date = (datetime.strptime(trade_date, "%d-%m-%Y").date() - timedelta(days=i))
@@ -424,10 +431,15 @@ def fetch_option_chain(
         ds = try_date.strftime("%d-%m-%Y")
         try:
             logger.info("[%s] Trying bhav copy for %s", symbol, ds)
-            b = derivatives.fno_bhav_copy(ds)
+            with concurrent.futures.ThreadPoolExecutor(max_workers=1) as ex:
+                future = ex.submit(derivatives.fno_bhav_copy, ds)
+                b = future.result(timeout=20)
             if b is not None and not b.empty:
                 bhav = b
                 break
+        except concurrent.futures.TimeoutError:
+            logger.warning("[%s] bhav fetch timed out for %s — skipping", symbol, ds)
+            break
         except Exception:
             logger.warning("[%s] bhav failed for %s", symbol, ds, exc_info=True)
 

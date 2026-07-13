@@ -44,12 +44,23 @@ logger = logging.getLogger(__name__)
 # ---------------------------------------------------------------------------
 # Src imports
 # ---------------------------------------------------------------------------
+import pytz
+from datetime import datetime as _dt
 from src.database                    import init_db, insert_data, insert_option_data, prune_old_option_data
 from src.tradingview_client          import get_tv
 from src.fetch_data                  import fetch_all
 from src.readme_generator            import update_readme
 from src.option_chain.nse_scraper    import get_expiry_dates, get_spot, _fetch_live_option_chain, fetch_option_chain
 from src.option_chain.bse_scraper    import get_sensex_expiry_dates, fetch_sensex_option_chain
+
+_IST = pytz.timezone("Asia/Kolkata")
+
+def _is_market_open() -> bool:
+    now = _dt.now(_IST)
+    if now.weekday() >= 5:
+        return False
+    hm = now.hour * 100 + now.minute
+    return 915 <= hm <= 1530
 
 
 def _load_symbols():
@@ -157,8 +168,14 @@ def main() -> None:
             except Exception:
                 logger.exception("[%s] insert_data failed", label)
 
-    # 4. Fetch option chains from NSE (next 4 expiries per symbol)
-    option_data = _fetch_option_chains(index_cfgs)
+    # 4. Fetch option chains — only during market hours Mon-Fri
+    if not _is_market_open():
+        now = _dt.now(_IST)
+        logger.info("Skipping option chain fetch — %s %s IST (market closed)",
+                    now.strftime("%A"), now.strftime("%H:%M"))
+        option_data = {}
+    else:
+        option_data = _fetch_option_chains(index_cfgs)
 
     # 5. Store option chain data into symbol-specific tables
     for sym, fetched_list in option_data.items():
