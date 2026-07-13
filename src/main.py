@@ -138,10 +138,9 @@ def _fetch_option_chains(index_cfgs) -> dict:
 
 
 def _needs_market_data_fetch(db: str, symbols: list) -> bool:
-    """Skip market data fetch if we already stored a candle in the last 4 minutes."""
+    """Skip market data fetch if a candle was stored in the last 4 minutes."""
     import sqlite3
-    now_hhmm = _dt.now(_IST).strftime("%Y%m%d%H%M")
-    cutoff   = str(int(now_hhmm) - 4)  # rough 4-min lookback
+    cutoff = (_dt.now(_IST) - __import__('datetime').timedelta(minutes=4)).strftime("%Y%m%d%H%M")
     try:
         with sqlite3.connect(db) as conn:
             row = conn.execute(

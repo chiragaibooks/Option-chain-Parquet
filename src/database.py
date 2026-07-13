@@ -300,10 +300,50 @@ def prune_old_option_data(db: str, keep_days: int = 14) -> None:
     logger.info("Pruned option chain rows older than %d days (cutoff ts=%s)", keep_days, cutoff)
 
 
+def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
+    """
+    Recompute open/high/low/close for every (option_type, expiry, strike) on today
+    from all ltp snapshots stored so far today, then UPDATE each row.
+    - open  = ltp of the first snapshot of the day
+    - high  = max ltp across all snapshots today
+    - low   = min ltp across all snapshots today (excluding 0)
+    - close = ltp of the latest snapshot (current row being inserted)
+    """
+    conn.execute(f"""
+        UPDATE {table}
+        SET
+            open  = day_agg.first_ltp,
+            high  = day_agg.max_ltp,
+            low   = day_agg.min_ltp,
+            close = day_agg.last_ltp
+        FROM (
+            SELECT
+                option_type, expiry, strike,
+                MIN(CASE WHEN rn_asc  = 1 THEN ltp END) AS first_ltp,
+                MAX(ltp)                                  AS max_ltp,
+                MIN(CASE WHEN ltp > 0 THEN ltp END)       AS min_ltp,
+                MIN(CASE WHEN rn_desc = 1 THEN ltp END)   AS last_ltp
+            FROM (
+                SELECT
+                    option_type, expiry, strike, ltp,
+                    ROW_NUMBER() OVER (PARTITION BY option_type, expiry, strike ORDER BY timestamp ASC)  AS rn_asc,
+                    ROW_NUMBER() OVER (PARTITION BY option_type, expiry, strike ORDER BY timestamp DESC) AS rn_desc
+                FROM {table}
+                WHERE substr(timestamp,1,8) = ?
+            ) ranked
+            GROUP BY option_type, expiry, strike
+        ) day_agg
+        WHERE {table}.option_type = day_agg.option_type
+          AND {table}.expiry      = day_agg.expiry
+          AND {table}.strike      = day_agg.strike
+          AND substr({table}.timestamp,1,8) = ?
+    """, (today, today))
+
+
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0, trade_date: Optional[str] = None) -> None:
     """
-    Insert option chain snapshot. Always stamps with actual current IST time so
-    every run produces a unique timestamp and rows accumulate across runs.
+    Insert option chain snapshot and recompute intraday OHLC from all
+    snapshots stored today for each (option_type, expiry, strike).
     """
     table = _OC_TABLES.get(symbol)
     if not table:
@@ -317,12 +357,12 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
         return
     hm = now.hour * 100 + now.minute
     if not (915 <= hm <= 1530):
-        logger.info("Outside market hours (%s %02d:%02d IST)  skipping option chain insert",
+        logger.info("Outside market hours (%s %02d:%02d IST) skipping option chain insert",
                     now.strftime("%a"), now.hour, now.minute)
         return
 
-    # Always use real current time — unique per run, accumulates history
-    ts = now.strftime("%Y%m%d%H%M")
+    ts    = now.strftime("%Y%m%d%H%M")
+    today = now.strftime("%Y%m%d")
 
     label = _INDEX_LABEL.get(symbol, symbol)
     df    = df.copy()
@@ -339,12 +379,12 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
         f"VALUES ({', '.join(['?'] * len(_OC_COLS))})"
     )
     with sqlite3.connect(db) as conn:
-        cur = conn.execute("SELECT COUNT(*) FROM " + table + " WHERE timestamp = ?", (ts,))
-        before = cur.fetchone()[0]
+        before = conn.execute(f"SELECT COUNT(*) FROM {table} WHERE timestamp=?", (ts,)).fetchone()[0]
         conn.executemany(sql, df[_OC_COLS].values.tolist())
+        after  = conn.execute(f"SELECT COUNT(*) FROM {table} WHERE timestamp=?", (ts,)).fetchone()[0]
+        # Recompute open/high/low/close for all today's rows from accumulated snapshots
+        _update_ohlc(conn, table, today)
         conn.commit()
-        after = conn.execute("SELECT COUNT(*) FROM " + table + " WHERE timestamp = ?", (ts,)).fetchone()[0]
-    inserted  = after - before
-    duplicate = len(df) - inserted
-    logger.info("[%s] ts=%s inserted=%d duplicates_ignored=%d table_ts_rows=%d",
-                symbol, ts, inserted, duplicate, after)
+    inserted = after - before
+    logger.info("[%s] ts=%s inserted=%d duplicates=%d | OHLC updated for %s",
+                symbol, ts, inserted, len(df) - inserted, today)
