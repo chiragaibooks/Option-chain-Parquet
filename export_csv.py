@@ -29,6 +29,6 @@ conn.close()
 if frames:
     out = pd.concat(frames, ignore_index=True)
     out.to_csv(OUT, index=False)
-    print(f"\nExported {len(out)} rows → {OUT}")
+    print(f"\nExported {len(out)} rows -> {OUT}")
 else:
     print("No data to export.")
