@@ -137,6 +137,22 @@ def _fetch_option_chains(index_cfgs) -> dict:
     return option_data
 
 
+def _needs_market_data_fetch(db: str, symbols: list) -> bool:
+    """Skip market data fetch if we already stored a candle in the last 4 minutes."""
+    import sqlite3
+    now_hhmm = _dt.now(_IST).strftime("%Y%m%d%H%M")
+    cutoff   = str(int(now_hhmm) - 4)  # rough 4-min lookback
+    try:
+        with sqlite3.connect(db) as conn:
+            row = conn.execute(
+                "SELECT datetime FROM indexes WHERE stock_name=? AND datetime >= ? LIMIT 1",
+                (symbols[0], cutoff)
+            ).fetchone()
+        return row is None
+    except Exception:
+        return True
+
+
 def main() -> None:
     logger.info("=== stock-data-cornjob starting ===")
 
@@ -145,19 +161,22 @@ def main() -> None:
     # 1. Init DBs
     init_db(MARKET_DB, OPTION_DB)
 
-    # 2. Fetch OHLCV candles
-    tv   = get_tv()
-    data = fetch_all(tv, index_cfgs)
-
-    # 3. Store latest candle per symbol
-    for cfg in index_cfgs:
-        label = cfg["label"]
-        df    = data.get(label)
-        if df is not None and not df.empty:
-            try:
-                insert_data(MARKET_DB, label, df)
-            except Exception:
-                logger.exception("[%s] insert_data failed", label)
+    # 2. Fetch OHLCV candles — only every ~5 min to avoid redundant TV calls
+    symbol_labels = [c["label"] for c in index_cfgs]
+    if _needs_market_data_fetch(MARKET_DB, symbol_labels):
+        tv   = get_tv()
+        data = fetch_all(tv, index_cfgs)
+        # 3. Store latest candle per symbol
+        for cfg in index_cfgs:
+            label = cfg["label"]
+            df    = data.get(label)
+            if df is not None and not df.empty:
+                try:
+                    insert_data(MARKET_DB, label, df)
+                except Exception:
+                    logger.exception("[%s] insert_data failed", label)
+    else:
+        logger.info("Market data already fresh — skipping TV/yfinance fetch this run")
 
     # 4. Fetch option chains — only during market hours Mon-Fri
     if not _is_market_open():
@@ -168,7 +187,7 @@ def main() -> None:
     else:
         option_data = _fetch_option_chains(index_cfgs)
 
-    # 5. Store option chain data into symbol-specific tables
+    # 5. Store option chain snapshots
     for sym, fetched_list in option_data.items():
         for df, expiry, spot in fetched_list:
             try:
@@ -176,12 +195,14 @@ def main() -> None:
             except Exception:
                 logger.exception("[%s] insert_option_data failed for expiry %s", sym, expiry)
 
-    # Prune snapshots older than 14 days
+    # 6. Prune snapshots older than 14 days
     prune_old_option_data(OPTION_DB, keep_days=14)
 
-    # 6. Update README
-    # flatten option_data for readme_generator (just first expiry per symbol)
-    readme_option = {sym: (fetched[0][0], fetched[0][2]) for sym, fetched in option_data.items()} if option_data else None
+    # 7. Update README
+    readme_option = (
+        {sym: (fetched[0][0], fetched[0][2]) for sym, fetched in option_data.items()}
+        if option_data else None
+    )
     update_readme(
         README_FILE,
         MARKET_DB,

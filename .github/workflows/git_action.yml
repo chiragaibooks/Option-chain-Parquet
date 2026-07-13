@@ -2,9 +2,7 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    - cron: "45,50,55 3 * * 1-5"  # 09:15, 09:20, 09:25 IST
-    - cron: "*/5 4-9 * * 1-5"     # every 5 min, 09:30-15:25 IST (04:00-09:55 UTC)
-    - cron: "0,5 10 * * 1-5"      # 15:30, 15:35 IST — market close
+    - cron: "*/1 3-10 * * 1-5"   # every minute, 08:30-16:30 UTC = 14:00-22:00 IST (covers 09:15-15:30 IST)
   workflow_dispatch:
 
 permissions:
@@ -13,6 +11,9 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
+    concurrency:
+      group: option-chain-run
+      cancel-in-progress: false   # queue runs, don't cancel — every snapshot matters
 
     steps:
       - uses: actions/checkout@v4
