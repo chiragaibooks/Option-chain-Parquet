@@ -21,20 +21,8 @@ _SYM_MAP = {
     "FINNIFTY":    "FINNIFTY",
     "MIDCAPNIFTY": "MIDCPNIFTY",
 }
-_NSE_LIVE_SYM = {
-    "NIFTY50":     "NIFTY%2050",
-    "BANKNIFTY":   "BANKNIFTY",
-    "FINNIFTY":    "FINNIFTY",
-    "MIDCAPNIFTY": "MIDCPNIFTY",
-}
 _MONTHLY_EXPIRY_SYMS = {"MIDCPNIFTY"}
 
-_NSE_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "Accept-Language": "en-US,en;q=0.9",
-    "Accept-Encoding": "gzip, deflate, br",
-    "Referer": "https://www.nseindia.com/option-chain",
-}
 _BSE_HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
     "Accept": "application/json, text/plain, */*",
@@ -139,14 +127,26 @@ def _iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Opt
 
 # ── Live NSE option chain ─────────────────────────────────────────────────────
 
+# option-chain-v3 API: per-expiry call, returns records.data with CE/PE keys
+_NSE_OC_V3_URL  = "https://www.nseindia.com/api/option-chain-v3?type={typ}&symbol={sym}&expiry={expiry}"
+_NSE_OC_ORIGIN  = "https://www.nseindia.com/option-chain"
+# MIDCPNIFTY is not in nselib indices_list so uses type=Equity
+_NSE_OC_TYPE = {
+    "NIFTY50":     "Indices",
+    "BANKNIFTY":   "Indices",
+    "FINNIFTY":    "Indices",
+    "MIDCAPNIFTY": "Equity",
+}
+
+
 def _nse_session() -> requests.Session:
+    """Cookie-warmed session for NSE API calls."""
+    from nselib.libutil import default_header, header as nselib_header
     s = requests.Session()
-    s.headers.update(_NSE_HEADERS)
+    s.headers.update(nselib_header)
     try:
-        s.get("https://www.nseindia.com", timeout=10)
-        time.sleep(1)
-        s.get("https://www.nseindia.com/market-data/live-equity-market", timeout=10)
-        time.sleep(1)
+        resp = s.get(_NSE_OC_ORIGIN, headers=default_header, timeout=10)
+        s.cookies.update(resp.cookies)
     except Exception:
         pass
     return s
@@ -154,85 +154,84 @@ def _nse_session() -> requests.Session:
 
 def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
     """
-    Fetch live option chain using nsepython.
-    IV is taken directly from API field 'impliedVolatility' (stored as %).
-    If API returns 0 or missing IV, stores NULL — never uses a hardcoded default.
-    Greeks computed only when vollib is available and IV > 0.
+    Fetch live NSE option chain via option-chain-v3 API (one call per expiry).
+    Returns combined DataFrame for all expiries so caller can filter by expiry.
+    IV taken from API 'impliedVolatility' field (already in %).
     """
-    nse_sym = _NSE_LIVE_SYM.get(symbol, "NIFTY")
+    from nselib.libutil import nse_urlfetch
+    nse_sym  = _SYM_MAP.get(symbol, "NIFTY")
+    oc_type  = _NSE_OC_TYPE.get(symbol, "Indices")
+
+    # Get expiry list first
     try:
-        from nsepython import nse_optionchain_scrapper
-        data    = nse_optionchain_scrapper(nse_sym)
-        records = data.get("records", {})
-        api_spot = _to_float(records.get("underlyingValue"))
-        spot     = api_spot if (api_spot and api_spot > 0) else spot
-        raw      = records.get("data", [])
-        logger.debug("[%s] Live API spot=%.2f, raw contracts=%d", symbol, spot, len(raw))
-    except Exception as e:
-        logger.warning("[%s] nsepython live fetch failed: %s", symbol, e)
+        expiries = get_expiry_dates(symbol)[:4]
+    except Exception:
+        expiries = []
+    if not expiries:
+        logger.warning("[%s] No expiries available for live fetch", symbol)
         return pd.DataFrame()
 
-    rows = []
+    all_rows: list = []
     skipped = 0
-    for item in raw:
-        expiry = item.get("expiryDate", "")
-        strike = _to_float(item.get("strikePrice"))
-        if strike is None:
-            skipped += 1
+
+    for expiry in expiries:
+        url = _NSE_OC_V3_URL.format(typ=oc_type, sym=nse_sym, expiry=expiry)
+        try:
+            resp    = nse_urlfetch(url, origin_url=_NSE_OC_ORIGIN)
+            data    = resp.json()
+            records = data.get("records", {})
+            api_spot = _to_float(records.get("underlyingValue"))
+            use_spot = api_spot if (api_spot and api_spot > 0) else spot
+            raw      = records.get("data", [])
+            logger.info("[%s] v3 API expiry=%s status=%d spot=%.2f rows=%d",
+                        symbol, expiry, resp.status_code, use_spot, len(raw))
+        except Exception as e:
+            logger.warning("[%s] v3 API failed for expiry=%s: %s", symbol, expiry, e)
             continue
+
         try:
             tte = max((datetime.strptime(expiry, "%d-%b-%Y").date() - date.today()).days, 1) / 365.0
         except Exception:
             tte = None
 
-        for otype, key in (("CE", "CE"), ("PE", "PE")):
-            d = item.get(key, {})
-            if not d:
-                continue
-
-            ltp    = _to_float_nonneg(d.get("lastPrice"))
-            oi     = _to_float_nonneg(d.get("openInterest"))
-            chg_oi = _to_float(d.get("changeinOpenInterest"))
-            vol    = _to_float_nonneg(d.get("totalTradedVolume"))
-
-            # IV: use API value directly (already in %), store None if 0 or missing
-            iv_api = _to_float(d.get("impliedVolatility"))
-            iv_pct = iv_api if (iv_api is not None and iv_api > 0) else None
-            logger.debug("[%s] strike=%s %s API_IV=%s stored_IV=%s", symbol, strike, otype, iv_api, iv_pct)
-
-            # Greeks: only compute if IV available and vollib installed
-            iv_dec = iv_pct / 100 if iv_pct else None
-            flag   = "c" if otype == "CE" else "p"
-            greeks = (
-                _greeks(flag, spot, strike, tte, iv_dec)
-                if (iv_dec and tte and spot > 0 and ltp and ltp > 0)
-                else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
-            )
-
-            record = {
-                "expiry":      expiry,
-                "strike":      strike,
-                "option_type": otype,
-                "spot":        spot,
-                "ltp":         ltp if ltp is not None else 0.0,
-                "open":        None,  # live API does not provide OHLC
-                "high":        None,
-                "low":         None,
-                "close":       None,
-                "volume":      vol,
-                "oi":          oi,
-                "oi_chg":      chg_oi,
-                "iv":          iv_pct,   # % or None — never hardcoded 18
-                **greeks,
-            }
-            if _validate_record(record, symbol):
-                rows.append(record)
-            else:
+        for item in raw:
+            strike = _to_float(item.get("strikePrice"))
+            if strike is None:
                 skipped += 1
+                continue
+            item_expiry = item.get("expiryDates", [expiry])
+            # expiryDates is a list; use the requested expiry
+            for otype, key in (("CE", "CE"), ("PE", "PE")):
+                d = item.get(key, {})
+                if not d:
+                    continue
+                ltp    = _to_float_nonneg(d.get("lastPrice"))
+                oi     = _to_float_nonneg(d.get("openInterest"))
+                chg_oi = _to_float(d.get("changeinOpenInterest"))
+                vol    = _to_float_nonneg(d.get("totalTradedVolume"))
+                iv_api = _to_float(d.get("impliedVolatility"))
+                iv_pct = iv_api if (iv_api is not None and iv_api > 0) else None
+                iv_dec = iv_pct / 100 if iv_pct else None
+                flag   = "c" if otype == "CE" else "p"
+                greeks = (
+                    _greeks(flag, use_spot, strike, tte, iv_dec)
+                    if (iv_dec and tte and use_spot > 0 and ltp and ltp > 0)
+                    else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+                )
+                record = {
+                    "expiry": expiry, "strike": strike, "option_type": otype,
+                    "spot": use_spot, "ltp": ltp if ltp is not None else 0.0,
+                    "open": None, "high": None, "low": None, "close": None,
+                    "volume": vol, "oi": oi, "oi_chg": chg_oi, "iv": iv_pct,
+                    **greeks,
+                }
+                if _validate_record(record, symbol):
+                    all_rows.append(record)
+                else:
+                    skipped += 1
 
-    logger.info("[%s] Live: %d contracts parsed, %d written, %d skipped (spot=%.2f)",
-                symbol, len(raw) * 2, len(rows), skipped, spot)
-    return pd.DataFrame(rows)
+    logger.info("[%s] Live total: %d rows written, %d skipped", symbol, len(all_rows), skipped)
+    return pd.DataFrame(all_rows)
 
 
 # ── Bhav copy parser ──────────────────────────────────────────────────────────
