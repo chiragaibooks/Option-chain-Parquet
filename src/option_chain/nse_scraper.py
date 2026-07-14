@@ -107,7 +107,8 @@ def _greeks(flag: str, S: float, K: float, t: float, iv: float) -> dict:
         }
     except ImportError:
         return null
-    except Exception:
+    except Exception as e:
+        logger.debug("[greeks] failed flag=%s S=%s K=%s t=%s iv=%s: %s", flag, S, K, t, iv, e)
         return null
 
 
@@ -121,7 +122,8 @@ def _iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Opt
         return round(iv, 4) if iv and 0.001 < iv < 20 else None
     except ImportError:
         return None
-    except Exception:
+    except Exception as e:
+        logger.debug("[_iv_from_price] failed flag=%s S=%s K=%s t=%s price=%s: %s", flag, S, K, t, price, e)
         return None
 
 
@@ -190,7 +192,7 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
             continue
 
         try:
-            tte = max((datetime.strptime(expiry, "%d-%b-%Y").date() - date.today()).days, 1) / 365.0
+            tte = max((datetime.strptime(expiry, "%d-%b-%Y").date() - date.today()).days, 0.5) / 365.0
         except Exception:
             tte = None
 
