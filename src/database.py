@@ -305,19 +305,26 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     Recompute OHLC for every row inserted today.
 
     Each row represents a point-in-time snapshot, so:
-    - close = this row's own ltp (snapshot value at this timestamp)
+    - close = this row's own ltp  (plain UPDATE, no FROM — avoids SQLite join ambiguity)
     - open  = ltp of the first snapshot of the day for this contract
     - high  = max ltp across all snapshots UP TO AND INCLUDING this row's timestamp
     - low   = min ltp (>0) across all snapshots UP TO AND INCLUDING this row's timestamp
-
-    This ensures historical rows are never overwritten with end-of-day values.
     """
+    # close must be set in a separate statement with no FROM clause.
+    # In SQLite's UPDATE...FROM, table.col inside SET resolves against the
+    # joined row, not the row being updated, so close would get the last
+    # joined ltp instead of each row's own ltp.
+    conn.execute(f"""
+        UPDATE {table}
+        SET close = ltp
+        WHERE substr(timestamp,1,8) = ?
+    """, (today,))
+
     conn.execute(f"""
         UPDATE {table}
         SET
-            close = {table}.ltp,
-            open  = day_open.first_ltp,
-            high  = (
+            open = day_open.first_ltp,
+            high = (
                 SELECT MAX(s.ltp)
                 FROM {table} s
                 WHERE s.option_type = {table}.option_type
@@ -326,7 +333,7 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
                   AND substr(s.timestamp,1,8) = ?
                   AND s.timestamp  <= {table}.timestamp
             ),
-            low   = (
+            low  = (
                 SELECT MIN(s.ltp)
                 FROM {table} s
                 WHERE s.option_type = {table}.option_type
@@ -337,8 +344,7 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
                   AND s.ltp > 0
             )
         FROM (
-            SELECT option_type, expiry, strike,
-                   MIN(ltp) AS first_ltp
+            SELECT option_type, expiry, strike, ltp AS first_ltp
             FROM (
                 SELECT option_type, expiry, strike, ltp,
                        ROW_NUMBER() OVER (
@@ -349,7 +355,6 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
                 WHERE substr(timestamp,1,8) = ?
             ) ranked
             WHERE rn = 1
-            GROUP BY option_type, expiry, strike
         ) day_open
         WHERE {table}.option_type = day_open.option_type
           AND {table}.expiry      = day_open.expiry
