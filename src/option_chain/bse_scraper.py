@@ -203,14 +203,10 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
         pe_vol    = _parse_float_nonneg(item.get("Vol_Traded"))
         pe_iv_raw = _parse_float(item.get("IV"))
 
-        if pe_iv_raw is None:
+        if pe_iv_raw is None or pe_iv_raw == 0.0:
             pe_iv_pct = None
-            _log_iv("SENSEX", strike, "PE", expiry, item.get("IV"), None, None, "API did not provide IV")
-        elif pe_iv_raw == 0.0:
-            pe_iv_pct = 0.0
-            _log_iv("SENSEX", strike, "PE", expiry, 0, 0.0, 0.0, "API explicitly returned zero")
-        else:
-            pe_iv_pct = pe_iv_raw
+            _log_iv("SENSEX", strike, "PE", expiry, item.get("IV"), pe_iv_raw, None,
+                    "API returned zero" if pe_iv_raw == 0.0 else "API did not provide IV")
 
         pe_iv_dec = pe_iv_pct / 100 if (pe_iv_pct is not None and pe_iv_pct > 0) else None
         pe_greeks = (
@@ -237,14 +233,10 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
         ce_vol    = _parse_float_nonneg(item.get("C_Vol_Traded"))
         ce_iv_raw = _parse_float(item.get("C_IV"))
 
-        if ce_iv_raw is None:
+        if ce_iv_raw is None or ce_iv_raw == 0.0:
             ce_iv_pct = None
-            _log_iv("SENSEX", strike, "CE", expiry, item.get("C_IV"), None, None, "API did not provide IV")
-        elif ce_iv_raw == 0.0:
-            ce_iv_pct = 0.0
-            _log_iv("SENSEX", strike, "CE", expiry, 0, 0.0, 0.0, "API explicitly returned zero")
-        else:
-            ce_iv_pct = ce_iv_raw
+            _log_iv("SENSEX", strike, "CE", expiry, item.get("C_IV"), ce_iv_raw, None,
+                    "API returned zero" if ce_iv_raw == 0.0 else "API did not provide IV")
 
         ce_iv_dec = ce_iv_pct / 100 if (ce_iv_pct is not None and ce_iv_pct > 0) else None
         ce_greeks = (
