@@ -300,7 +300,56 @@ def prune_old_option_data(db: str, keep_days: int = 14) -> None:
     logger.info("Pruned option chain rows older than %d days (cutoff ts=%s)", keep_days, cutoff)
 
 
-def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
+def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
+    """
+    Backfill NULL Greeks for today's rows where iv, spot, strike are available.
+    Runs after INSERT so rows inserted with delta=NULL (e.g. from a prior run
+    before the ltp-guard fix) get their Greeks filled in.
+    """
+    try:
+        from src.option_chain.nse_scraper import _greeks
+        from datetime import date as _date
+    except ImportError:
+        return
+
+    rows = conn.execute(f"""
+        SELECT timestamp, option_type, expiry, strike, spot, iv
+        FROM {table}
+        WHERE substr(timestamp,1,8) = ?
+          AND delta IS NULL
+          AND iv IS NOT NULL AND iv > 0
+          AND spot IS NOT NULL AND spot > 0
+          AND strike IS NOT NULL AND strike > 0
+    """, (today,)).fetchall()
+
+    if not rows:
+        return
+
+    updated = 0
+    for ts, otype, expiry, strike, spot, iv_pct in rows:
+        try:
+            exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
+            tte = max((exp_date - _date.today()).days, 0.5) / 365.0
+        except Exception:
+            continue
+        iv_dec = iv_pct / 100.0
+        flag   = "c" if otype == "CE" else "p"
+        g = _greeks(flag, spot, strike, tte, iv_dec)
+        if g["delta"] is None:
+            continue
+        conn.execute(f"""
+            UPDATE {table}
+            SET delta=?, gamma=?, theta=?, vega=?, rho=?
+            WHERE timestamp=? AND option_type=? AND expiry=? AND strike=?
+        """, (g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
+               ts, otype, expiry, strike))
+        updated += 1
+
+    if updated:
+        logger.info("[%s] Backfilled Greeks for %d rows on %s", table, updated, today)
+
+
+
     """
     Recompute OHLC for every row inserted today.
 
@@ -407,6 +456,8 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
         after  = conn.execute(f"SELECT COUNT(*) FROM {table} WHERE timestamp=?", (ts,)).fetchone()[0]
         # Recompute open/high/low/close for all today's rows from accumulated snapshots
         _update_ohlc(conn, table, today)
+        # Backfill NULL Greeks for today's rows where inputs are available
+        _update_greeks(conn, table, today)
         conn.commit()
     inserted = after - before
     logger.info("[%s] ts=%s inserted=%d duplicates=%d | OHLC updated for %s",

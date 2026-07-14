@@ -217,7 +217,7 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
                 flag   = "c" if otype == "CE" else "p"
                 greeks = (
                     _greeks(flag, use_spot, strike, tte, iv_dec)
-                    if (iv_dec and tte and use_spot > 0 and ltp and ltp > 0)
+                    if (iv_dec and tte and use_spot > 0 and strike and strike > 0)
                     else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
                 )
                 record = {

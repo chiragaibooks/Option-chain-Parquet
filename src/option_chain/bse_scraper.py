@@ -215,7 +215,7 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
         pe_iv_dec = pe_iv_pct / 100 if (pe_iv_pct is not None and pe_iv_pct > 0) else None
         pe_greeks = (
             _greeks("p", item_spot, strike, tte, pe_iv_dec)
-            if (pe_iv_dec and item_spot > 0 and pe_ltp and pe_ltp > 0)
+            if (pe_iv_dec and item_spot > 0 and strike and strike > 0)
             else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
         )
 
@@ -249,7 +249,7 @@ def fetch_sensex_option_chain(expiry: str, spot: float = 0.0) -> pd.DataFrame:
         ce_iv_dec = ce_iv_pct / 100 if (ce_iv_pct is not None and ce_iv_pct > 0) else None
         ce_greeks = (
             _greeks("c", item_spot, strike, tte, ce_iv_dec)
-            if (ce_iv_dec and item_spot > 0 and ce_ltp and ce_ltp > 0)
+            if (ce_iv_dec and item_spot > 0 and strike and strike > 0)
             else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
         )
 
