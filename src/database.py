@@ -349,20 +349,16 @@ def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
         logger.info("[%s] Backfilled Greeks for %d rows on %s", table, updated, today)
 
 
-
+def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     """
     Recompute OHLC for every row inserted today.
 
-    Each row represents a point-in-time snapshot, so:
-    - close = this row's own ltp  (plain UPDATE, no FROM — avoids SQLite join ambiguity)
+    Each row is a point-in-time snapshot:
+    - close = this row's own ltp  (separate UPDATE — avoids SQLite UPDATE...FROM join ambiguity)
     - open  = ltp of the first snapshot of the day for this contract
     - high  = max ltp across all snapshots UP TO AND INCLUDING this row's timestamp
     - low   = min ltp (>0) across all snapshots UP TO AND INCLUDING this row's timestamp
     """
-    # close must be set in a separate statement with no FROM clause.
-    # In SQLite's UPDATE...FROM, table.col inside SET resolves against the
-    # joined row, not the row being updated, so close would get the last
-    # joined ltp instead of each row's own ltp.
     conn.execute(f"""
         UPDATE {table}
         SET close = ltp
@@ -410,6 +406,7 @@ def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
           AND {table}.strike      = day_open.strike
           AND substr({table}.timestamp,1,8) = ?
     """, (today, today, today, today))
+    logger.debug("[%s] OHLC recomputed for %s", table, today)
 
 
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0, trade_date: Optional[str] = None) -> None:
