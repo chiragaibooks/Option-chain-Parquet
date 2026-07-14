@@ -302,42 +302,60 @@ def prune_old_option_data(db: str, keep_days: int = 14) -> None:
 
 def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     """
-    Recompute open/high/low/close for every (option_type, expiry, strike) on today
-    from all ltp snapshots stored so far today, then UPDATE each row.
-    - open  = ltp of the first snapshot of the day
-    - high  = max ltp across all snapshots today
-    - low   = min ltp across all snapshots today (excluding 0)
-    - close = ltp of the latest snapshot (current row being inserted)
+    Recompute OHLC for every row inserted today.
+
+    Each row represents a point-in-time snapshot, so:
+    - close = this row's own ltp (snapshot value at this timestamp)
+    - open  = ltp of the first snapshot of the day for this contract
+    - high  = max ltp across all snapshots UP TO AND INCLUDING this row's timestamp
+    - low   = min ltp (>0) across all snapshots UP TO AND INCLUDING this row's timestamp
+
+    This ensures historical rows are never overwritten with end-of-day values.
     """
     conn.execute(f"""
         UPDATE {table}
         SET
-            open  = day_agg.first_ltp,
-            high  = day_agg.max_ltp,
-            low   = day_agg.min_ltp,
-            close = day_agg.last_ltp
+            close = {table}.ltp,
+            open  = day_open.first_ltp,
+            high  = (
+                SELECT MAX(s.ltp)
+                FROM {table} s
+                WHERE s.option_type = {table}.option_type
+                  AND s.expiry      = {table}.expiry
+                  AND s.strike      = {table}.strike
+                  AND substr(s.timestamp,1,8) = ?
+                  AND s.timestamp  <= {table}.timestamp
+            ),
+            low   = (
+                SELECT MIN(s.ltp)
+                FROM {table} s
+                WHERE s.option_type = {table}.option_type
+                  AND s.expiry      = {table}.expiry
+                  AND s.strike      = {table}.strike
+                  AND substr(s.timestamp,1,8) = ?
+                  AND s.timestamp  <= {table}.timestamp
+                  AND s.ltp > 0
+            )
         FROM (
-            SELECT
-                option_type, expiry, strike,
-                MIN(CASE WHEN rn_asc  = 1 THEN ltp END) AS first_ltp,
-                MAX(ltp)                                  AS max_ltp,
-                MIN(CASE WHEN ltp > 0 THEN ltp END)       AS min_ltp,
-                MIN(CASE WHEN rn_desc = 1 THEN ltp END)   AS last_ltp
+            SELECT option_type, expiry, strike,
+                   MIN(ltp) AS first_ltp
             FROM (
-                SELECT
-                    option_type, expiry, strike, ltp,
-                    ROW_NUMBER() OVER (PARTITION BY option_type, expiry, strike ORDER BY timestamp ASC)  AS rn_asc,
-                    ROW_NUMBER() OVER (PARTITION BY option_type, expiry, strike ORDER BY timestamp DESC) AS rn_desc
+                SELECT option_type, expiry, strike, ltp,
+                       ROW_NUMBER() OVER (
+                           PARTITION BY option_type, expiry, strike
+                           ORDER BY timestamp ASC
+                       ) AS rn
                 FROM {table}
                 WHERE substr(timestamp,1,8) = ?
             ) ranked
+            WHERE rn = 1
             GROUP BY option_type, expiry, strike
-        ) day_agg
-        WHERE {table}.option_type = day_agg.option_type
-          AND {table}.expiry      = day_agg.expiry
-          AND {table}.strike      = day_agg.strike
+        ) day_open
+        WHERE {table}.option_type = day_open.option_type
+          AND {table}.expiry      = day_open.expiry
+          AND {table}.strike      = day_open.strike
           AND substr({table}.timestamp,1,8) = ?
-    """, (today, today))
+    """, (today, today, today, today))
 
 
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0, trade_date: Optional[str] = None) -> None:
