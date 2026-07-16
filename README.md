@@ -1,6 +1,6 @@
-<!-- Auto-generated — 2026-07-16 15:46:32 IST -->
+<!-- Auto-generated — 2026-07-16 16:02:11 IST -->
 
-**Last updated:** 2026-07-16 15:46:32 IST
+**Last updated:** 2026-07-16 16:02:11 IST
 
 ## 📊 Market Indexes
 
@@ -9,7 +9,7 @@
 <tr><td><b>NIFTY50</b></td><td>202607161529</td><td>24081.10</td><td>12,977</td><td>56.87</td><td>24070.09</td><td>-2.79</td><td>9.07</td><td>28.04</td><td>🟢 BUY</td></tr>
 <tr><td><b>BANKNIFTY</b></td><td>202607161529</td><td>57602.00</td><td>27,107</td><td>58.17</td><td>57580.52</td><td>2.50</td><td>28.26</td><td>19.01</td><td>🟡 HOLD</td></tr>
 <tr><td><b>SENSEX</b></td><td>202607161529</td><td>77186.87</td><td>500</td><td>36.76</td><td>77214.66</td><td>-21.67</td><td>21.39</td><td>19.35</td><td>🟡 HOLD</td></tr>
-<tr><td><b>MIDCAPNIFTY</b></td><td>202607161527</td><td>17991.45</td><td>5,427</td><td>58.03</td><td>17986.38</td><td>3.49</td><td>6.20</td><td>18.32</td><td>🟡 HOLD</td></tr>
-<tr><td><b>FINNIFTY</b></td><td>202607161524</td><td>26544.80</td><td>3,972</td><td>42.75</td><td>26552.94</td><td>-2.41</td><td>10.21</td><td>15.44</td><td>🟡 HOLD</td></tr>
+<tr><td><b>MIDCAPNIFTY</b></td><td>202607161529</td><td>18002.35</td><td>6,777</td><td>66.70</td><td>17989.14</td><td>4.87</td><td>6.66</td><td>21.31</td><td>🟢 BUY</td></tr>
+<tr><td><b>FINNIFTY</b></td><td>202607161529</td><td>26553.15</td><td>29</td><td>50.50</td><td>26551.77</td><td>-1.39</td><td>12.71</td><td>17.38</td><td>🟡 HOLD</td></tr>
 </table>
 
