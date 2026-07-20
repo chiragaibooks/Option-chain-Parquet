@@ -1,11 +1,6 @@
 """
 backfill.py — Backfill last 14 trading days of EOD option chain data from NSE bhav copy.
 Run once from project root: py backfill.py
-
-- Fetches fno_bhav_copy for each of the last 14 trading days
-- Stores one snapshot per day per symbol (timestamp = yyyyMMdd1530)
-- Skips days already in the DB
-- SENSEX is skipped (BSE has no historical bhav API)
 """
 import logging
 import os
@@ -14,14 +9,11 @@ import sys
 from datetime import date, datetime, timedelta
 
 import pandas as pd
-import pytz
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
 logger = logging.getLogger(__name__)
 
-OPTION_DB    = os.getenv("OPTION_DB", "data/option_chain.db")
-MARKET_DB    = os.getenv("MARKET_DB", "data/market_data.db")
-IST          = pytz.timezone("Asia/Kolkata")
+OPTION_DB     = os.getenv("OPTION_DB", "data/option_chain.db")
 BACKFILL_DAYS = 14
 
 _NSE_SYMBOLS = ["NIFTY50", "BANKNIFTY", "FINNIFTY", "MIDCAPNIFTY"]
@@ -51,9 +43,7 @@ _OC_COLS = [
 
 
 def _last_n_trading_days(n: int):
-    """Return last n weekdays (Mon-Fri) as date objects, most recent first."""
-    days = []
-    d = date.today() - timedelta(days=1)  # start from yesterday
+    days, d = [], date.today() - timedelta(days=1)
     while len(days) < n:
         if d.weekday() < 5:
             days.append(d)
@@ -62,34 +52,25 @@ def _last_n_trading_days(n: int):
 
 
 def _already_stored(conn, table: str, ts: str) -> bool:
-    """Return True if this timestamp already has rows in the table."""
-    row = conn.execute(
-        f"SELECT COUNT(*) FROM {table} WHERE timestamp = ?", (ts,)
-    ).fetchone()
+    row = conn.execute(f"SELECT COUNT(*) FROM {table} WHERE timestamp = ?", (ts,)).fetchone()
     return row[0] > 0
 
 
-def _get_spot_for_date(trade_date: date, symbol: str) -> float:
-    """Get EOD spot from market_data.db for a given date, fallback to 0."""
-    ts_prefix = trade_date.strftime("%Y%m%d")
-    try:
-        with sqlite3.connect(MARKET_DB) as conn:
-            row = conn.execute(
-                "SELECT close FROM indexes WHERE stock_name=? AND datetime LIKE ? ORDER BY datetime DESC LIMIT 1",
-                (symbol, ts_prefix + "%"),
-            ).fetchone()
-            if row:
-                return float(row[0])
-    except Exception:
-        pass
+def _spot_from_bhav(bhav: pd.DataFrame, nse_sym: str) -> float:
+    """Derive spot from bhav underlying price column."""
+    sub = bhav[bhav["TckrSymb"] == nse_sym]
+    for col in ("UndrlygPric", "UnderlyingValue"):
+        if col in sub.columns:
+            v = pd.to_numeric(sub[col], errors="coerce").dropna()
+            if not v.empty:
+                return float(v.iloc[0])
     return 0.0
 
 
 def _insert_df(conn, symbol: str, df: pd.DataFrame, spot: float, ts: str):
-    label = _INDEX_LABEL[symbol]
     table = _OC_TABLES[symbol]
     df = df.copy()
-    df["index_name"] = label
+    df["index_name"] = _INDEX_LABEL[symbol]
     df["timestamp"]  = ts
     df["spot"]       = spot
     for col in _OC_COLS:
@@ -105,12 +86,11 @@ def _insert_df(conn, symbol: str, df: pd.DataFrame, spot: float, ts: str):
 
 
 def main():
-    # Ensure DB tables exist
     from src.database import init_db
-    init_db(MARKET_DB, OPTION_DB)
+    init_db(OPTION_DB)
 
     from nselib import derivatives
-    from src.option_chain.nse_scraper import _parse_bhav, _SYM_MAP
+    from src.option_chain.nse_scraper import _parse_bhav
 
     trading_days = _last_n_trading_days(BACKFILL_DAYS)
     logger.info("Backfilling %d trading days: %s → %s",
@@ -119,10 +99,9 @@ def main():
     conn = sqlite3.connect(OPTION_DB)
 
     for trade_date in trading_days:
-        ds      = trade_date.strftime("%d-%m-%Y")
-        ts      = trade_date.strftime("%Y%m%d") + "1530"
+        ds = trade_date.strftime("%d-%m-%Y")
+        ts = trade_date.strftime("%Y%m%d") + "1530"
 
-        # Fetch bhav copy for this date
         try:
             bhav = derivatives.fno_bhav_copy(ds)
         except Exception as e:
@@ -143,22 +122,13 @@ def main():
                 logger.info("[%s] %s already in DB, skipping", symbol, ts)
                 continue
 
-            # Get all expiries present in bhav for this symbol
             sub = bhav[(bhav["TckrSymb"] == nse_sym) & bhav["OptnTp"].notna()]
             if sub.empty:
                 logger.warning("[%s] No rows in bhav for %s", symbol, ds)
                 continue
 
             expiry_dates = sorted(sub["XpryDt"].astype(str).str[:10].unique())
-            spot = _get_spot_for_date(trade_date, symbol)
-
-            # If no spot in DB, try to derive from bhav underlying value
-            if spot == 0.0:
-                uval = sub.get("UndrlygPric") if "UndrlygPric" in sub.columns else None
-                if uval is not None:
-                    v = pd.to_numeric(uval, errors="coerce").dropna()
-                    if not v.empty:
-                        spot = float(v.iloc[0])
+            spot         = _spot_from_bhav(bhav, nse_sym)
 
             all_rows = []
             for exp_iso in expiry_dates:
