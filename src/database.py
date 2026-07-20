@@ -228,6 +228,10 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0
         logger.warning("No option chain table for symbol: %s", symbol)
         return
 
+    if not spot or spot <= 0:
+        logger.warning("[%s] spot=0 or missing — skipping insert to avoid bad data", symbol)
+        return
+
     now = datetime.now(IST)
     if now.weekday() >= 5:
         logger.info("Weekend — skipping option chain insert for %s", symbol)
