@@ -40,7 +40,7 @@ def _is_market_open() -> bool:
     if now.weekday() >= 5:
         return False
     hm = now.hour * 100 + now.minute
-    return 915 <= hm <= 1530
+    return 900 <= hm <= 1530
 
 
 def _fetch_option_chains() -> dict:
