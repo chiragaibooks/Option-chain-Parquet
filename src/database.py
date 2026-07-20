@@ -130,44 +130,90 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     logger.debug("[%s] OHLC recomputed for %s", table, today)
 
 
-def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
-    """Backfill NULL Greeks for today's rows where iv, spot, strike are available."""
+def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
+               lo: float = 0.001, hi: float = 20.0, tol: float = 0.01) -> float:
+    """Bisection IV solver — works for deep ITM where vollib Newton method fails."""
+    from src.option_chain.greeks import _d1_d2
+    import math
+    from scipy.stats import norm
+    _r = 0.065
+
+    def bs_price(iv):
+        try:
+            d1, d2 = _d1_d2(spot, strike, tte, _r, iv)
+            if flag == 'c':
+                return spot * norm.cdf(d1) - strike * math.exp(-_r * tte) * norm.cdf(d2)
+            else:
+                return strike * math.exp(-_r * tte) * norm.cdf(-d2) - spot * norm.cdf(-d1)
+        except Exception:
+            return None
+
     try:
-        from src.option_chain.nse_scraper import _greeks
+        for _ in range(50):
+            mid = (lo + hi) / 2
+            p   = bs_price(mid)
+            if p is None:
+                return None
+            if abs(p - price) < tol:
+                return mid
+            if p < price:
+                lo = mid
+            else:
+                hi = mid
+        return (lo + hi) / 2
+    except Exception:
+        return None
+
+
+def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
+    """Backfill NULL Greeks for today's rows. Derives IV from LTP if iv column is NULL."""
+    try:
+        from src.option_chain.nse_scraper import _greeks, _iv_from_price
         from datetime import date as _date
     except ImportError:
         return
 
     rows = conn.execute(f"""
-        SELECT timestamp, option_type, expiry, strike, spot, iv
+        SELECT timestamp, option_type, expiry, strike, spot, ltp, iv
         FROM {table}
         WHERE substr(timestamp,1,8) = ?
           AND delta IS NULL
-          AND iv IS NOT NULL AND iv > 0
           AND spot IS NOT NULL AND spot > 0
           AND strike IS NOT NULL AND strike > 0
+          AND ltp IS NOT NULL AND ltp > 0
     """, (today,)).fetchall()
 
     if not rows:
         return
 
     updated = 0
-    for ts, otype, expiry, strike, spot, iv_pct in rows:
+    for ts, otype, expiry, strike, spot, ltp, iv_pct in rows:
         try:
             exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
             tte = max((exp_date - _date.today()).days, 0.5) / 365.0
         except Exception:
             continue
-        iv_dec = iv_pct / 100.0
-        flag   = "c" if otype == "CE" else "p"
+        flag = "c" if otype == "CE" else "p"
+        # use stored iv if available, else derive from ltp
+        if iv_pct and iv_pct > 0:
+            iv_dec = iv_pct / 100.0
+        else:
+            iv_dec = _iv_from_price(flag, spot, strike, tte, ltp)
+        if not iv_dec:
+            # bisection fallback for deep ITM where vollib solver fails
+            iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
+        if not iv_dec:
+            continue
         g = _greeks(flag, spot, strike, tte, iv_dec)
         if g["delta"] is None:
             continue
         conn.execute(f"""
             UPDATE {table}
-            SET delta=?, gamma=?, theta=?, vega=?, rho=?
+            SET delta=?, gamma=?, theta=?, vega=?, rho=?,
+                iv=COALESCE(iv, ?)
             WHERE timestamp=? AND option_type=? AND expiry=? AND strike=?
         """, (g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
+               round(iv_dec * 100, 2),
                ts, otype, expiry, strike))
         updated += 1
 
