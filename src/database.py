@@ -130,6 +130,41 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     logger.debug("[%s] OHLC recomputed for %s", table, today)
 
 
+def _bs_greeks(flag: str, S: float, K: float, t: float, iv: float, r: float = 0.065) -> dict:
+    """
+    Pure Black-Scholes Greeks using scipy — no vollib dependency.
+    flag: 'c' for CE, 'p' for PE
+    iv: decimal (e.g. 0.18 for 18%)
+    """
+    null = {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
+    if not (S > 0 and K > 0 and t > 0 and iv > 0):
+        return null
+    try:
+        import math
+        from scipy.stats import norm
+        d1 = (math.log(S / K) + (r + 0.5 * iv * iv) * t) / (iv * math.sqrt(t))
+        d2 = d1 - iv * math.sqrt(t)
+        nd1  = norm.cdf(d1)  if flag == 'c' else norm.cdf(-d1)
+        nd2  = norm.cdf(d2)  if flag == 'c' else norm.cdf(-d2)
+        npd1 = norm.pdf(d1)
+        sign = 1 if flag == 'c' else -1
+        delta = sign * nd1
+        gamma = npd1 / (S * iv * math.sqrt(t))
+        theta = (-(S * npd1 * iv) / (2 * math.sqrt(t))
+                 - sign * r * K * math.exp(-r * t) * nd2) / 365
+        vega  = S * npd1 * math.sqrt(t) / 100
+        rho   = sign * K * t * math.exp(-r * t) * nd2 / 100
+        return {
+            "delta": round(delta, 4),
+            "gamma": round(gamma, 6),
+            "theta": round(theta, 4),
+            "vega":  round(vega,  4),
+            "rho":   round(rho,   4),
+        }
+    except Exception:
+        return null
+
+
 def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
                lo: float = 0.001, hi: float = 20.0, tol: float = 0.01) -> Optional[float]:
     """Bisection IV solver — works for deep ITM where vollib Newton method fails."""
@@ -168,24 +203,17 @@ def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
 def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
     """
     Backfill NULL Greeks for rows on `today` (YYYYMMDD).
-    Uses stored IV if available, else computes IV from LTP via vollib,
-    then falls back to bisection solver for deep ITM/OTM strikes.
+    Uses stored IV if available, else computes IV from LTP via bisection,
+    then computes Greeks using pure scipy Black-Scholes (no vollib dependency).
     """
-    try:
-        from src.option_chain.nse_scraper import _greeks, _iv_from_price
-        from datetime import date as _date
-    except ImportError:
-        logger.warning("[_update_greeks] could not import nse_scraper — skipping")
-        return
-
     rows = conn.execute(f"""
         SELECT timestamp, option_type, expiry, strike, spot, ltp, iv
         FROM {table}
         WHERE substr(timestamp,1,8) = ?
           AND delta IS NULL
-          AND spot  IS NOT NULL AND spot  > 0
+          AND spot   IS NOT NULL AND spot   > 0
           AND strike IS NOT NULL AND strike > 0
-          AND ltp   IS NOT NULL AND ltp   > 0
+          AND ltp    IS NOT NULL AND ltp    > 0
     """, (today,)).fetchall()
 
     if not rows:
@@ -195,6 +223,7 @@ def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
     skipped = 0
     for ts, otype, expiry, strike, spot, ltp, iv_pct in rows:
         try:
+            from datetime import date as _date
             exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
             tte = max((exp_date - _date.today()).days, 0.5) / 365.0
         except Exception:
@@ -207,18 +236,25 @@ def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
         if iv_pct and iv_pct > 0:
             iv_dec = iv_pct / 100.0
         else:
-            # 2. Compute IV from LTP via vollib Newton solver
-            iv_dec = _iv_from_price(flag, spot, strike, tte, ltp)
-
-        if not iv_dec:
-            # 3. Bisection fallback — handles deep ITM/OTM where Newton fails
-            iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
+            # 2. Try vollib Newton solver first (faster)
+            iv_dec = None
+            try:
+                from vollib.black_scholes.implied_volatility import implied_volatility as iv_fn
+                iv_raw = iv_fn(ltp, spot, strike, tte, 0.065, flag)
+                if iv_raw and 0.001 < iv_raw < 20:
+                    iv_dec = round(iv_raw, 4)
+            except Exception:
+                pass
+            # 3. Bisection fallback — always works, no external dependency
+            if not iv_dec:
+                iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
 
         if not iv_dec:
             skipped += 1
             continue
 
-        g = _greeks(flag, spot, strike, tte, iv_dec)
+        # Use pure scipy Greeks — works on any runner without vollib
+        g = _bs_greeks(flag, spot, strike, tte, iv_dec)
         if g["delta"] is None:
             skipped += 1
             continue
