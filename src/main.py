@@ -59,9 +59,17 @@ def _fetch_option_chains() -> dict:
             if not df_all.empty:
                 for expiry in expiries:
                     df_exp = df_all[df_all["expiry"] == expiry].copy()
-                    if not df_exp.empty:
-                        fetched.append((df_exp, expiry, spot))
-                        logger.info("[%s] %s — %d rows", sym, expiry, len(df_exp))
+                    if df_exp.empty:
+                        continue
+                    # Use spot from API response if get_spot() returned 0
+                    exp_spot = spot
+                    if exp_spot <= 0 and "spot" in df_exp.columns:
+                        api_spot = df_exp["spot"].dropna()
+                        if not api_spot.empty:
+                            exp_spot = float(api_spot.iloc[0])
+                            logger.info("[%s] using spot from API response: %.2f", sym, exp_spot)
+                    fetched.append((df_exp, expiry, exp_spot))
+                    logger.info("[%s] %s — %d rows (spot=%.2f)", sym, expiry, len(df_exp), exp_spot)
             else:
                 logger.warning("[%s] Live API returned empty", sym)
 
@@ -78,8 +86,16 @@ def _fetch_option_chains() -> dict:
         for expiry in expiries:
             try:
                 df = fetch_sensex_option_chain(expiry, spot)
-                if not df.empty:
-                    fetched.append((df, expiry, spot))
+                if df.empty:
+                    continue
+                # Use spot from API response if get_spot() returned 0
+                exp_spot = spot
+                if exp_spot <= 0 and "spot" in df.columns:
+                    api_spot = df["spot"].dropna()
+                    if not api_spot.empty:
+                        exp_spot = float(api_spot.iloc[0])
+                        logger.info("[SENSEX] using spot from API response: %.2f", exp_spot)
+                fetched.append((df, expiry, exp_spot))
             except Exception:
                 logger.exception("[SENSEX] fetch error for expiry %s", expiry)
         if fetched:
