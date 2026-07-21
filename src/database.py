@@ -131,16 +131,16 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
 
 
 def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
-               lo: float = 0.001, hi: float = 20.0, tol: float = 0.01) -> float:
+               lo: float = 0.001, hi: float = 20.0, tol: float = 0.01) -> Optional[float]:
     """Bisection IV solver — works for deep ITM where vollib Newton method fails."""
-    from src.option_chain.greeks import _d1_d2
     import math
     from scipy.stats import norm
     _r = 0.065
 
     def bs_price(iv):
         try:
-            d1, d2 = _d1_d2(spot, strike, tte, _r, iv)
+            d1 = (math.log(spot / strike) + (_r + 0.5 * iv * iv) * tte) / (iv * math.sqrt(tte))
+            d2 = d1 - iv * math.sqrt(tte)
             if flag == 'c':
                 return spot * norm.cdf(d1) - strike * math.exp(-_r * tte) * norm.cdf(d2)
             else:
@@ -155,22 +155,27 @@ def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
             if p is None:
                 return None
             if abs(p - price) < tol:
-                return mid
+                return round(mid, 4)
             if p < price:
                 lo = mid
             else:
                 hi = mid
-        return (lo + hi) / 2
+        return round((lo + hi) / 2, 4)
     except Exception:
         return None
 
 
 def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
-    """Backfill NULL Greeks for today's rows. Derives IV from LTP if iv column is NULL."""
+    """
+    Backfill NULL Greeks for rows on `today` (YYYYMMDD).
+    Uses stored IV if available, else computes IV from LTP via vollib,
+    then falls back to bisection solver for deep ITM/OTM strikes.
+    """
     try:
         from src.option_chain.nse_scraper import _greeks, _iv_from_price
         from datetime import date as _date
     except ImportError:
+        logger.warning("[_update_greeks] could not import nse_scraper — skipping")
         return
 
     rows = conn.execute(f"""
@@ -178,47 +183,78 @@ def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
         FROM {table}
         WHERE substr(timestamp,1,8) = ?
           AND delta IS NULL
-          AND spot IS NOT NULL AND spot > 0
+          AND spot  IS NOT NULL AND spot  > 0
           AND strike IS NOT NULL AND strike > 0
-          AND ltp IS NOT NULL AND ltp > 0
+          AND ltp   IS NOT NULL AND ltp   > 0
     """, (today,)).fetchall()
 
     if not rows:
         return
 
     updated = 0
+    skipped = 0
     for ts, otype, expiry, strike, spot, ltp, iv_pct in rows:
         try:
             exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
             tte = max((exp_date - _date.today()).days, 0.5) / 365.0
         except Exception:
+            skipped += 1
             continue
+
         flag = "c" if otype == "CE" else "p"
-        # use stored iv if available, else derive from ltp
+
+        # 1. Use stored IV if valid
         if iv_pct and iv_pct > 0:
             iv_dec = iv_pct / 100.0
         else:
+            # 2. Compute IV from LTP via vollib Newton solver
             iv_dec = _iv_from_price(flag, spot, strike, tte, ltp)
+
         if not iv_dec:
-            # bisection fallback for deep ITM where vollib solver fails
+            # 3. Bisection fallback — handles deep ITM/OTM where Newton fails
             iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
+
         if not iv_dec:
+            skipped += 1
             continue
+
         g = _greeks(flag, spot, strike, tte, iv_dec)
         if g["delta"] is None:
+            skipped += 1
             continue
+
         conn.execute(f"""
             UPDATE {table}
             SET delta=?, gamma=?, theta=?, vega=?, rho=?,
                 iv=COALESCE(iv, ?)
             WHERE timestamp=? AND option_type=? AND expiry=? AND strike=?
-        """, (g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
-               round(iv_dec * 100, 2),
-               ts, otype, expiry, strike))
+        """, (
+            g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
+            round(iv_dec * 100, 2),
+            ts, otype, expiry, strike
+        ))
         updated += 1
 
-    if updated:
-        logger.info("[%s] Backfilled Greeks for %d rows on %s", table, updated, today)
+    logger.info("[%s] Greeks backfill %s: updated=%d skipped=%d", table, today, updated, skipped)
+
+
+def backfill_greeks_for_date(db: str, date_str: str) -> None:
+    """
+    Backfill NULL Greeks for ALL tables for a given date (YYYYMMDD).
+    Call this manually to fix historical rows.
+    """
+    with sqlite3.connect(db) as conn:
+        for symbol, table in _OC_TABLES.items():
+            count = conn.execute(
+                f"SELECT COUNT(*) FROM {table} WHERE substr(timestamp,1,8)=? AND delta IS NULL",
+                (date_str,)
+            ).fetchone()[0]
+            if count == 0:
+                logger.info("[%s] No NULL Greeks on %s — skipping", symbol, date_str)
+                continue
+            logger.info("[%s] Backfilling %d NULL-greek rows for %s", symbol, count, date_str)
+            _update_greeks(conn, table, date_str)
+        conn.commit()
 
 
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float = 0.0, trade_date: Optional[str] = None) -> None:
