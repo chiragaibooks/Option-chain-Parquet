@@ -117,5 +117,96 @@ def api_option_chain():
     })
 
 
+_OC_TABLES = {
+    "NIFTY50":     "nifty50_option_chain",
+    "BANKNIFTY":   "banknifty_option_chain",
+    "FINNIFTY":    "finnifty_option_chain",
+    "MIDCAPNIFTY": "midcapnifty_option_chain",
+    "SENSEX":      "sensex_option_chain",
+}
+
+
+@app.route("/api/dates")
+def api_dates():
+    symbol = request.args.get("symbol", "NIFTY50")
+    table  = _OC_TABLES.get(symbol)
+    if not table:
+        return jsonify([])
+    try:
+        import sqlite3
+        with sqlite3.connect(OPTION_DB) as conn:
+            rows = conn.execute(
+                f"SELECT DISTINCT substr(timestamp,1,8) AS d FROM {table} ORDER BY d DESC LIMIT 30"
+            ).fetchall()
+        dates = [r[0] for r in rows]
+        return jsonify([f"{d[:4]}-{d[4:6]}-{d[6:]}" for d in dates])
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+@app.route("/api/history")
+def api_history():
+    symbol   = request.args.get("symbol", "NIFTY50")
+    date_str = request.args.get("date", "")
+    interval = int(request.args.get("interval", 1))
+    table    = _OC_TABLES.get(symbol)
+    if not table:
+        return jsonify([])
+
+    date_filter = date_str.replace("-", "") if date_str else ""
+
+    try:
+        import sqlite3
+        from collections import defaultdict
+
+        with sqlite3.connect(OPTION_DB) as conn:
+            if date_filter:
+                rows = conn.execute(
+                    f"SELECT timestamp, spot FROM {table} "
+                    f"WHERE substr(timestamp,1,8)=? GROUP BY timestamp ORDER BY timestamp",
+                    (date_filter,)
+                ).fetchall()
+            else:
+                rows = conn.execute(
+                    f"SELECT timestamp, spot FROM {table} GROUP BY timestamp ORDER BY timestamp"
+                ).fetchall()
+
+        minute_candles = []
+        for ts, spot in rows:
+            if not spot or spot <= 0:
+                continue
+            minute_candles.append({"close": float(spot), "ts": ts})
+
+        if not minute_candles:
+            return jsonify([])
+
+        def bucket_key(ts, mins):
+            h, m = int(ts[8:10]), int(ts[10:12])
+            bm = (m // mins) * mins
+            return f"{ts[:8]}{h:02d}{bm:02d}"
+
+        buckets = defaultdict(list)
+        for c in minute_candles:
+            buckets[bucket_key(c["ts"], interval)].append(c["close"])
+
+        candles = []
+        for key in sorted(buckets):
+            prices = buckets[key]
+            dt = f"{key[:4]}-{key[4:6]}-{key[6:8]}T{key[8:10]}:{key[10:12]}:00"
+            candles.append({
+                "datetime": dt,
+                "open":   round(prices[0], 2),
+                "high":   round(max(prices), 2),
+                "low":    round(min(prices), 2),
+                "close":  round(prices[-1], 2),
+                "volume": len(prices),
+                "signal": "HOLD",
+            })
+
+        return jsonify(candles)
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

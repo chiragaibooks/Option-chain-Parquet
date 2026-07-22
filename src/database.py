@@ -130,39 +130,21 @@ def _update_ohlc(conn: sqlite3.Connection, table: str, today: str) -> None:
     logger.debug("[%s] OHLC recomputed for %s", table, today)
 
 
-def _bs_greeks(flag: str, S: float, K: float, t: float, iv: float, r: float = 0.065) -> dict:
-    """
-    Pure Black-Scholes Greeks using scipy — no vollib dependency.
-    flag: 'c' for CE, 'p' for PE
-    iv: decimal (e.g. 0.18 for 18%)
-    """
-    null = {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
-    if not (S > 0 and K > 0 and t > 0 and iv > 0):
-        return null
+def _calc_greeks(flag: str, S: float, K: float, t: float, iv_dec: float) -> dict:
+    """Wrapper around greeks.compute_greeks — single source of truth."""
     try:
-        import math
-        from scipy.stats import norm
-        d1 = (math.log(S / K) + (r + 0.5 * iv * iv) * t) / (iv * math.sqrt(t))
-        d2 = d1 - iv * math.sqrt(t)
-        nd1  = norm.cdf(d1)  if flag == 'c' else norm.cdf(-d1)
-        nd2  = norm.cdf(d2)  if flag == 'c' else norm.cdf(-d2)
-        npd1 = norm.pdf(d1)
-        sign = 1 if flag == 'c' else -1
-        delta = sign * nd1
-        gamma = npd1 / (S * iv * math.sqrt(t))
-        theta = (-(S * npd1 * iv) / (2 * math.sqrt(t))
-                 - sign * r * K * math.exp(-r * t) * nd2) / 365
-        vega  = S * npd1 * math.sqrt(t) / 100
-        rho   = sign * K * t * math.exp(-r * t) * nd2 / 100
+        from src.option_chain.greeks import compute_greeks
+        otype = "CE" if flag == "c" else "PE"
+        g = compute_greeks(S, K, t, 0.065, iv_dec, otype)
         return {
-            "delta": round(delta, 4),
-            "gamma": round(gamma, 6),
-            "theta": round(theta, 4),
-            "vega":  round(vega,  4),
-            "rho":   round(rho,   4),
+            "delta": round(g["delta"], 4)  if g["delta"] is not None else None,
+            "gamma": round(g["gamma"], 6)  if g["gamma"] is not None else None,
+            "theta": round(g["theta"], 4)  if g["theta"] is not None else None,
+            "vega":  round(g["vega"],  4)  if g["vega"]  is not None else None,
+            "rho":   round(g["rho"],   4)  if g["rho"]   is not None else None,
         }
     except Exception:
-        return null
+        return {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
 
 
 def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
@@ -202,76 +184,84 @@ def _bisect_iv(flag: str, spot: float, strike: float, tte: float, price: float,
 
 def _update_greeks(conn: sqlite3.Connection, table: str, today: str) -> None:
     """
-    Backfill NULL Greeks for rows on `today` (YYYYMMDD).
-    Uses stored IV if available, else computes IV from LTP via bisection,
-    then computes Greeks using pure scipy Black-Scholes (no vollib dependency).
+    Backfill NULL Greeks for rows on `today` AND yesterday (YYYYMMDD).
+    - Uses stored IV if valid (> 1.0% to exclude NSE's fake 0.1 floor)
+    - Falls back to vollib Newton solver, then bisection
+    - Uses greeks.compute_greeks (scipy) — no vollib dependency for Greeks
     """
-    rows = conn.execute(f"""
-        SELECT timestamp, option_type, expiry, strike, spot, ltp, iv
-        FROM {table}
-        WHERE substr(timestamp,1,8) = ?
-          AND delta IS NULL
-          AND spot   IS NOT NULL AND spot   > 0
-          AND strike IS NOT NULL AND strike > 0
-          AND ltp    IS NOT NULL AND ltp    > 0
-    """, (today,)).fetchall()
+    from datetime import date as _date, timedelta as _td
 
-    if not rows:
-        return
+    # Also cover yesterday in case a run spanned midnight
+    yesterday = (datetime.strptime(today, "%Y%m%d").date() - _td(days=1)).strftime("%Y%m%d")
+    dates_to_fix = [today, yesterday]
 
-    updated = 0
-    skipped = 0
-    for ts, otype, expiry, strike, spot, ltp, iv_pct in rows:
-        try:
-            from datetime import date as _date
-            exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
-            tte = max((exp_date - _date.today()).days, 0.5) / 365.0
-        except Exception:
-            skipped += 1
+    for day in dates_to_fix:
+        rows = conn.execute(f"""
+            SELECT timestamp, option_type, expiry, strike, spot, ltp, iv
+            FROM {table}
+            WHERE substr(timestamp,1,8) = ?
+              AND delta  IS NULL
+              AND spot   IS NOT NULL AND spot   > 0
+              AND strike IS NOT NULL AND strike > 0
+              AND ltp    IS NOT NULL AND ltp    > 0
+        """, (day,)).fetchall()
+
+        if not rows:
             continue
 
-        flag = "c" if otype == "CE" else "p"
-
-        # 1. Use stored IV if valid
-        if iv_pct and iv_pct > 0:
-            iv_dec = iv_pct / 100.0
-        else:
-            # 2. Try vollib Newton solver first (faster)
-            iv_dec = None
+        updated = 0
+        skipped = 0
+        for ts, otype, expiry, strike, spot, ltp, iv_pct in rows:
             try:
-                from vollib.black_scholes.implied_volatility import implied_volatility as iv_fn
-                iv_raw = iv_fn(ltp, spot, strike, tte, 0.065, flag)
-                if iv_raw and 0.001 < iv_raw < 20:
-                    iv_dec = round(iv_raw, 4)
+                exp_date = datetime.strptime(expiry, "%d-%b-%Y").date()
+                tte = max((exp_date - _date.today()).days, 0.5) / 365.0
             except Exception:
-                pass
-            # 3. Bisection fallback — always works, no external dependency
+                skipped += 1
+                continue
+
+            flag = "c" if otype == "CE" else "p"
+
+            # 1. Use stored IV only if meaningful (> 1% — excludes NSE's 0.1 floor value)
+            if iv_pct and iv_pct > 1.0:
+                iv_dec = iv_pct / 100.0
+            else:
+                # 2. Vollib Newton solver (fast, accurate for near-ATM)
+                iv_dec = None
+                try:
+                    from vollib.black_scholes.implied_volatility import implied_volatility as iv_fn
+                    iv_raw = iv_fn(ltp, spot, strike, tte, 0.065, flag)
+                    if iv_raw and 0.01 < iv_raw < 20:
+                        iv_dec = round(iv_raw, 4)
+                except Exception:
+                    pass
+                # 3. Bisection fallback — pure math, no external dependency
+                if not iv_dec:
+                    iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
+
             if not iv_dec:
-                iv_dec = _bisect_iv(flag, spot, strike, tte, ltp)
+                skipped += 1
+                continue
 
-        if not iv_dec:
-            skipped += 1
-            continue
+            g = _calc_greeks(flag, spot, strike, tte, iv_dec)
+            if g["delta"] is None:
+                skipped += 1
+                continue
 
-        # Use pure scipy Greeks — works on any runner without vollib
-        g = _bs_greeks(flag, spot, strike, tte, iv_dec)
-        if g["delta"] is None:
-            skipped += 1
-            continue
+            conn.execute(f"""
+                UPDATE {table}
+                SET delta=?, gamma=?, theta=?, vega=?, rho=?,
+                    iv=COALESCE(NULLIF(iv, 0), ?)
+                WHERE timestamp=? AND option_type=? AND expiry=? AND strike=?
+            """, (
+                g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
+                round(iv_dec * 100, 2),
+                ts, otype, expiry, strike
+            ))
+            updated += 1
 
-        conn.execute(f"""
-            UPDATE {table}
-            SET delta=?, gamma=?, theta=?, vega=?, rho=?,
-                iv=COALESCE(iv, ?)
-            WHERE timestamp=? AND option_type=? AND expiry=? AND strike=?
-        """, (
-            g["delta"], g["gamma"], g["theta"], g["vega"], g["rho"],
-            round(iv_dec * 100, 2),
-            ts, otype, expiry, strike
-        ))
-        updated += 1
-
-    logger.info("[%s] Greeks backfill %s: updated=%d skipped=%d", table, today, updated, skipped)
+        if updated or skipped:
+            logger.info("[%s] Greeks backfill %s: updated=%d skipped=%d",
+                        table, day, updated, skipped)
 
 
 def backfill_greeks_for_date(db: str, date_str: str) -> None:
