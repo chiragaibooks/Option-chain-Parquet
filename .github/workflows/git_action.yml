@@ -2,10 +2,10 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    # Trigger once at market open and once mid-session to handle runner restarts
-    # Each run loops internally for ~75 min, covering the full session with 2 triggers
-    - cron: "14 3 * * 1-5"   # 03:14 UTC = 08:44 IST (pre-market, loop runs until ~10:00 UTC)
-    - cron: "29 6 * * 1-5"   # 06:29 UTC = 11:59 IST (mid-session backup trigger)
+    # 3 triggers x 90 min each = full 9:15-15:30 IST session covered
+    - cron: "14 3 * * 1-5"   # 03:14 UTC = 08:44 IST  → covers 09:15-10:44 IST
+    - cron: "14 5 * * 1-5"   # 05:14 UTC = 10:44 IST  → covers 10:44-12:14 IST
+    - cron: "14 7 * * 1-5"   # 07:14 UTC = 12:44 IST  → covers 12:44-15:30 IST
   workflow_dispatch:
 
 permissions:
