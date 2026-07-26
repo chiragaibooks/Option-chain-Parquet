@@ -18,14 +18,8 @@ IST       = pytz.timezone("Asia/Kolkata")
 
 app = Flask(__name__, template_folder="frontend/templates", static_folder="frontend/static")
 
-_STRIKE_GAP = {"NIFTY50": 50, "BANKNIFTY": 100, "MIDCAPNIFTY": 25, "FINNIFTY": 50, "SENSEX": 100}
-_DISPLAY_NAME = {
-    "NIFTY50":     "NIFTY 50",
-    "BANKNIFTY":   "BANK NIFTY",
-    "FINNIFTY":    "FIN NIFTY",
-    "MIDCAPNIFTY": "MIDCAP NIFTY",
-    "SENSEX":      "SENSEX",
-}
+_STRIKE_GAP = {"NIFTY50": 50}
+_DISPLAY_NAME = {"NIFTY50": "NIFTY 50"}
 
 
 def _fmt(v):
@@ -117,13 +111,7 @@ def api_option_chain():
     })
 
 
-_OC_TABLES = {
-    "NIFTY50":     "nifty50_option_chain",
-    "BANKNIFTY":   "banknifty_option_chain",
-    "FINNIFTY":    "finnifty_option_chain",
-    "MIDCAPNIFTY": "midcapnifty_option_chain",
-    "SENSEX":      "sensex_option_chain",
-}
+_OC_TABLES = {"NIFTY50": "nifty50_option_chain"}
 
 
 @app.route("/api/dates")

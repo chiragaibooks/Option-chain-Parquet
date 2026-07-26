@@ -5,29 +5,17 @@ Fallback : nselib fno_bhav_copy (EOD)
 Greeks   : py_vollib (Black-Scholes) — only when vollib is installed AND spot > 0
 """
 import logging
-import time
-import requests
 from datetime import date, datetime, timedelta
-from typing import Dict, List, Optional
+from typing import List, Optional
 
 import pandas as pd
 
 logger = logging.getLogger(__name__)
 
 _RISK_FREE = 0.065
-_SYM_MAP = {
-    "NIFTY50":     "NIFTY",
-    "BANKNIFTY":   "BANKNIFTY",
-    "FINNIFTY":    "FINNIFTY",
-    "MIDCAPNIFTY": "MIDCPNIFTY",
-}
-_MONTHLY_EXPIRY_SYMS = {"MIDCPNIFTY"}
+_SYM_MAP = {"NIFTY50": "NIFTY"}
 
-_BSE_HEADERS = {
-    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36",
-    "Accept": "application/json, text/plain, */*",
-    "Referer": "https://www.bseindia.com/",
-}
+_NSE_OC_TYPE = {"NIFTY50": "Indices"}
 
 
 # ── Helpers ───────────────────────────────────────────────────────────────────
@@ -129,16 +117,9 @@ def _iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Opt
 
 # ── Live NSE option chain ─────────────────────────────────────────────────────
 
-# option-chain-v3 API: per-expiry call, returns records.data with CE/PE keys
-_NSE_OC_V3_URL  = "https://www.nseindia.com/api/option-chain-v3?type={typ}&symbol={sym}&expiry={expiry}"
-_NSE_OC_ORIGIN  = "https://www.nseindia.com/option-chain"
-# MIDCPNIFTY is not in nselib indices_list so uses type=Equity
-_NSE_OC_TYPE = {
-    "NIFTY50":     "Indices",
-    "BANKNIFTY":   "Indices",
-    "FINNIFTY":    "Indices",
-    "MIDCAPNIFTY": "Equity",
-}
+# NIFTY50 uses Indices type
+_NSE_OC_V3_URL = "https://www.nseindia.com/api/option-chain-v3?type={typ}&symbol={sym}&expiry={expiry}"
+_NSE_OC_ORIGIN = "https://www.nseindia.com/option-chain"
 
 
 def _nse_session() -> requests.Session:
@@ -329,8 +310,6 @@ def _parse_bhav(df: pd.DataFrame, nse_sym: str, expiry_str: str, spot: float) ->
 
 def get_expiry_dates(symbol: str = "NIFTY50") -> List[str]:
     nse_sym = _SYM_MAP.get(symbol, "NIFTY")
-    if nse_sym in _MONTHLY_EXPIRY_SYMS:
-        return _expiries_from_bhav(nse_sym)
     try:
         from nselib import derivatives
         data     = derivatives.expiry_dates_option_index()
@@ -453,127 +432,14 @@ def fetch_option_chain(
     return pd.DataFrame()
 
 
-# ── BSE SENSEX ────────────────────────────────────────────────────────────────
-
-def fetch_sensex_option_chain(spot: float) -> pd.DataFrame:
-    try:
-        s = requests.Session()
-        s.headers.update(_BSE_HEADERS)
-        s.get("https://www.bseindia.com", timeout=10)
-        time.sleep(1)
-        url  = "https://api.bseindia.com/BseIndiaAPI/api/getOptionChain/w?scripcode=BSE_SENSEX&expirydate=&optiontype=&strikeprice="
-        data = s.get(url, timeout=15).json()
-        rows = []
-        skipped = 0
-        for item in data.get("optionChain", []):
-            expiry_raw = item.get("ExpiryDate", "")
-            try:
-                expiry = datetime.strptime(expiry_raw[:10], "%Y-%m-%d").strftime("%d-%b-%Y")
-                tte    = max((datetime.strptime(expiry, "%d-%b-%Y").date() - date.today()).days, 1) / 365.0
-            except Exception:
-                continue
-            strike = _to_float(item.get("StrikePrice"))
-            if strike is None:
-                continue
-            for otype, ltp_k, oi_k, vol_k, iv_k, oichg_k in [
-                ("CE", "CallLTP", "CallOI", "CallVolume", "CallIV", "CallOIChange"),
-                ("PE", "PutLTP",  "PutOI",  "PutVolume",  "PutIV",  "PutOIChange"),
-            ]:
-                ltp    = _to_float_nonneg(item.get(ltp_k))
-                oi     = _to_float_nonneg(item.get(oi_k))
-                vol    = _to_float_nonneg(item.get(vol_k))
-                oi_chg = _to_float(item.get(oichg_k))
-                iv_api = _to_float(item.get(iv_k))
-                iv_pct = iv_api if (iv_api is not None and iv_api > 0) else None
-                iv_dec = iv_pct / 100 if iv_pct else None
-                flag   = "c" if otype == "CE" else "p"
-                greeks = (
-                    _greeks(flag, spot, strike, tte, iv_dec)
-                    if (iv_dec and spot > 0 and ltp and ltp > 0)
-                    else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
-                )
-                record = {
-                    "expiry": expiry, "strike": strike, "option_type": otype,
-                    "spot": spot, "ltp": ltp if ltp is not None else 0.0,
-                    "open": None, "high": None, "low": None, "close": None,
-                    "volume": vol, "oi": oi, "oi_chg": oi_chg,
-                    "iv": iv_pct, **greeks,
-                }
-                if _validate_record(record, "SENSEX"):
-                    rows.append(record)
-                else:
-                    skipped += 1
-        df = pd.DataFrame(rows)
-        logger.info("[SENSEX] BSE live: %d written, %d skipped (spot=%.2f)", len(rows), skipped, spot)
-        return df
-    except Exception as e:
-        logger.warning("[SENSEX] BSE fetch failed: %s", e)
-        return pd.DataFrame()
-
-
-def get_sensex_expiry_dates() -> List[str]:
-    try:
-        s = requests.Session()
-        s.headers.update(_BSE_HEADERS)
-        s.get("https://www.bseindia.com", timeout=10)
-        time.sleep(1)
-        url  = "https://api.bseindia.com/BseIndiaAPI/api/getOptionChain/w?scripcode=BSE_SENSEX&expirydate=&optiontype=&strikeprice="
-        data = s.get(url, timeout=15).json()
-        expiries = sorted(set(
-            datetime.strptime(item["ExpiryDate"][:10], "%Y-%m-%d").strftime("%d-%b-%Y")
-            for item in data.get("optionChain", [])
-            if item.get("ExpiryDate")
-        ), key=lambda e: datetime.strptime(e, "%d-%b-%Y"))
-        today    = date.today()
-        upcoming = [e for e in expiries if datetime.strptime(e, "%d-%b-%Y").date() >= today]
-        return upcoming[:4]
-    except Exception as e:
-        logger.warning("[SENSEX] expiry fetch failed: %s", e)
-        result, cursor = [], date.today()
-        while len(result) < 4:
-            cursor += timedelta(days=1)
-            if cursor.weekday() == 4:
-                result.append(cursor.strftime("%d-%b-%Y"))
-        return result
-
-
-def get_spot(symbol: str, market_db: str = "data/market_data.db") -> Optional[float]:
-    if symbol == "SENSEX":
-        try:
-            import yfinance as yf
-            hist = yf.Ticker("^BSESN").history(period="1d")
-            if not hist.empty:
-                return float(hist["Close"].iloc[-1])
-        except Exception:
-            pass
-
+def get_spot(symbol: str) -> Optional[float]:
     try:
         from nselib import capital_market
         data = capital_market.index_data()
         if data is not None and not data.empty:
-            sym_map_display = {
-                "NIFTY50":     "NIFTY 50",
-                "BANKNIFTY":   "NIFTY BANK",
-                "FINNIFTY":    "NIFTY FIN SERVICE",
-                "MIDCAPNIFTY": "NIFTY MIDCAP SELECT",
-            }
-            label = sym_map_display.get(symbol, "")
-            row   = data[data["indexSymbol"] == label] if "indexSymbol" in data.columns else pd.DataFrame()
+            row = data[data["indexSymbol"] == "NIFTY 50"] if "indexSymbol" in data.columns else pd.DataFrame()
             if not row.empty:
                 return float(row.iloc[0]["last"])
-    except Exception:
-        pass
-
-    try:
-        import sqlite3
-        with sqlite3.connect(market_db) as conn:
-            row = conn.execute(
-                "SELECT close FROM indexes WHERE stock_name=? ORDER BY datetime DESC LIMIT 1",
-                (symbol,)
-            ).fetchone()
-            if row:
-                logger.info("[%s] spot from market_data.db: %.2f", symbol, row[0])
-                return float(row[0])
     except Exception:
         pass
     return None

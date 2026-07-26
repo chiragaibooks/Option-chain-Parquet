@@ -101,26 +101,17 @@ table.hist tbody td{padding:6px 12px;}
 
 <nav class="nav">
   <div class="logo">📈 TradeSense</div>
-  <div class="nav-tab active" id="tab-market"  onclick="showPage('market',this)">Market</div>
-  <div class="nav-tab"        id="tab-options" onclick="showPage('options',this)">Option Chain</div>
+  <div class="nav-tab active" id="tab-options" onclick="showPage('options',this)">Option Chain</div>
   <div class="nav-tab"        id="tab-greeks"  onclick="showPage('greeks',this)">Greeks</div>
   <div class="nav-tab"        id="tab-history" onclick="showPage('history',this)">History</div>
 </nav>
 
-<!-- MARKET -->
-<div class="page active" id="page-market">
-  <div class="cards" id="mkt-cards"><div class="loader"><span class="spin"></span>Loading...</div></div>
-</div>
-
 <!-- OPTION CHAIN -->
-<div class="page" id="page-options">
+<div class="page active" id="page-options">
   <div class="bar">
     <div><label>Symbol &nbsp;</label>
       <select id="oc-sym" onchange="loadExpiries()">
         <option value="NIFTY50">NIFTY 50</option>
-        <option value="BANKNIFTY">BANK NIFTY</option>
-        <option value="FINNIFTY">FIN NIFTY</option>
-        <option value="MIDCAPNIFTY">MIDCAP NIFTY</option>
       </select>
     </div>
     <div><label>Expiry &nbsp;</label>
@@ -140,9 +131,6 @@ table.hist tbody td{padding:6px 12px;}
     <div><label>Symbol &nbsp;</label>
       <select id="gk-sym" onchange="loadGreeksExpiries()">
         <option value="NIFTY50">NIFTY 50</option>
-        <option value="BANKNIFTY">BANK NIFTY</option>
-        <option value="FINNIFTY">FIN NIFTY</option>
-        <option value="MIDCAPNIFTY">MIDCAP NIFTY</option>
       </select>
     </div>
     <div><label>Expiry &nbsp;</label>
@@ -160,10 +148,6 @@ table.hist tbody td{padding:6px 12px;}
     <div><label>Symbol &nbsp;</label>
       <select id="h-sym" onchange="loadDates()">
         <option value="NIFTY50">NIFTY 50</option>
-        <option value="BANKNIFTY">BANK NIFTY</option>
-        <option value="FINNIFTY">FIN NIFTY</option>
-        <option value="MIDCAPNIFTY">MIDCAP NIFTY</option>
-        <option value="SENSEX">SENSEX</option>
       </select>
     </div>
     <div><label>Date &nbsp;</label>
@@ -200,46 +184,9 @@ function showPage(name, el){
   document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('page-'+name).classList.add('active');
   el.classList.add('active');
-  if(name==='market') loadMarket();
-  if(name==='options'){ loadExpiries(); }
-  if(name==='greeks')  { loadGreeksExpiries(); }
+  if(name==='options') loadExpiries();
+  if(name==='greeks')  loadGreeksExpiries();
   if(name==='history') loadDates();
-}
-
-// ══════════════════════════════════════════════════
-// MARKET
-// ══════════════════════════════════════════════════
-async function loadMarket(){
-  const el = document.getElementById('mkt-cards');
-  el.innerHTML = '<div class="loader"><span class="spin"></span>Loading...</div>';
-  try{
-    const data = await api('/api/market-summary');
-    if(!data.length){el.innerHTML='<div class="empty">No data — run <code>python -m src.main</code> first.</div>';return;}
-    el.innerHTML = data.map(d=>{
-      const up=(d.chg_pct||0)>=0;
-      const sig=d.signal||'HOLD';
-      return `<div class="card" onclick="goHistory('${d.symbol}')">
-        <div class="sym">${d.symbol}</div>
-        <div class="price">${f2(d.close)}</div>
-        <div class="chg ${up?'up':'dn'}">${up?'▲':'▼'} ${pct(d.chg_pct)}</div>
-        <div class="meta"><span class="badge ${sig}">${sig}</span><span style="color:#aaa;font-size:11px;">${(d.datetime||'').slice(11,16)} IST</span></div>
-        <div class="stats">
-          <span>RSI <b>${f2(d.rsi_14)}</b></span>
-          <span>ADX <b>${f2(d.adx)}</b></span>
-          <span>EMA20 <b>${f2(d.ema_20)}</b></span>
-          <span>ATR <b>${f2(d.atr)}</b></span>
-        </div>
-      </div>`;
-    }).join('');
-  }catch(e){el.innerHTML=`<div class="err">Error: ${e.message}</div>`;}
-}
-
-function goHistory(sym){
-  document.querySelectorAll('.nav-tab').forEach((t,i)=>t.classList.toggle('active',i===2));
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.getElementById('page-history').classList.add('active');
-  document.getElementById('h-sym').value=sym;
-  loadDates();
 }
 
 // ══════════════════════════════════════════════════
@@ -511,7 +458,7 @@ function renderHist(rows,sym,dt,iv){
 }
 
 // ── Init ─────────────────────────────────────────────────────
-loadMarket();
+loadExpiries();
 </script>
 </body>
 </html>
