@@ -5,11 +5,13 @@ Fallback : nselib fno_bhav_copy (EOD)
 Greeks   : py_vollib (Black-Scholes) — only when vollib is installed AND spot > 0
 """
 import logging
+import math
 import requests
 from datetime import date, datetime, timedelta
 from typing import List, Optional
 
 import pandas as pd
+from scipy.stats import norm
 
 logger = logging.getLogger(__name__)
 
@@ -74,45 +76,60 @@ def _validate_record(row: dict, source: str) -> bool:
     return True
 
 
-# ── Greeks ────────────────────────────────────────────────────────────────────
+# ── Greeks (pure BS, no external dependency) ─────────────────────────────────
+
+def _bs_price(flag: str, S: float, K: float, t: float, iv: float) -> float:
+    r = _RISK_FREE
+    d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * math.sqrt(t))
+    d2 = d1 - iv * math.sqrt(t)
+    if flag == "c":
+        return S * norm.cdf(d1) - K * math.exp(-r * t) * norm.cdf(d2)
+    return K * math.exp(-r * t) * norm.cdf(-d2) - S * norm.cdf(-d1)
+
 
 def _greeks(flag: str, S: float, K: float, t: float, iv: float) -> dict:
-    """
-    Compute Black-Scholes Greeks using vollib.
-    Returns all None if vollib is not installed or computation fails.
-    iv must be in decimal form (e.g. 0.18 for 18%).
-    """
     null = {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
     if not (S > 0 and K > 0 and t > 0 and iv > 0):
         return null
     try:
-        from vollib.black_scholes.greeks import analytical as ga
-        return {
-            "delta": round(ga.delta(flag, S, K, t, _RISK_FREE, iv), 4),
-            "gamma": round(ga.gamma(flag, S, K, t, _RISK_FREE, iv), 6),
-            "theta": round(ga.theta(flag, S, K, t, _RISK_FREE, iv), 4),
-            "vega":  round(ga.vega( flag, S, K, t, _RISK_FREE, iv), 4),
-            "rho":   round(ga.rho(  flag, S, K, t, _RISK_FREE, iv), 4),
-        }
-    except ImportError:
-        return null
+        r  = _RISK_FREE
+        d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * math.sqrt(t))
+        d2 = d1 - iv * math.sqrt(t)
+        pdf_d1 = norm.pdf(d1)
+        gamma  = round(pdf_d1 / (S * iv * math.sqrt(t)), 6)
+        vega   = round(S * pdf_d1 * math.sqrt(t) / 100, 4)  # per 1% IV move
+        if flag == "c":
+            delta = round(norm.cdf(d1), 4)
+            theta = round((-S * pdf_d1 * iv / (2 * math.sqrt(t)) - r * K * math.exp(-r * t) * norm.cdf(d2)) / 365, 4)
+            rho   = round(K * t * math.exp(-r * t) * norm.cdf(d2) / 100, 4)
+        else:
+            delta = round(norm.cdf(d1) - 1, 4)
+            theta = round((-S * pdf_d1 * iv / (2 * math.sqrt(t)) + r * K * math.exp(-r * t) * norm.cdf(-d2)) / 365, 4)
+            rho   = round(-K * t * math.exp(-r * t) * norm.cdf(-d2) / 100, 4)
+        return {"delta": delta, "gamma": gamma, "theta": theta, "vega": vega, "rho": rho}
     except Exception as e:
-        logger.debug("[greeks] failed flag=%s S=%s K=%s t=%s iv=%s: %s", flag, S, K, t, iv, e)
+        logger.debug("[greeks] failed: %s", e)
         return null
 
 
 def _iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Optional[float]:
-    """Compute IV from market price. Returns None if vollib unavailable or fails."""
+    """Brent's method IV solver — no external dependency."""
     if not (S > 0 and K > 0 and t > 0 and price > 0):
         return None
     try:
-        from vollib.black_scholes.implied_volatility import implied_volatility as iv_fn
-        iv = iv_fn(price, S, K, t, _RISK_FREE, flag)
-        return round(iv, 4) if iv and 0.001 < iv < 20 else None
-    except ImportError:
-        return None
+        lo, hi = 0.001, 10.0
+        for _ in range(100):
+            mid = (lo + hi) / 2
+            if hi - lo < 1e-5:
+                break
+            if _bs_price(flag, S, K, t, mid) > price:
+                hi = mid
+            else:
+                lo = mid
+        iv = (lo + hi) / 2
+        return round(iv, 4) if 0.001 < iv < 10 else None
     except Exception as e:
-        logger.debug("[_iv_from_price] failed flag=%s S=%s K=%s t=%s price=%s: %s", flag, S, K, t, price, e)
+        logger.debug("[_iv_from_price] failed: %s", e)
         return None
 
 
@@ -195,6 +212,10 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
                 vol    = _to_float_nonneg(d.get("totalTradedVolume"))
                 iv_api = _to_float(d.get("impliedVolatility"))
                 iv_pct = iv_api if (iv_api is not None and iv_api > 0) else None
+                # fallback: compute IV from LTP if API didn't provide it
+                if iv_pct is None and ltp and ltp > 0 and tte:
+                    iv_dec_fb = _iv_from_price("c" if otype == "CE" else "p", use_spot, strike, tte, ltp)
+                    iv_pct = round(iv_dec_fb * 100, 2) if iv_dec_fb else None
                 iv_dec = iv_pct / 100 if iv_pct else None
                 flag   = "c" if otype == "CE" else "p"
                 greeks = (
