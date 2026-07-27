@@ -36,6 +36,14 @@ def _atm(spot: float) -> int:
 def generate(db: str = _DB, out: str = _OUT) -> None:
     try:
         with sqlite3.connect(db) as conn:
+            conn.execute(
+                "CREATE TABLE IF NOT EXISTS nifty50_option_chain ("
+                "timestamp TEXT, symbol TEXT, expiry TEXT, strike REAL, option_type TEXT,"
+                "spot REAL, ltp REAL, open REAL, high REAL, low REAL, close REAL,"
+                "volume REAL, oi REAL, oi_chg REAL, iv REAL,"
+                "delta REAL, gamma REAL, theta REAL, vega REAL, rho REAL,"
+                "PRIMARY KEY (timestamp, strike, option_type, expiry))"
+            )
             ts_rows = conn.execute(
                 "SELECT DISTINCT timestamp FROM nifty50_option_chain "
                 "ORDER BY timestamp DESC LIMIT 10"

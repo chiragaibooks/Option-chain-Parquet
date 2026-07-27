@@ -5,6 +5,7 @@ Fallback : nselib fno_bhav_copy (EOD)
 Greeks   : py_vollib (Black-Scholes) — only when vollib is installed AND spot > 0
 """
 import logging
+import requests
 from datetime import date, datetime, timedelta
 from typing import List, Optional
 
