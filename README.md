@@ -1,8 +1,121 @@
-<!-- auto-updated: 27 Jul 2026 12:57:32 IST -->
+<!-- auto-updated: 27 Jul 2026 12:59:28 IST -->
 
 # 📋 NIFTY50 Option Chain — Last 10 Snapshots
 
-**Updated:** 27 Jul 2026 12:57:32 IST
+**Updated:** 27 Jul 2026 12:59:28 IST
+
+---
+
+## 🕐 27 Jul 2026 12:59 IST &nbsp;|&nbsp; Spot: **23,952.70** &nbsp;|&nbsp; ATM: **23950**
+
+<table>
+<tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th><th>Strike</th><th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>
+<tr><td>330.00</td><td>95.00</td><td>93.51</td><td>2,867.00</td><td>-</td><td><b>21100</b></td><td>-</td><td>0.40</td><td>81.65</td><td>16,116.00</td><td>38,828.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21150</b></td><td>-</td><td>0.50</td><td>81.86</td><td>6,541.00</td><td>2,336.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21200</b></td><td>-</td><td>0.50</td><td>81.14</td><td>6,819.00</td><td>10,367.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21250</b></td><td>-</td><td>0.55</td><td>79.72</td><td>2,655.00</td><td>1,094.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21300</b></td><td>-</td><td>0.55</td><td>78.29</td><td>19,097.00</td><td>11,328.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21350</b></td><td>-</td><td>0.55</td><td>76.87</td><td>4,119.00</td><td>2,509.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21400</b></td><td>-</td><td>0.60</td><td>75.44</td><td>11,791.00</td><td>5,895.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21450</b></td><td>-</td><td>0.60</td><td>74.02</td><td>1,492.00</td><td>412.00</td></tr>
+<tr><td>4,710.00</td><td>1,027.00</td><td>90.88</td><td>2,458.90</td><td>-</td><td><b>21500</b></td><td>-</td><td>0.60</td><td>73.75</td><td>50,822.00</td><td>28,248.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21550</b></td><td>-</td><td>0.65</td><td>72.32</td><td>1,324.00</td><td>886.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21600</b></td><td>-</td><td>0.60</td><td>70.34</td><td>14,448.00</td><td>4,617.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21650</b></td><td>-</td><td>0.60</td><td>68.91</td><td>4,091.00</td><td>1,055.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21700</b></td><td>-</td><td>0.60</td><td>68.01</td><td>11,887.00</td><td>3,893.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21750</b></td><td>-</td><td>0.70</td><td>67.06</td><td>1,759.00</td><td>867.00</td></tr>
+<tr><td>1.00</td><td>1.00</td><td>-</td><td>2,135.00</td><td>-</td><td><b>21800</b></td><td>-</td><td>0.75</td><td>66.06</td><td>17,388.00</td><td>15,511.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21850</b></td><td>-</td><td>0.75</td><td>64.17</td><td>1,905.00</td><td>872.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21900</b></td><td>-</td><td>0.80</td><td>63.58</td><td>10,497.00</td><td>2,988.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>21950</b></td><td>-</td><td>0.80</td><td>62.12</td><td>4,254.00</td><td>1,176.00</td></tr>
+<tr><td>5,344.00</td><td>2,253.00</td><td>80.95</td><td>1,966.95</td><td>-</td><td><b>22000</b></td><td>-</td><td>0.75</td><td>60.27</td><td>97,513.00</td><td>51,856.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22050</b></td><td>-</td><td>0.75</td><td>59.21</td><td>5,764.00</td><td>1,309.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22100</b></td><td>-</td><td>0.85</td><td>58.11</td><td>17,744.00</td><td>8,395.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22150</b></td><td>-</td><td>0.85</td><td>56.65</td><td>7,059.00</td><td>1,049.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22200</b></td><td>-</td><td>0.80</td><td>55.52</td><td>40,872.00</td><td>11,558.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22250</b></td><td>-</td><td>0.85</td><td>53.72</td><td>11,654.00</td><td>3,810.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22300</b></td><td>-</td><td>0.80</td><td>52.58</td><td>50,437.00</td><td>15,656.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22350</b></td><td>-</td><td>0.85</td><td>51.11</td><td>21,112.00</td><td>4,631.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22400</b></td><td>-</td><td>0.95</td><td>49.93</td><td>58,760.00</td><td>17,269.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22450</b></td><td>-</td><td>1.00</td><td>48.72</td><td>25,436.00</td><td>7,100.00</td></tr>
+<tr><td>2,400.00</td><td>1,147.00</td><td>65.44</td><td>1,459.10</td><td>-</td><td><b>22500</b></td><td>-</td><td>1.00</td><td>47.74</td><td>322,179.00</td><td>92,998.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22550</b></td><td>-</td><td>1.05</td><td>46.00</td><td>26,295.00</td><td>5,140.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22600</b></td><td>-</td><td>1.05</td><td>44.74</td><td>138,238.00</td><td>18,978.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22650</b></td><td>-</td><td>1.10</td><td>43.45</td><td>49,429.00</td><td>10,515.00</td></tr>
+<tr><td>88.00</td><td>8.00</td><td>56.57</td><td>1,270.00</td><td>-</td><td><b>22700</b></td><td>-</td><td>1.10</td><td>41.94</td><td>216,563.00</td><td>45,307.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22750</b></td><td>-</td><td>1.20</td><td>40.63</td><td>63,706.00</td><td>10,310.00</td></tr>
+<tr><td>151.00</td><td>151.00</td><td>46.30</td><td>1,165.00</td><td>-</td><td><b>22800</b></td><td>-</td><td>1.15</td><td>39.30</td><td>240,261.00</td><td>45,713.00</td></tr>
+<tr><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td><td><b>22850</b></td><td>-</td><td>1.20</td><td>37.76</td><td>97,064.00</td><td>10,329.00</td></tr>
+<tr><td>834.00</td><td>30.00</td><td>50.57</td><td>1,071.85</td><td>-</td><td><b>22900</b></td><td>-</td><td>1.25</td><td>36.40</td><td>286,280.00</td><td>50,557.00</td></tr>
+<tr><td>24.00</td><td>1.00</td><td>-</td><td>965.10</td><td>-</td><td><b>22950</b></td><td>-</td><td>1.45</td><td>35.49</td><td>173,567.00</td><td>22,919.00</td></tr>
+<tr><td>6,166.00</td><td>3,844.00</td><td>47.51</td><td>962.40</td><td>-</td><td><b>23000</b></td><td>-</td><td>1.45</td><td>33.92</td><td>707,964.00</td><td>193,853.00</td></tr>
+<tr><td>26.00</td><td>13.00</td><td>47.64</td><td>908.75</td><td>-</td><td><b>23050</b></td><td>-</td><td>1.60</td><td>32.48</td><td>151,084.00</td><td>19,405.00</td></tr>
+<tr><td>732.00</td><td>94.00</td><td>42.18</td><td>871.40</td><td>-</td><td><b>23100</b></td><td>-</td><td>1.60</td><td>31.15</td><td>328,179.00</td><td>55,395.00</td></tr>
+<tr><td>126.00</td><td>25.00</td><td>41.14</td><td>806.70</td><td>-</td><td><b>23150</b></td><td>-</td><td>1.80</td><td>29.90</td><td>193,213.00</td><td>32,220.00</td></tr>
+<tr><td>801.00</td><td>551.00</td><td>-</td><td>768.70</td><td>-</td><td><b>23200</b></td><td>-</td><td>1.90</td><td>28.49</td><td>531,168.00</td><td>96,091.00</td></tr>
+<tr><td>225.00</td><td>139.00</td><td>35.03</td><td>720.00</td><td>-</td><td><b>23250</b></td><td>-</td><td>2.05</td><td>27.24</td><td>262,514.00</td><td>32,726.00</td></tr>
+<tr><td>1,337.00</td><td>1,112.00</td><td>36.07</td><td>665.75</td><td>-</td><td><b>23300</b></td><td>-</td><td>2.20</td><td>25.84</td><td>739,559.00</td><td>107,570.00</td></tr>
+<tr><td>917.00</td><td>366.00</td><td>28.58</td><td>615.75</td><td>-</td><td><b>23350</b></td><td>-</td><td>2.45</td><td>24.46</td><td>407,177.00</td><td>50,410.00</td></tr>
+<tr><td>1,809.00</td><td>2,429.00</td><td>30.66</td><td>565.55</td><td>-</td><td><b>23400</b></td><td>-</td><td>2.85</td><td>23.30</td><td>783,032.00</td><td>113,073.00</td></tr>
+<tr><td>1,378.00</td><td>2,542.00</td><td>28.50</td><td>514.00</td><td>-</td><td><b>23450</b></td><td>-</td><td>3.20</td><td>22.01</td><td>525,863.00</td><td>62,131.00</td></tr>
+<tr><td>13,134.00</td><td>32,111.00</td><td>27.47</td><td>467.00</td><td>-</td><td><b>23500</b></td><td>-</td><td>3.70</td><td>20.72</td><td>953,785.00</td><td>162,910.00</td></tr>
+<tr><td>2,694.00</td><td>7,409.00</td><td>25.25</td><td>415.70</td><td>-</td><td><b>23550</b></td><td>-</td><td>4.40</td><td>19.39</td><td>526,279.00</td><td>58,829.00</td></tr>
+<tr><td>11,637.00</td><td>47,130.00</td><td>23.26</td><td>366.85</td><td>-</td><td><b>23600</b></td><td>-</td><td>5.30</td><td>18.10</td><td>1,086,056.00</td><td>141,451.00</td></tr>
+<tr><td>13,506.00</td><td>38,969.00</td><td>21.70</td><td>316.90</td><td>-</td><td><b>23650</b></td><td>-</td><td>6.85</td><td>16.99</td><td>869,460.00</td><td>93,224.00</td></tr>
+<tr><td>35,550.00</td><td>235,828.00</td><td>19.58</td><td>270.45</td><td>-</td><td><b>23700</b></td><td>-</td><td>9.00</td><td>15.89</td><td>1,755,138.00</td><td>172,882.00</td></tr>
+<tr><td>14,122.00</td><td>201,289.00</td><td>18.25</td><td>224.50</td><td>-</td><td><b>23750</b></td><td>-</td><td>12.65</td><td>14.97</td><td>1,247,089.00</td><td>90,725.00</td></tr>
+<tr><td>67,745.00</td><td>1,077,048.00</td><td>17.11</td><td>180.90</td><td>-</td><td><b>23800</b></td><td>-</td><td>18.50</td><td>14.21</td><td>2,792,833.00</td><td>229,065.00</td></tr>
+<tr><td>54,418.00</td><td>1,433,243.00</td><td>15.91</td><td>139.30</td><td>-</td><td><b>23850</b></td><td>-</td><td>27.25</td><td>13.51</td><td>2,109,497.00</td><td>139,394.00</td></tr>
+<tr><td>173,176.00</td><td>4,231,636.00</td><td>15.10</td><td>103.20</td><td>-</td><td><b>23900</b></td><td>-</td><td>41.15</td><td>12.99</td><td>5,300,235.00</td><td>328,771.00</td></tr>
+<tr style="background:#fffde7;font-weight:bold;"><td>232,642.00</td><td>4,662,994.00</td><td>14.51</td><td>72.35</td><td>-</td><td><b>23950</b> ← ATM</td><td>-</td><td>60.35</td><td>12.52</td><td>4,145,267.00</td><td>256,712.00</td></tr>
+<tr><td>422,226.00</td><td>5,275,527.00</td><td>14.25</td><td>49.00</td><td>-</td><td><b>24000</b></td><td>-</td><td>87.20</td><td>12.22</td><td>3,288,936.00</td><td>223,439.00</td></tr>
+<tr><td>147,000.00</td><td>2,274,886.00</td><td>14.11</td><td>31.70</td><td>-</td><td><b>24050</b></td><td>-</td><td>119.90</td><td>11.83</td><td>775,614.00</td><td>36,303.00</td></tr>
+<tr><td>269,251.00</td><td>2,599,442.00</td><td>14.22</td><td>20.20</td><td>-</td><td><b>24100</b></td><td>-</td><td>158.40</td><td>11.25</td><td>683,005.00</td><td>54,294.00</td></tr>
+<tr><td>114,678.00</td><td>1,247,939.00</td><td>14.52</td><td>12.90</td><td>-</td><td><b>24150</b></td><td>-</td><td>201.15</td><td>10.59</td><td>133,718.00</td><td>10,106.00</td></tr>
+<tr><td>264,837.00</td><td>1,960,526.00</td><td>15.05</td><td>8.75</td><td>-</td><td><b>24200</b></td><td>-</td><td>246.45</td><td>-</td><td>174,755.00</td><td>40,205.00</td></tr>
+<tr><td>108,563.00</td><td>787,518.00</td><td>15.60</td><td>5.85</td><td>-</td><td><b>24250</b></td><td>-</td><td>294.65</td><td>-</td><td>25,824.00</td><td>7,269.00</td></tr>
+<tr><td>162,477.00</td><td>876,664.00</td><td>16.42</td><td>4.35</td><td>-</td><td><b>24300</b></td><td>-</td><td>342.10</td><td>-</td><td>27,765.00</td><td>16,803.00</td></tr>
+<tr><td>62,613.00</td><td>509,838.00</td><td>17.30</td><td>3.35</td><td>-</td><td><b>24350</b></td><td>-</td><td>390.00</td><td>-</td><td>4,211.00</td><td>1,835.00</td></tr>
+<tr><td>112,607.00</td><td>740,151.00</td><td>18.31</td><td>2.75</td><td>-</td><td><b>24400</b></td><td>-</td><td>442.40</td><td>-</td><td>8,267.00</td><td>11,062.00</td></tr>
+<tr><td>45,847.00</td><td>474,009.00</td><td>19.33</td><td>2.25</td><td>-</td><td><b>24450</b></td><td>-</td><td>488.00</td><td>-</td><td>1,693.00</td><td>912.00</td></tr>
+<tr><td>177,407.00</td><td>846,577.00</td><td>20.65</td><td>1.95</td><td>-</td><td><b>24500</b></td><td>-</td><td>539.45</td><td>-</td><td>18,160.00</td><td>27,771.00</td></tr>
+<tr><td>42,691.00</td><td>225,805.00</td><td>21.79</td><td>1.75</td><td>-</td><td><b>24550</b></td><td>-</td><td>587.65</td><td>24.35</td><td>647.00</td><td>754.00</td></tr>
+<tr><td>86,887.00</td><td>414,047.00</td><td>22.81</td><td>1.45</td><td>-</td><td><b>24600</b></td><td>-</td><td>640.20</td><td>26.24</td><td>2,484.00</td><td>3,276.00</td></tr>
+<tr><td>39,978.00</td><td>197,282.00</td><td>23.95</td><td>1.30</td><td>-</td><td><b>24650</b></td><td>-</td><td>687.20</td><td>-</td><td>277.00</td><td>462.00</td></tr>
+<tr><td>82,728.00</td><td>341,228.00</td><td>25.29</td><td>1.25</td><td>-</td><td><b>24700</b></td><td>-</td><td>737.55</td><td>29.48</td><td>1,446.00</td><td>1,941.00</td></tr>
+<tr><td>29,128.00</td><td>114,799.00</td><td>26.75</td><td>1.20</td><td>-</td><td><b>24750</b></td><td>-</td><td>784.90</td><td>-</td><td>70.00</td><td>476.00</td></tr>
+<tr><td>116,491.00</td><td>315,805.00</td><td>27.89</td><td>1.05</td><td>-</td><td><b>24800</b></td><td>-</td><td>848.20</td><td>-</td><td>1,400.00</td><td>2,159.00</td></tr>
+<tr><td>31,054.00</td><td>83,801.00</td><td>29.14</td><td>1.10</td><td>-</td><td><b>24850</b></td><td>-</td><td>885.90</td><td>-</td><td>33.00</td><td>289.00</td></tr>
+<tr><td>56,791.00</td><td>149,726.00</td><td>30.55</td><td>1.00</td><td>-</td><td><b>24900</b></td><td>-</td><td>933.00</td><td>-</td><td>309.00</td><td>868.00</td></tr>
+<tr><td>23,960.00</td><td>70,395.00</td><td>31.94</td><td>1.05</td><td>-</td><td><b>24950</b></td><td>-</td><td>982.00</td><td>-</td><td>19.00</td><td>198.00</td></tr>
+<tr><td>209,009.00</td><td>420,585.00</td><td>33.13</td><td>0.90</td><td>-</td><td><b>25000</b></td><td>-</td><td>1,039.15</td><td>-</td><td>7,445.00</td><td>19,663.00</td></tr>
+<tr><td>13,359.00</td><td>38,646.00</td><td>34.30</td><td>0.95</td><td>-</td><td><b>25050</b></td><td>-</td><td>1,080.85</td><td>-</td><td>23.00</td><td>32.00</td></tr>
+<tr><td>45,533.00</td><td>86,040.00</td><td>35.20</td><td>0.85</td><td>-</td><td><b>25100</b></td><td>-</td><td>1,135.00</td><td>-</td><td>194.00</td><td>518.00</td></tr>
+<tr><td>13,104.00</td><td>34,930.00</td><td>36.53</td><td>0.85</td><td>-</td><td><b>25150</b></td><td>-</td><td>1,190.00</td><td>38.86</td><td>3.00</td><td>29.00</td></tr>
+<tr><td>65,187.00</td><td>173,705.00</td><td>37.34</td><td>0.75</td><td>-</td><td><b>25200</b></td><td>-</td><td>1,248.00</td><td>-</td><td>878.00</td><td>1,139.00</td></tr>
+<tr><td>16,619.00</td><td>20,552.00</td><td>38.35</td><td>0.65</td><td>-</td><td><b>25250</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>68,912.00</td><td>127,885.00</td><td>39.33</td><td>0.65</td><td>-</td><td><b>25300</b></td><td>-</td><td>1,332.00</td><td>-</td><td>13.00</td><td>254.00</td></tr>
+<tr><td>29,380.00</td><td>24,516.00</td><td>40.92</td><td>0.65</td><td>-</td><td><b>25350</b></td><td>-</td><td>1,420.00</td><td>74.29</td><td>8.00</td><td>24.00</td></tr>
+<tr><td>26,999.00</td><td>84,721.00</td><td>42.19</td><td>0.60</td><td>-</td><td><b>25400</b></td><td>-</td><td>1,434.80</td><td>-</td><td>84.00</td><td>146.00</td></tr>
+<tr><td>7,254.00</td><td>17,972.00</td><td>43.46</td><td>0.65</td><td>-</td><td><b>25450</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>88,113.00</td><td>131,401.00</td><td>44.02</td><td>0.55</td><td>-</td><td><b>25500</b></td><td>-</td><td>1,538.95</td><td>-</td><td>1,995.00</td><td>12,317.00</td></tr>
+<tr><td>7,851.00</td><td>15,846.00</td><td>45.26</td><td>0.60</td><td>-</td><td><b>25550</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>14,430.00</td><td>43,042.00</td><td>46.09</td><td>0.55</td><td>-</td><td><b>25600</b></td><td>-</td><td>1,635.00</td><td>-</td><td>75.00</td><td>160.00</td></tr>
+<tr><td>5,039.00</td><td>41,674.00</td><td>48.47</td><td>0.55</td><td>-</td><td><b>25650</b></td><td>-</td><td>1,715.00</td><td>82.73</td><td>8.00</td><td>6.00</td></tr>
+<tr><td>11,411.00</td><td>17,383.00</td><td>48.94</td><td>0.55</td><td>-</td><td><b>25700</b></td><td>-</td><td>1,735.00</td><td>-</td><td>33.00</td><td>175.00</td></tr>
+<tr><td>3,349.00</td><td>10,944.00</td><td>50.15</td><td>0.55</td><td>-</td><td><b>25750</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>14,621.00</td><td>35,725.00</td><td>50.93</td><td>0.45</td><td>-</td><td><b>25800</b></td><td>-</td><td>1,835.00</td><td>-</td><td>162.00</td><td>239.00</td></tr>
+<tr><td>2,114.00</td><td>4,461.00</td><td>52.12</td><td>0.55</td><td>-</td><td><b>25850</b></td><td>-</td><td>1,890.00</td><td>58.49</td><td>1.00</td><td>3.00</td></tr>
+<tr><td>4,909.00</td><td>10,970.00</td><td>53.32</td><td>0.55</td><td>-</td><td><b>25900</b></td><td>-</td><td>1,977.35</td><td>99.78</td><td>26.00</td><td>39.00</td></tr>
+<tr><td>1,995.00</td><td>4,651.00</td><td>54.01</td><td>0.50</td><td>-</td><td><b>25950</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>62,701.00</td><td>81,304.00</td><td>55.18</td><td>0.50</td><td>-</td><td><b>26000</b></td><td>-</td><td>2,044.00</td><td>-</td><td>6,933.00</td><td>20,733.00</td></tr>
+<tr><td>2,074.00</td><td>5,809.00</td><td>56.35</td><td>0.50</td><td>-</td><td><b>26050</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>4,020.00</td><td>11,968.00</td><td>57.52</td><td>0.50</td><td>-</td><td><b>26100</b></td><td>-</td><td>2,145.20</td><td>-</td><td>111.00</td><td>291.00</td></tr>
+<tr><td>1,213.00</td><td>4,069.00</td><td>58.10</td><td>0.45</td><td>-</td><td><b>26150</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>4,738.00</td><td>7,768.00</td><td>58.62</td><td>0.45</td><td>-</td><td><b>26200</b></td><td>-</td><td>2,239.00</td><td>-</td><td>88.00</td><td>523.00</td></tr>
+<tr><td>2,025.00</td><td>5,066.00</td><td>60.39</td><td>0.40</td><td>-</td><td><b>26250</b></td><td>-</td><td>-</td><td>-</td><td>-</td><td>-</td></tr>
+<tr><td>13,565.00</td><td>17,457.00</td><td>61.53</td><td>0.45</td><td>-</td><td><b>26300</b></td><td>-</td><td>2,340.05</td><td>-</td><td>2,166.00</td><td>5,956.00</td></tr>
+</table>
 
 ---
 
