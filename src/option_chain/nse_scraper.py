@@ -434,7 +434,18 @@ def fetch_option_chain(
 
 
 def get_spot(symbol: str) -> Optional[float]:
-    # Try 1: nselib capital_market
+    # Try 1: yfinance (works reliably from GitHub Actions)
+    try:
+        import yfinance as yf
+        ticker = yf.Ticker("^NSEI")
+        price = ticker.fast_info.get("lastPrice") or ticker.fast_info.get("regularMarketPrice")
+        if price and float(price) > 0:
+            logger.info("[get_spot] yfinance spot: %.2f", float(price))
+            return float(price)
+    except Exception as e:
+        logger.warning("[get_spot] yfinance failed: %s", e)
+
+    # Try 2: nselib capital_market
     try:
         from nselib import capital_market
         data = capital_market.index_data()
@@ -444,26 +455,5 @@ def get_spot(symbol: str) -> Optional[float]:
                 return float(row.iloc[0]["last"])
     except Exception as e:
         logger.warning("[get_spot] nselib failed: %s", e)
-
-    # Try 2: NSE indices API directly
-    try:
-        _HEADERS = {
-            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
-            "Accept": "*/*",
-            "Accept-Language": "en-US,en;q=0.9",
-            "Referer": "https://www.nseindia.com/",
-        }
-        s = requests.Session()
-        s.get("https://www.nseindia.com", headers=_HEADERS, timeout=10)
-        resp = s.get(
-            "https://www.nseindia.com/api/allIndices",
-            headers=_HEADERS, timeout=10
-        )
-        resp.raise_for_status()
-        for item in resp.json().get("data", []):
-            if item.get("index") == "NIFTY 50":
-                return float(item["last"])
-    except Exception as e:
-        logger.warning("[get_spot] NSE API fallback failed: %s", e)
 
     return None
