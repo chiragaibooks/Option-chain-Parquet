@@ -434,6 +434,7 @@ def fetch_option_chain(
 
 
 def get_spot(symbol: str) -> Optional[float]:
+    # Try 1: nselib capital_market
     try:
         from nselib import capital_market
         data = capital_market.index_data()
@@ -441,6 +442,28 @@ def get_spot(symbol: str) -> Optional[float]:
             row = data[data["indexSymbol"] == "NIFTY 50"] if "indexSymbol" in data.columns else pd.DataFrame()
             if not row.empty:
                 return float(row.iloc[0]["last"])
-    except Exception:
-        pass
+    except Exception as e:
+        logger.warning("[get_spot] nselib failed: %s", e)
+
+    # Try 2: NSE indices API directly
+    try:
+        _HEADERS = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36",
+            "Accept": "*/*",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Referer": "https://www.nseindia.com/",
+        }
+        s = requests.Session()
+        s.get("https://www.nseindia.com", headers=_HEADERS, timeout=10)
+        resp = s.get(
+            "https://www.nseindia.com/api/allIndices",
+            headers=_HEADERS, timeout=10
+        )
+        resp.raise_for_status()
+        for item in resp.json().get("data", []):
+            if item.get("index") == "NIFTY 50":
+                return float(item["last"])
+    except Exception as e:
+        logger.warning("[get_spot] NSE API fallback failed: %s", e)
+
     return None
