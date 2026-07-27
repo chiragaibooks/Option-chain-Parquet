@@ -10,7 +10,6 @@ IST = pytz.timezone("Asia/Kolkata")
 
 _DB  = "data/option_chain.db"
 _OUT = "README.md"
-_GAP = 50
 
 
 def _fmt(v):
@@ -29,21 +28,9 @@ def _fmt_ts(ts: str) -> str:
         return ts
 
 
-def _atm(spot: float) -> int:
-    return round(spot / _GAP) * _GAP
-
-
 def generate(db: str = _DB, out: str = _OUT) -> None:
     try:
         with sqlite3.connect(db) as conn:
-            conn.execute(
-                "CREATE TABLE IF NOT EXISTS nifty50_option_chain ("
-                "timestamp TEXT, symbol TEXT, expiry TEXT, strike REAL, option_type TEXT,"
-                "spot REAL, ltp REAL, open REAL, high REAL, low REAL, close REAL,"
-                "volume REAL, oi REAL, oi_chg REAL, iv REAL,"
-                "delta REAL, gamma REAL, theta REAL, vega REAL, rho REAL,"
-                "PRIMARY KEY (timestamp, strike, option_type, expiry))"
-            )
             ts_rows = conn.execute(
                 "SELECT DISTINCT timestamp FROM nifty50_option_chain "
                 "ORDER BY timestamp DESC LIMIT 10"
@@ -66,8 +53,8 @@ def generate(db: str = _DB, out: str = _OUT) -> None:
         try:
             with sqlite3.connect(db) as conn:
                 rows = conn.execute(
-                    "SELECT strike, option_type, spot, ltp, oi, oi_chg, volume, iv, delta "
-                    "FROM nifty50_option_chain WHERE timestamp=? ORDER BY strike",
+                    "SELECT strike, option_type, expiry, ltp "
+                    "FROM nifty50_option_chain WHERE timestamp=? ORDER BY strike, option_type",
                     (ts,)
                 ).fetchall()
         except Exception:
@@ -76,33 +63,21 @@ def generate(db: str = _DB, out: str = _OUT) -> None:
         if not rows:
             continue
 
-        spot    = next((r[2] for r in rows if r[2]), 0.0)
-        atm     = _atm(spot) if spot else 0
-        ce      = {r[0]: r for r in rows if r[1] == "CE"}
-        pe      = {r[0]: r for r in rows if r[1] == "PE"}
-        strikes = sorted(set(ce) | set(pe))
-
-        content += f"## 🕐 {_fmt_ts(ts)} &nbsp;|&nbsp; Spot: **{_fmt(spot)}** &nbsp;|&nbsp; ATM: **{atm}**\n\n"
+        content += f"## 🕐 {_fmt_ts(ts)}\n\n"
         content += "<table>\n"
-        content += "<tr><th>CE OI</th><th>CE Vol</th><th>CE IV</th><th>CE LTP</th><th>CE Δ</th>"
-        content += "<th>Strike</th>"
-        content += "<th>PE Δ</th><th>PE LTP</th><th>PE IV</th><th>PE Vol</th><th>PE OI</th></tr>\n"
+        content += "<tr><th>Timestamp</th><th>Expiry</th><th>Strike</th><th>Type</th><th>LTP</th></tr>\n"
 
-        for strike in strikes:
-            c      = ce.get(strike, [None]*9)
-            p      = pe.get(strike, [None]*9)
-            is_atm = strike == atm
-            style  = ' style="background:#fffde7;font-weight:bold;"' if is_atm else ""
-            atm_tag = " ← ATM" if is_atm else ""
+        for strike, otype, expiry, ltp in rows:
             content += (
-                f"<tr{style}>"
-                f"<td>{_fmt(c[4])}</td><td>{_fmt(c[6])}</td><td>{_fmt(c[7])}</td>"
-                f"<td>{_fmt(c[3])}</td><td>{_fmt(c[8])}</td>"
-                f"<td><b>{int(strike)}</b>{atm_tag}</td>"
-                f"<td>{_fmt(p[8])}</td><td>{_fmt(p[3])}</td><td>{_fmt(p[7])}</td>"
-                f"<td>{_fmt(p[6])}</td><td>{_fmt(p[4])}</td>"
+                f"<tr>"
+                f"<td>{_fmt_ts(ts)}</td>"
+                f"<td>{expiry or '-'}</td>"
+                f"<td>{int(strike)}</td>"
+                f"<td>{otype}</td>"
+                f"<td>{_fmt(ltp)}</td>"
                 f"</tr>\n"
             )
+
         content += "</table>\n\n---\n\n"
 
     _write(out, content)
