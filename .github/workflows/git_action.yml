@@ -59,13 +59,14 @@ jobs:
           INTERVAL = 120  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "pull", "--rebase", "origin", "main"], check=False)
               subprocess.run(["git", "add", "data/option_chain.db", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
                   now_str = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
                   subprocess.run(["git", "commit", "-m", f"chore: auto-update {now_str}"], check=False)
-                  subprocess.run(["git", "push", "origin", "main"], check=False)
+              subprocess.run(["git", "fetch", "origin", "main"], check=False)
+              subprocess.run(["git", "rebase", "origin/main"], check=False)
+              subprocess.run(["git", "push", "origin", "main"], check=False)
 
           def run_and_sync():
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
