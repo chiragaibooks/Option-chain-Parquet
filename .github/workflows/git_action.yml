@@ -76,8 +76,8 @@ jobs:
           import threading
 
           def run_and_sync():
-              subprocess.run([sys.executable, "-m", "src.fetch_option_chain"])
-              subprocess.run([sys.executable, "-m", "src.readme_generator"])
+              subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
+              subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
               git_sync()
 
           print("Loop started", flush=True)
