@@ -1,8 +1,156 @@
-<!-- auto-updated: 30 Jul 2026 09:48:30 IST -->
+<!-- auto-updated: 30 Jul 2026 09:50:31 IST -->
 
 # 📋 NIFTY50 Option Chain — Last 10 Snapshots
 
-**Updated:** 30 Jul 2026 09:48:30 IST
+**Updated:** 30 Jul 2026 09:50:31 IST
+
+---
+
+## 🕐 30 Jul 2026 09:50 IST
+
+<table>
+<tr><th>Timestamp</th><th>Expiry</th><th>Strike</th><th>Type</th><th>LTP</th></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21600</td><td>PE</td><td>1.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21650</td><td>PE</td><td>1.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21700</td><td>PE</td><td>1.10</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21750</td><td>PE</td><td>1.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21800</td><td>PE</td><td>1.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21850</td><td>PE</td><td>1.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21900</td><td>PE</td><td>1.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>21950</td><td>PE</td><td>1.25</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22000</td><td>CE</td><td>2,230.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22000</td><td>PE</td><td>1.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22050</td><td>PE</td><td>1.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22100</td><td>PE</td><td>1.45</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22150</td><td>PE</td><td>1.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22200</td><td>PE</td><td>1.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22250</td><td>PE</td><td>1.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22300</td><td>PE</td><td>1.60</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22350</td><td>PE</td><td>1.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22400</td><td>PE</td><td>1.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22450</td><td>PE</td><td>1.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22500</td><td>PE</td><td>1.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22550</td><td>PE</td><td>1.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22600</td><td>PE</td><td>2.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22650</td><td>PE</td><td>2.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22700</td><td>PE</td><td>2.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22750</td><td>PE</td><td>2.25</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22800</td><td>CE</td><td>1,446.60</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22800</td><td>PE</td><td>2.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22850</td><td>PE</td><td>2.45</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22900</td><td>PE</td><td>2.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>22950</td><td>PE</td><td>2.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23000</td><td>CE</td><td>1,255.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23000</td><td>PE</td><td>2.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23050</td><td>PE</td><td>3.10</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23100</td><td>CE</td><td>1,144.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23100</td><td>PE</td><td>3.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23150</td><td>CE</td><td>1,082.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23150</td><td>PE</td><td>3.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23200</td><td>CE</td><td>1,052.10</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23200</td><td>PE</td><td>3.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23250</td><td>PE</td><td>4.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23300</td><td>CE</td><td>932.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23300</td><td>PE</td><td>4.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23350</td><td>CE</td><td>903.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23350</td><td>PE</td><td>4.60</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23400</td><td>CE</td><td>838.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23400</td><td>PE</td><td>4.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23450</td><td>CE</td><td>809.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23450</td><td>PE</td><td>5.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23500</td><td>CE</td><td>756.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23500</td><td>PE</td><td>5.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23550</td><td>CE</td><td>690.85</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23550</td><td>PE</td><td>6.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23600</td><td>CE</td><td>661.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23600</td><td>PE</td><td>7.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23650</td><td>CE</td><td>605.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23650</td><td>PE</td><td>8.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23700</td><td>CE</td><td>566.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23700</td><td>PE</td><td>10.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23750</td><td>CE</td><td>514.85</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23750</td><td>PE</td><td>12.25</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23800</td><td>CE</td><td>468.90</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23800</td><td>PE</td><td>15.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23850</td><td>CE</td><td>419.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23850</td><td>PE</td><td>18.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23900</td><td>CE</td><td>376.45</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23900</td><td>PE</td><td>23.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23950</td><td>CE</td><td>333.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>23950</td><td>PE</td><td>29.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24000</td><td>CE</td><td>290.90</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24000</td><td>PE</td><td>37.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24050</td><td>CE</td><td>251.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24050</td><td>PE</td><td>47.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24100</td><td>CE</td><td>213.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24100</td><td>PE</td><td>60.10</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24150</td><td>CE</td><td>179.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24150</td><td>PE</td><td>75.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24200</td><td>CE</td><td>147.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24200</td><td>PE</td><td>93.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24250</td><td>CE</td><td>118.90</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24250</td><td>PE</td><td>114.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24300</td><td>CE</td><td>93.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24300</td><td>PE</td><td>140.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24350</td><td>CE</td><td>72.25</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24350</td><td>PE</td><td>168.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24400</td><td>CE</td><td>54.25</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24400</td><td>PE</td><td>200.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24450</td><td>CE</td><td>39.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24450</td><td>PE</td><td>236.45</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24500</td><td>CE</td><td>28.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24500</td><td>PE</td><td>275.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24550</td><td>CE</td><td>19.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24550</td><td>PE</td><td>314.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24600</td><td>CE</td><td>13.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24600</td><td>PE</td><td>360.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24650</td><td>CE</td><td>9.30</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24650</td><td>PE</td><td>404.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24700</td><td>CE</td><td>6.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24700</td><td>PE</td><td>454.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24750</td><td>CE</td><td>4.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24750</td><td>PE</td><td>499.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24800</td><td>CE</td><td>3.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24800</td><td>PE</td><td>550.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24850</td><td>CE</td><td>3.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24850</td><td>PE</td><td>619.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24900</td><td>CE</td><td>2.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24900</td><td>PE</td><td>645.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24950</td><td>CE</td><td>2.40</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>24950</td><td>PE</td><td>695.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25000</td><td>CE</td><td>2.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25000</td><td>PE</td><td>745.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25050</td><td>CE</td><td>1.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25100</td><td>CE</td><td>1.55</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25100</td><td>PE</td><td>832.00</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25150</td><td>CE</td><td>1.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25200</td><td>CE</td><td>1.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25200</td><td>PE</td><td>936.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25250</td><td>CE</td><td>1.35</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25300</td><td>CE</td><td>1.15</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25300</td><td>PE</td><td>1,045.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25350</td><td>CE</td><td>1.10</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25400</td><td>CE</td><td>1.05</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25400</td><td>PE</td><td>1,155.50</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25450</td><td>CE</td><td>0.95</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25500</td><td>CE</td><td>0.85</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25500</td><td>PE</td><td>1,235.60</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25550</td><td>CE</td><td>0.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25600</td><td>CE</td><td>0.90</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25650</td><td>CE</td><td>0.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25700</td><td>CE</td><td>0.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25750</td><td>CE</td><td>0.85</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25800</td><td>CE</td><td>0.80</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25850</td><td>CE</td><td>0.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25900</td><td>CE</td><td>0.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>25950</td><td>CE</td><td>0.75</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26000</td><td>CE</td><td>0.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26000</td><td>PE</td><td>1,768.20</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26050</td><td>CE</td><td>0.70</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26100</td><td>CE</td><td>0.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26150</td><td>CE</td><td>0.65</td></tr>
+<tr><td>30 Jul 2026 09:50 IST</td><td>04-Aug-2026</td><td>26200</td><td>CE</td><td>0.65</td></tr>
+</table>
 
 ---
 
@@ -1315,150 +1463,6 @@
 <tr><td>30 Jul 2026 09:32 IST</td><td>04-Aug-2026</td><td>26100</td><td>CE</td><td>0.65</td></tr>
 <tr><td>30 Jul 2026 09:32 IST</td><td>04-Aug-2026</td><td>26150</td><td>CE</td><td>0.70</td></tr>
 <tr><td>30 Jul 2026 09:32 IST</td><td>04-Aug-2026</td><td>26200</td><td>CE</td><td>0.60</td></tr>
-</table>
-
----
-
-## 🕐 30 Jul 2026 09:30 IST
-
-<table>
-<tr><th>Timestamp</th><th>Expiry</th><th>Strike</th><th>Type</th><th>LTP</th></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21600</td><td>PE</td><td>1.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21650</td><td>PE</td><td>1.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21700</td><td>PE</td><td>1.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21750</td><td>PE</td><td>1.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21800</td><td>PE</td><td>1.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21850</td><td>PE</td><td>1.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21900</td><td>PE</td><td>1.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>21950</td><td>PE</td><td>1.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22000</td><td>CE</td><td>2,260.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22000</td><td>PE</td><td>1.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22050</td><td>PE</td><td>1.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22100</td><td>PE</td><td>1.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22150</td><td>PE</td><td>1.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22200</td><td>PE</td><td>1.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22250</td><td>PE</td><td>1.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22300</td><td>PE</td><td>1.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22350</td><td>PE</td><td>1.90</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22400</td><td>PE</td><td>2.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22450</td><td>PE</td><td>2.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22500</td><td>PE</td><td>2.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22550</td><td>PE</td><td>2.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22600</td><td>PE</td><td>2.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22650</td><td>PE</td><td>2.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22700</td><td>PE</td><td>2.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22750</td><td>PE</td><td>2.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22800</td><td>CE</td><td>1,440.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22800</td><td>PE</td><td>2.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22850</td><td>PE</td><td>2.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22900</td><td>PE</td><td>2.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>22950</td><td>PE</td><td>2.90</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23000</td><td>CE</td><td>1,260.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23000</td><td>PE</td><td>3.10</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23050</td><td>PE</td><td>3.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23100</td><td>CE</td><td>1,167.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23100</td><td>PE</td><td>3.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23150</td><td>PE</td><td>3.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23200</td><td>CE</td><td>1,063.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23200</td><td>PE</td><td>4.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23250</td><td>PE</td><td>4.30</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23300</td><td>CE</td><td>957.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23300</td><td>PE</td><td>4.60</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23350</td><td>CE</td><td>903.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23350</td><td>PE</td><td>4.95</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23400</td><td>CE</td><td>860.60</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23400</td><td>PE</td><td>5.35</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23450</td><td>CE</td><td>814.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23450</td><td>PE</td><td>5.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23500</td><td>CE</td><td>757.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23500</td><td>PE</td><td>6.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23550</td><td>CE</td><td>708.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23550</td><td>PE</td><td>6.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23600</td><td>CE</td><td>660.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23600</td><td>PE</td><td>7.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23650</td><td>CE</td><td>611.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23650</td><td>PE</td><td>8.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23700</td><td>CE</td><td>563.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23700</td><td>PE</td><td>10.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23750</td><td>CE</td><td>519.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23750</td><td>PE</td><td>12.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23800</td><td>CE</td><td>471.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23800</td><td>PE</td><td>15.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23850</td><td>CE</td><td>421.95</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23850</td><td>PE</td><td>19.55</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23900</td><td>CE</td><td>376.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23900</td><td>PE</td><td>24.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23950</td><td>CE</td><td>333.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>23950</td><td>PE</td><td>30.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24000</td><td>CE</td><td>292.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24000</td><td>PE</td><td>39.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24050</td><td>CE</td><td>253.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24050</td><td>PE</td><td>48.90</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24100</td><td>CE</td><td>215.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24100</td><td>PE</td><td>61.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24150</td><td>CE</td><td>181.10</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24150</td><td>PE</td><td>77.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24200</td><td>CE</td><td>149.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24200</td><td>PE</td><td>95.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24250</td><td>CE</td><td>121.30</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24250</td><td>PE</td><td>116.95</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24300</td><td>CE</td><td>96.30</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24300</td><td>PE</td><td>142.15</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24350</td><td>CE</td><td>74.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24350</td><td>PE</td><td>170.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24400</td><td>CE</td><td>56.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24400</td><td>PE</td><td>202.60</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24450</td><td>CE</td><td>41.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24450</td><td>PE</td><td>237.85</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24500</td><td>CE</td><td>29.85</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24500</td><td>PE</td><td>275.55</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24550</td><td>CE</td><td>21.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24550</td><td>PE</td><td>314.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24600</td><td>CE</td><td>14.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24600</td><td>PE</td><td>359.90</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24650</td><td>CE</td><td>10.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24650</td><td>PE</td><td>403.10</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24700</td><td>CE</td><td>7.10</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24700</td><td>PE</td><td>451.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24750</td><td>CE</td><td>5.25</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24750</td><td>PE</td><td>499.60</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24800</td><td>CE</td><td>4.15</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24800</td><td>PE</td><td>545.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24850</td><td>CE</td><td>3.45</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24850</td><td>PE</td><td>595.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24900</td><td>CE</td><td>3.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24900</td><td>PE</td><td>650.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>24950</td><td>CE</td><td>2.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25000</td><td>CE</td><td>2.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25000</td><td>PE</td><td>747.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25050</td><td>CE</td><td>2.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25100</td><td>CE</td><td>1.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25100</td><td>PE</td><td>843.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25150</td><td>CE</td><td>1.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25200</td><td>CE</td><td>1.50</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25200</td><td>PE</td><td>945.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25250</td><td>CE</td><td>1.40</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25300</td><td>CE</td><td>1.20</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25300</td><td>PE</td><td>1,045.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25350</td><td>CE</td><td>1.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25400</td><td>CE</td><td>1.05</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25450</td><td>CE</td><td>0.95</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25500</td><td>CE</td><td>0.85</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25500</td><td>PE</td><td>1,240.00</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25550</td><td>CE</td><td>0.85</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25600</td><td>CE</td><td>0.90</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25650</td><td>CE</td><td>0.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25700</td><td>CE</td><td>0.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25750</td><td>CE</td><td>0.80</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25800</td><td>CE</td><td>0.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25850</td><td>CE</td><td>0.75</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25900</td><td>CE</td><td>0.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>25950</td><td>CE</td><td>0.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>26000</td><td>CE</td><td>0.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>26050</td><td>CE</td><td>0.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>26100</td><td>CE</td><td>0.65</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>26150</td><td>CE</td><td>0.70</td></tr>
-<tr><td>30 Jul 2026 09:30 IST</td><td>04-Aug-2026</td><td>26200</td><td>CE</td><td>0.60</td></tr>
 </table>
 
 ---
