@@ -226,7 +226,10 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
                 record = {
                     "expiry": expiry, "strike": strike, "option_type": otype,
                     "spot": use_spot, "ltp": ltp if ltp is not None else 0.0,
-                    "open": None, "high": None, "low": None, "close": None,
+                    "open":  _to_float_nonneg(d.get("openPrice")),
+                    "high":  _to_float_nonneg(d.get("highPrice")),
+                    "low":   _to_float_nonneg(d.get("lowPrice")),
+                    "close": _to_float_nonneg(d.get("prevClose")),
                     "volume": vol, "oi": oi, "oi_chg": chg_oi, "iv": iv_pct,
                     **greeks,
                 }
