@@ -410,7 +410,7 @@ def fetch_option_chain(
 ) -> pd.DataFrame:
     df_live = _fetch_live_option_chain(symbol, spot)
     if not df_live.empty:
-        df_exp = df_live[df_live["expiry"] == expiry].copy() if expiry else df_live
+        df_exp = df_live[df_live["expiry"] == expiry].copy() if expiry else df_live.copy()
         if not df_exp.empty:
             return df_exp
 
