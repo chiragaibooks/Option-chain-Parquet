@@ -59,7 +59,7 @@ jobs:
           INTERVAL = 60  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "add", "data/option_chain.db", "README.md"], check=False)
+              subprocess.run(["git", "add", "-f", "data/option_chain.db", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
                   now_str = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
