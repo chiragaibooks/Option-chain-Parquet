@@ -66,8 +66,8 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float) -> N
         logger.info("[%s] Outside market hours — skipping insert", symbol)
         return
     init_option_db(db)
-    if _last_snapshot_age_mins(db) < 2:
-        logger.info("[%s] Skipping insert — last snapshot < 2 mins ago", symbol)
+    if _last_snapshot_age_mins(db) < 1:
+        logger.info("[%s] Skipping insert — last snapshot < 1 min ago", symbol)
         return
     ts = datetime.now(IST).strftime("%Y%m%d%H%M")
     df = df.copy()
