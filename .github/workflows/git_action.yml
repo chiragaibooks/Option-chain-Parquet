@@ -56,7 +56,7 @@ jobs:
           import pytz
 
           IST = pytz.timezone("Asia/Kolkata")
-          INTERVAL = 120  # seconds between runs
+          INTERVAL = 60  # seconds between runs
 
           def git_sync():
               subprocess.run(["git", "add", "data/option_chain.db", "README.md"], check=False)
