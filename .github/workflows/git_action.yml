@@ -2,7 +2,7 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    # 3 triggers x 90 min each = full 9:15-15:30 IST session covered
+    # 4 triggers x 80 min each = full 9:15-15:30 IST session covered
     - cron: "14 3 * * 1-5"   # 03:14 UTC = 08:44 IST  → covers 09:15-10:44 IST
     - cron: "14 5 * * 1-5"   # 05:14 UTC = 10:44 IST  → covers 10:44-12:14 IST
     - cron: "14 7 * * 1-5"   # 07:14 UTC = 12:44 IST  → covers 12:44-14:14 IST
@@ -15,10 +15,7 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
-    concurrency:
-      group: option-chain-run
-      cancel-in-progress: true
+    timeout-minutes: 80
 
     steps:
       - uses: actions/checkout@v4
