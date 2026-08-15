@@ -32,7 +32,7 @@ jobs:
           restore-keys: ${{ runner.os }}-pip-
 
       - name: Install dependencies
-        run: pip install --quiet -r requirements.txt
+        run: pip install --quiet -r requirements.txt pyarrow
 
       - name: Configure git
         run: |
@@ -81,6 +81,12 @@ jobs:
                   shutil.move(db, archive)
                   print(f"DB reached {size_mb:.1f}MB — archived to {archive}", flush=True)
 
+          def flush_parquet_and_sync():
+              from src.database import flush_day_to_parquet
+              import pytz
+              flush_day_to_parquet("data/option_chain.db", datetime.now(pytz.timezone("Asia/Kolkata")))
+              git_sync()
+
           def run_and_sync():
               rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
@@ -97,7 +103,8 @@ jobs:
               now = datetime.now(IST)
               hm  = now.hour * 100 + now.minute
               if hm > 1530:
-                  print(f"[{now.strftime('%H:%M IST')}] Market closed — exiting", flush=True)
+                  print(f"[{now.strftime('%H:%M IST')}] Market closed — flushing parquet", flush=True)
+                  flush_parquet_and_sync()
                   break
               if hm < 900:
                   wait = (900 - hm) * 60 - now.second

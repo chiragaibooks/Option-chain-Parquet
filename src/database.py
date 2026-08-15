@@ -1,4 +1,5 @@
 """database.py — SQLite helpers for option_chain.db."""
+import os
 import sqlite3
 import logging
 from datetime import datetime
@@ -87,3 +88,32 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float) -> N
         conn.executemany(sql, df[_OC_COLS].values.tolist())
         conn.commit()
     logger.info("[%s] Stored %d option rows", symbol, len(df))
+
+
+def flush_day_to_parquet(db: str, trade_date: datetime) -> None:
+    """
+    Read all rows for `trade_date` from SQLite and write / append to
+    data/option_chain_YYYYMMDD.parquet.  Safe to call multiple times
+    (overwrites the file each time so it always reflects the full day).
+    """
+    date_prefix = trade_date.strftime("%Y%m%d")
+    parquet_path = os.path.join("data", f"option_chain_{date_prefix}.parquet")
+
+    try:
+        with sqlite3.connect(db) as conn:
+            df = pd.read_sql_query(
+                "SELECT * FROM nifty50_option_chain WHERE substr(timestamp,1,8)=?",
+                conn,
+                params=(date_prefix,),
+            )
+    except Exception:
+        logger.exception("flush_day_to_parquet: DB read failed for %s", date_prefix)
+        return
+
+    if df.empty:
+        logger.info("flush_day_to_parquet: no rows for %s — skipping", date_prefix)
+        return
+
+    os.makedirs("data", exist_ok=True)
+    df.to_parquet(parquet_path, index=False)
+    logger.info("Flushed %d rows → %s", len(df), parquet_path)
