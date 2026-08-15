@@ -6,40 +6,7 @@
 
 ---
 
-<script>
-function applyFilters(){
-  var exp=document.getElementById("f-exp").value;
-  var typ=document.getElementById("f-typ").value;
-  var sMin=parseFloat(document.getElementById("f-smin").value)||0;
-  var sMax=parseFloat(document.getElementById("f-smax").value)||Infinity;
-  var lMin=parseFloat(document.getElementById("f-lmin").value)||0;
-  var lMax=parseFloat(document.getElementById("f-lmax").value)||Infinity;
-  document.querySelectorAll("tr[data-expiry]").forEach(function(r){
-    var ok=(!exp||r.dataset.expiry===exp)&&(!typ||r.dataset.type===typ)
-      &&+r.dataset.strike>=sMin&&+r.dataset.strike<=sMax
-      &&+r.dataset.ltp>=lMin&&+r.dataset.ltp<=lMax;
-    r.style.display=ok?"":"none";
-  });
-}
-function resetFilters(){
-  ["f-exp","f-typ","f-smin","f-smax","f-lmin","f-lmax"].forEach(function(id){document.getElementById(id).value="";});
-  applyFilters();
-}
-</script>
 
-<details open><summary><b>&#128269; Filters</b></summary>
-<table><tr>
-<th>Expiry</th><th>Strike Min</th><th>Strike Max</th><th>Type</th><th>LTP Min</th><th>LTP Max</th><th></th>
-</tr><tr>
-<td><select id="f-exp" onchange="applyFilters()"><option value="">All</option><option value="01-Sep-2026">01-Sep-2026</option><option value="11-Aug-2026">11-Aug-2026</option><option value="18-Aug-2026">18-Aug-2026</option><option value="25-Aug-2026">25-Aug-2026</option></select></td>
-<td><input id="f-smin" type="number" placeholder="e.g. 24000" oninput="applyFilters()" style="width:90px"></td>
-<td><input id="f-smax" type="number" placeholder="e.g. 25000" oninput="applyFilters()" style="width:90px"></td>
-<td><select id="f-typ" onchange="applyFilters()"><option value="">All</option><option>CE</option><option>PE</option></select></td>
-<td><input id="f-lmin" type="number" placeholder="e.g. 10" oninput="applyFilters()" style="width:80px"></td>
-<td><input id="f-lmax" type="number" placeholder="e.g. 500" oninput="applyFilters()" style="width:80px"></td>
-<td><button onclick="resetFilters()">Reset</button></td>
-</tr></table>
-</details>
 
 ## 🕐 07 Aug 2026 09:16 IST
 
