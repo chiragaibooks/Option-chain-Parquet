@@ -54,7 +54,7 @@ jobs:
           INTERVAL = 60  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "add", "-f", "data/"], check=False)
+              subprocess.run(["git", "add", "-f", "data/", "docs/"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
                   now_str = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
@@ -91,6 +91,7 @@ jobs:
               rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
               subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
+              subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
               git_sync()
 
           print("Loop started", flush=True)
