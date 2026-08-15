@@ -57,16 +57,35 @@ jobs:
           INTERVAL = 60  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "add", "-f", "data/option_chain.db", "README.md"], check=False)
+              subprocess.run(["git", "add", "-f", "data/"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
                   now_str = datetime.now(IST).strftime("%Y-%m-%d %H:%M IST")
                   subprocess.run(["git", "commit", "-m", f"chore: auto-update {now_str}"], check=False)
-              subprocess.run(["git", "fetch", "origin", "main"], check=False)
-              subprocess.run(["git", "rebase", "origin/main"], check=False)
-              subprocess.run(["git", "push", "origin", "main"], check=False)
+              for _ in range(5):
+                  subprocess.run(["git", "fetch", "origin", "main"], check=False)
+                  subprocess.run(["git", "rebase", "origin/main"], check=False)
+                  r = subprocess.run(["git", "push", "origin", "main"], capture_output=True)
+                  if r.returncode == 0:
+                      break
+                  print("Push failed, retrying in 10s...", flush=True)
+                  subprocess.run(["git", "rebase", "--abort"], check=False)
+                  time.sleep(10)
+
+          def rollover_db_if_large():
+              import os, shutil
+              db = "data/option_chain.db"
+              if not os.path.exists(db):
+                  return
+              size_mb = os.path.getsize(db) / (1024 * 1024)
+              if size_mb >= 90:
+                  today = datetime.now(IST).strftime("%Y%m%d")
+                  archive = f"data/option_chain_{today}.db"
+                  shutil.move(db, archive)
+                  print(f"DB reached {size_mb:.1f}MB — archived to {archive}", flush=True)
 
           def run_and_sync():
+              rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
               subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
               git_sync()
