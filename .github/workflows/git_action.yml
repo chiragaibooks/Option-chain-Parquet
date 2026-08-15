@@ -2,11 +2,8 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    # 4 triggers x 80 min each = full 9:15-15:30 IST session covered
-    - cron: "14 3 * * 1-5"   # 03:14 UTC = 08:44 IST  → covers 09:15-10:44 IST
-    - cron: "14 5 * * 1-5"   # 05:14 UTC = 10:44 IST  → covers 10:44-12:14 IST
-    - cron: "14 7 * * 1-5"   # 07:14 UTC = 12:44 IST  → covers 12:44-14:14 IST
-    - cron: "44 8 * * 1-5"   # 08:44 UTC = 14:14 IST  → covers 14:14-15:30 IST
+    # Single daily trigger — loop runs 09:15-15:30 IST internally
+    - cron: "44 3 * * 1-5"   # 03:44 UTC = 09:14 IST
   workflow_dispatch:
 
 permissions:
@@ -15,7 +12,7 @@ permissions:
 jobs:
   run:
     runs-on: ubuntu-latest
-    timeout-minutes: 80
+    timeout-minutes: 400
 
     steps:
       - uses: actions/checkout@v4
