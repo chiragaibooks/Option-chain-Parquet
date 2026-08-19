@@ -42,30 +42,6 @@ def generate(parquet_dir: str = _PARQUET_DIR, out: str = _OUT) -> None:
     content += f"**Updated:** {now_str}\n\n---\n\n"
     content += "🔍 **[Open Interactive Dashboard →](https://chiragaibooks.github.io/Option-chain-Parquet/)** — filter by Expiry, Strike, Type, LTP, view Greeks & OI charts\n\n---\n\n"
 
-    # Summary table of all parquet files
-    content += "## 📦 Available Parquet Files\n\n"
-    content += "| File | Date | Timestamps | First | Last | Rows |\n"
-    content += "|------|------|-----------|-------|------|------|\n"
-
-    for f in files:
-        try:
-            df = pd.read_parquet(f, columns=["timestamp"])
-            ts = df["timestamp"].drop_duplicates().sort_values()
-            name = os.path.basename(f)
-            date_str = name.replace("option_chain_", "").replace(".parquet", "")
-            try:
-                date_fmt = datetime.strptime(date_str, "%Y%m%d").strftime("%d %b %Y")
-            except Exception:
-                date_fmt = date_str
-            content += (
-                f"| `{name}` | {date_fmt} | {len(ts)} | "
-                f"{_fmt_ts(ts.iloc[0])} | {_fmt_ts(ts.iloc[-1])} | {len(df):,} |\n"
-            )
-        except Exception:
-            logger.warning("Could not read %s", f)
-
-    content += "\n---\n\n"
-
     # Last 10 snapshots from the most recent parquet file
     try:
         latest_file = files[0]
