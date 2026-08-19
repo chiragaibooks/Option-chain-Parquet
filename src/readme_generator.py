@@ -1,14 +1,16 @@
-"""readme_generator.py — Writes README with last 10 NIFTY50 option chain snapshots."""
-import sqlite3
+"""readme_generator.py — Writes README with latest parquet snapshot data."""
+import glob
 import logging
+import os
 from datetime import datetime
 
+import pandas as pd
 import pytz
 
 logger = logging.getLogger(__name__)
 IST = pytz.timezone("Asia/Kolkata")
 
-_DB  = "data/option_chain.db"
+_PARQUET_DIR = "data"
 _OUT = "README.md"
 
 
@@ -23,68 +25,76 @@ def _fmt(v):
 
 def _fmt_ts(ts: str) -> str:
     try:
-        return datetime.strptime(ts, "%Y%m%d%H%M").strftime("%d %b %Y %H:%M IST")
+        return datetime.strptime(str(ts), "%Y%m%d%H%M").strftime("%d %b %Y %H:%M IST")
     except Exception:
-        return ts
+        return str(ts)
 
 
-def generate(db: str = _DB, out: str = _OUT) -> None:
-    try:
-        with sqlite3.connect(db) as conn:
-            ts_rows = conn.execute(
-                "SELECT DISTINCT timestamp FROM nifty50_option_chain "
-                "ORDER BY timestamp DESC LIMIT 10"
-            ).fetchall()
-    except Exception:
-        logger.exception("Failed to read DB")
+def generate(parquet_dir: str = _PARQUET_DIR, out: str = _OUT) -> None:
+    files = sorted(glob.glob(os.path.join(parquet_dir, "option_chain_*.parquet")), reverse=True)
+    if not files:
+        _write(out, "# 📋 NIFTY50 Option Chain\n\n_No parquet data yet._\n")
         return
 
-    if not ts_rows:
-        _write(out, "# 📋 NIFTY50 Option Chain\n\n_No data yet._\n")
-        return
-
-    timestamps = [r[0] for r in ts_rows]
-    now_str    = datetime.now(IST).strftime("%d %b %Y %H:%M:%S IST")
-    content    = f"<!-- auto-updated: {now_str} -->\n\n"
-    content   += "# 📋 NIFTY50 Option Chain — Last 10 Snapshots\n\n"
-    content   += f"**Updated:** {now_str}\n\n---\n\n"
-
-    snapshot_data = []
-    for ts in timestamps:
-        try:
-            with sqlite3.connect(db) as conn:
-                rows = conn.execute(
-                    "SELECT strike, option_type, expiry, ltp "
-                    "FROM nifty50_option_chain WHERE timestamp=? ORDER BY strike, option_type",
-                    (ts,)
-                ).fetchall()
-        except Exception:
-            continue
-        if rows:
-            snapshot_data.append((ts, rows))
-
+    now_str = datetime.now(IST).strftime("%d %b %Y %H:%M:%S IST")
+    content = f"<!-- auto-updated: {now_str} -->\n\n"
+    content += "# 📋 NIFTY50 Option Chain — Parquet Data\n\n"
+    content += f"**Updated:** {now_str}\n\n---\n\n"
     content += "🔍 **[Open Interactive Dashboard →](https://chiragaibooks.github.io/Option-chain-Parquet/)** — filter by Expiry, Strike, Type, LTP, view Greeks & OI charts\n\n---\n\n"
 
-    for ts, rows in snapshot_data:
-        content += f"## 🕐 {_fmt_ts(ts)}\n\n"
-        content += "<table>\n"
-        content += "<tr><th>Timestamp</th><th>Expiry</th><th>Strike</th><th>Type</th><th>LTP</th></tr>\n"
+    # Summary table of all parquet files
+    content += "## 📦 Available Parquet Files\n\n"
+    content += "| File | Date | Timestamps | First | Last | Rows |\n"
+    content += "|------|------|-----------|-------|------|------|\n"
 
-        for strike, otype, expiry, ltp in rows:
+    for f in files:
+        try:
+            df = pd.read_parquet(f, columns=["timestamp"])
+            ts = df["timestamp"].drop_duplicates().sort_values()
+            name = os.path.basename(f)
+            date_str = name.replace("option_chain_", "").replace(".parquet", "")
+            try:
+                date_fmt = datetime.strptime(date_str, "%Y%m%d").strftime("%d %b %Y")
+            except Exception:
+                date_fmt = date_str
             content += (
-                f"<tr>"
-                f"<td>{_fmt_ts(ts)}</td>"
-                f"<td>{expiry or '-'}</td>"
-                f"<td>{int(strike)}</td>"
-                f"<td>{otype}</td>"
-                f"<td>{_fmt(ltp)}</td>"
-                f"</tr>\n"
+                f"| `{name}` | {date_fmt} | {len(ts)} | "
+                f"{_fmt_ts(ts.iloc[0])} | {_fmt_ts(ts.iloc[-1])} | {len(df):,} |\n"
             )
+        except Exception:
+            logger.warning("Could not read %s", f)
 
-        content += "</table>\n\n---\n\n"
+    content += "\n---\n\n"
+
+    # Last 10 snapshots from the most recent parquet file
+    try:
+        latest_file = files[0]
+        df_latest = pd.read_parquet(latest_file)
+        latest_timestamps = (
+            df_latest["timestamp"].drop_duplicates().sort_values().tail(10).tolist()
+        )
+
+        content += f"## 🕐 Last 10 Snapshots — `{os.path.basename(latest_file)}`\n\n"
+
+        for ts in reversed(latest_timestamps):
+            rows = df_latest[df_latest["timestamp"] == ts][
+                ["strike", "option_type", "expiry", "ltp"]
+            ].sort_values(["strike", "option_type"]).values.tolist()
+
+            content += f"### {_fmt_ts(ts)}\n\n"
+            content += "<table>\n"
+            content += "<tr><th>Expiry</th><th>Strike</th><th>Type</th><th>LTP</th></tr>\n"
+            for strike, otype, expiry, ltp in rows:
+                content += (
+                    f"<tr><td>{expiry or '-'}</td><td>{int(strike)}</td>"
+                    f"<td>{otype}</td><td>{_fmt(ltp)}</td></tr>\n"
+                )
+            content += "</table>\n\n---\n\n"
+    except Exception:
+        logger.exception("Failed to build snapshot section")
 
     _write(out, content)
-    logger.info("README updated with %d snapshots", len(timestamps))
+    logger.info("README updated from parquet files: %d files", len(files))
 
 
 def _write(path: str, content: str) -> None:

@@ -92,16 +92,16 @@ def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float) -> N
 
 def flush_day_to_parquet(db: str, trade_date: datetime) -> None:
     """
-    Read all rows for `trade_date` from SQLite and write / append to
-    data/option_chain_YYYYMMDD.parquet.  Safe to call multiple times
-    (overwrites the file each time so it always reflects the full day).
+    Read all rows for `trade_date` from SQLite, merge with any existing
+    parquet for that day, deduplicate, and overwrite the parquet file.
+    Safe to call multiple times — always produces a complete file.
     """
     date_prefix = trade_date.strftime("%Y%m%d")
     parquet_path = os.path.join("data", f"option_chain_{date_prefix}.parquet")
 
     try:
         with sqlite3.connect(db) as conn:
-            df = pd.read_sql_query(
+            df_db = pd.read_sql_query(
                 "SELECT * FROM nifty50_option_chain WHERE substr(timestamp,1,8)=?",
                 conn,
                 params=(date_prefix,),
@@ -110,10 +110,23 @@ def flush_day_to_parquet(db: str, trade_date: datetime) -> None:
         logger.exception("flush_day_to_parquet: DB read failed for %s", date_prefix)
         return
 
-    if df.empty:
+    if df_db.empty:
         logger.info("flush_day_to_parquet: no rows for %s — skipping", date_prefix)
         return
 
+    # Merge with existing parquet to recover any previously missing minutes
+    if os.path.exists(parquet_path):
+        try:
+            df_existing = pd.read_parquet(parquet_path)
+            df_db = pd.concat([df_existing, df_db], ignore_index=True)
+        except Exception:
+            logger.warning("flush_day_to_parquet: could not read existing parquet, overwriting")
+
+    df_db = df_db.drop_duplicates(
+        subset=["timestamp", "strike", "option_type", "expiry"]
+    ).sort_values("timestamp").reset_index(drop=True)
+
     os.makedirs("data", exist_ok=True)
-    df.to_parquet(parquet_path, index=False)
-    logger.info("Flushed %d rows → %s", len(df), parquet_path)
+    df_db.to_parquet(parquet_path, index=False)
+    logger.info("Flushed %d rows (%d timestamps) → %s",
+                len(df_db), df_db['timestamp'].nunique(), parquet_path)

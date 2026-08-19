@@ -54,7 +54,8 @@ jobs:
           INTERVAL = 60  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "add", "-f", "data/"], check=False)
+              subprocess.run(["git", "rm", "--cached", "data/option_chain.db"], check=False, capture_output=True)
+              subprocess.run(["git", "add", "-f", "data/*.parquet"], check=False)
               subprocess.run(["git", "add", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
@@ -84,13 +85,13 @@ jobs:
 
           def flush_parquet_and_sync():
               from src.database import flush_day_to_parquet
-              import pytz
-              flush_day_to_parquet("data/option_chain.db", datetime.now(pytz.timezone("Asia/Kolkata")))
+              flush_day_to_parquet("data/option_chain.db", datetime.now(IST))
               git_sync()
 
           def run_and_sync():
               rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
+              flush_parquet_and_sync()  # flush parquet every minute so it's always current
               subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
               subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
               git_sync()
