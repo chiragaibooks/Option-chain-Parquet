@@ -6,6 +6,10 @@ on:
     - cron: "30 3 * * 1-5"   # 03:30 UTC = 09:00 IST (15 min buffer before market open)
   workflow_dispatch:
 
+concurrency:
+  group: stock-data-cronjob
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
