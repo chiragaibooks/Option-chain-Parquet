@@ -59,7 +59,7 @@ jobs:
 
           def git_sync():
               subprocess.run(["git", "rm", "--cached", "data/option_chain.db"], check=False, capture_output=True)
-              subprocess.run(["git", "add", "-f", "data/*.parquet"], check=False)
+              subprocess.run("git add -f data/*.parquet", shell=True, check=False)
               subprocess.run(["git", "add", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
               if result.returncode != 0:
