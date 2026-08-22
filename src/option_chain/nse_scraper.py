@@ -226,10 +226,6 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
                 record = {
                     "expiry": expiry, "strike": strike, "option_type": otype,
                     "spot": use_spot, "ltp": ltp if ltp is not None else 0.0,
-                    "open":  _to_float_nonneg(d.get("openPrice")),
-                    "high":  _to_float_nonneg(d.get("highPrice")),
-                    "low":   _to_float_nonneg(d.get("lowPrice")),
-                    "close": _to_float_nonneg(d.get("prevClose")),
                     "volume": vol, "oi": oi, "oi_chg": chg_oi, "iv": iv_pct,
                     **greeks,
                 }
@@ -286,12 +282,6 @@ def _parse_bhav(df: pd.DataFrame, nse_sym: str, expiry_str: str, spot: float) ->
         oi_chg   = _to_float(r.get("ChngInOpnIntrst"))
         vol      = _to_float_nonneg(r.get("TtlTradgVol"))
 
-        # OHLC — use pd.notna to correctly handle NaN from pandas
-        open_  = _to_float(r.get("OpnPric"))
-        high_  = _to_float(r.get("HghPric"))
-        low_   = _to_float(r.get("LwPric"))
-        close_ = _to_float(r.get("ClsPric"))
-
         # IV: compute from LTP via Black-Scholes; NULL if unavailable — no hardcoded default
         iv_dec = _iv_from_price(flag, spot, K, tte, ltp) if (ltp and ltp > 0 and spot > 0 and K) else None
         iv_pct = round(iv_dec * 100, 2) if iv_dec else None
@@ -309,15 +299,11 @@ def _parse_bhav(df: pd.DataFrame, nse_sym: str, expiry_str: str, spot: float) ->
             "strike":      K,
             "option_type": otype,
             "spot":        spot,
-            "open":        open_,
-            "high":        high_,
-            "low":         low_,
-            "close":       close_,
             "ltp":         ltp if ltp is not None else 0.0,
             "volume":      vol,
             "oi":          oi,
             "oi_chg":      oi_chg,
-            "iv":          iv_pct,   # % or None — never hardcoded 18
+            "iv":          iv_pct,
             **greeks,
         }
         if _validate_record(record, nse_sym):

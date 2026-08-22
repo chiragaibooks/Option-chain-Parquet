@@ -12,7 +12,7 @@ IST = pytz.timezone("Asia/Kolkata")
 
 _OC_COLS = [
     "timestamp", "symbol", "expiry", "strike", "option_type",
-    "spot", "ltp", "open", "high", "low", "close",
+    "spot", "ltp",
     "volume", "oi", "oi_chg", "iv",
     "delta", "gamma", "theta", "vega", "rho",
 ]
@@ -20,7 +20,7 @@ _OC_COLS = [
 _OC_DDL = """
 CREATE TABLE IF NOT EXISTS nifty50_option_chain (
     timestamp TEXT, symbol TEXT, expiry TEXT, strike REAL, option_type TEXT,
-    spot REAL, ltp REAL, open REAL, high REAL, low REAL, close REAL,
+    spot REAL, ltp REAL,
     volume REAL, oi REAL, oi_chg REAL, iv REAL,
     delta REAL, gamma REAL, theta REAL, vega REAL, rho REAL,
     PRIMARY KEY (timestamp, strike, option_type, expiry)
