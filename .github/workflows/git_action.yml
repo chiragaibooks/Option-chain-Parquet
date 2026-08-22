@@ -58,7 +58,7 @@ jobs:
           INTERVAL = 60  # seconds between runs
 
           def git_sync():
-              subprocess.run(["git", "rm", "--cached", "data/option_chain.db"], check=False, capture_output=True)
+              subprocess.run(["git", "add", "-f", "data/option_chain.db"], check=False)
               subprocess.run("git add -f data/*.parquet", shell=True, check=False)
               subprocess.run(["git", "add", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
