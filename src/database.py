@@ -35,7 +35,27 @@ def init_option_db(db: str) -> None:
     with sqlite3.connect(db) as conn:
         conn.execute(_OC_DDL)
         conn.commit()
+    _migrate_drop_ohlc(db)
     logger.info("Option DB initialised: %s", db)
+
+
+def _migrate_drop_ohlc(db: str) -> None:
+    """Drop open/high/low/close columns if they still exist (one-time migration)."""
+    with sqlite3.connect(db) as conn:
+        cols = [r[1] for r in conn.execute("PRAGMA table_info(nifty50_option_chain)").fetchall()]
+        if not any(c in cols for c in ("open", "high", "low", "close")):
+            return
+        keep = [c for c in cols if c not in ("open", "high", "low", "close")]
+        keep_sql = ", ".join(keep)
+        conn.executescript(f"""
+            BEGIN;
+            CREATE TABLE nifty50_option_chain_new AS
+                SELECT {keep_sql} FROM nifty50_option_chain;
+            DROP TABLE nifty50_option_chain;
+            ALTER TABLE nifty50_option_chain_new RENAME TO nifty50_option_chain;
+            COMMIT;
+        """)
+    logger.info("Migration: dropped open/high/low/close columns from nifty50_option_chain")
 
 
 def _is_market_hours() -> bool:
