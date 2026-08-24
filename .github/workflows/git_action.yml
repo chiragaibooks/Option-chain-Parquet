@@ -55,7 +55,9 @@ jobs:
           import pytz
 
           IST = pytz.timezone("Asia/Kolkata")
-          INTERVAL = 60  # seconds between runs
+          INTERVAL   = 60   # fetch every 60 seconds
+          PUSH_EVERY = 5    # push to git every N fetches
+          push_counter = 0
 
           def git_sync():
               subprocess.run(["git", "add", "-f", "data/option_chain.db"], check=False)
@@ -93,12 +95,17 @@ jobs:
               git_sync()
 
           def run_and_sync():
+              global push_counter
               rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
-              flush_parquet_and_sync()  # flush parquet every minute so it's always current
-              subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
-              subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
-              git_sync()
+              from src.database import flush_day_to_parquet
+              flush_day_to_parquet("data/option_chain.db", datetime.now(IST))
+              push_counter += 1
+              if push_counter >= PUSH_EVERY:
+                  subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
+                  subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
+                  git_sync()
+                  push_counter = 0
 
           print("Loop started", flush=True)
           now = datetime.now(IST)
