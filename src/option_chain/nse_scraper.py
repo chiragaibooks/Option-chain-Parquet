@@ -11,7 +11,8 @@ from datetime import date, datetime, timedelta
 from typing import List, Optional
 
 import pandas as pd
-from scipy.stats import norm
+
+from src.option_chain.greeks import compute_greeks
 
 logger = logging.getLogger(__name__)
 
@@ -76,40 +77,18 @@ def _validate_record(row: dict, source: str) -> bool:
     return True
 
 
-# ── Greeks (pure BS, no external dependency) ─────────────────────────────────
+# ── IV solver (pure BS, no external dependency) ───────────────────────────────
 
 def _bs_price(flag: str, S: float, K: float, t: float, iv: float) -> float:
-    r = _RISK_FREE
-    d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * math.sqrt(t))
-    d2 = d1 - iv * math.sqrt(t)
+    """Black-Scholes option price. flag: 'c' = call, 'p' = put."""
+    r  = _RISK_FREE
+    sq = math.sqrt(t)
+    d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * sq)
+    d2 = d1 - iv * sq
+    from scipy.stats import norm
     if flag == "c":
         return S * norm.cdf(d1) - K * math.exp(-r * t) * norm.cdf(d2)
     return K * math.exp(-r * t) * norm.cdf(-d2) - S * norm.cdf(-d1)
-
-
-def _greeks(flag: str, S: float, K: float, t: float, iv: float) -> dict:
-    null = {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
-    if not (S > 0 and K > 0 and t > 0 and iv > 0):
-        return null
-    try:
-        r  = _RISK_FREE
-        d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * math.sqrt(t))
-        d2 = d1 - iv * math.sqrt(t)
-        pdf_d1 = norm.pdf(d1)
-        gamma  = round(pdf_d1 / (S * iv * math.sqrt(t)), 6)
-        vega   = round(S * pdf_d1 * math.sqrt(t) / 100, 4)  # per 1% IV move
-        if flag == "c":
-            delta = round(norm.cdf(d1), 4)
-            theta = round((-S * pdf_d1 * iv / (2 * math.sqrt(t)) - r * K * math.exp(-r * t) * norm.cdf(d2)) / 365, 4)
-            rho   = round(K * t * math.exp(-r * t) * norm.cdf(d2) / 100, 4)
-        else:
-            delta = round(norm.cdf(d1) - 1, 4)
-            theta = round((-S * pdf_d1 * iv / (2 * math.sqrt(t)) + r * K * math.exp(-r * t) * norm.cdf(-d2)) / 365, 4)
-            rho   = round(-K * t * math.exp(-r * t) * norm.cdf(-d2) / 100, 4)
-        return {"delta": delta, "gamma": gamma, "theta": theta, "vega": vega, "rho": rho}
-    except Exception as e:
-        logger.debug("[greeks] failed: %s", e)
-        return null
 
 
 def _iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Optional[float]:
@@ -217,9 +196,8 @@ def _fetch_live_option_chain(symbol: str, spot: float) -> pd.DataFrame:
                     iv_dec_fb = _iv_from_price("c" if otype == "CE" else "p", use_spot, strike, tte, ltp)
                     iv_pct = round(iv_dec_fb * 100, 2) if iv_dec_fb else None
                 iv_dec = iv_pct / 100 if iv_pct else None
-                flag   = "c" if otype == "CE" else "p"
                 greeks = (
-                    _greeks(flag, use_spot, strike, tte, iv_dec)
+                    compute_greeks(use_spot, strike, tte, _RISK_FREE, iv_dec, otype)
                     if (iv_dec and tte and use_spot > 0 and strike and strike > 0)
                     else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
                 )
@@ -289,7 +267,7 @@ def _parse_bhav(df: pd.DataFrame, nse_sym: str, expiry_str: str, spot: float) ->
 
         # Greeks: only when IV available
         greeks = (
-            _greeks(flag, spot, K, tte, iv_dec)
+            compute_greeks(spot, K, tte, _RISK_FREE, iv_dec, otype)
             if (iv_dec and spot > 0 and K)
             else {"delta": None, "gamma": None, "theta": None, "vega": None, "rho": None}
         )

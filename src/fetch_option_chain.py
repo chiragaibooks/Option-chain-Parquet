@@ -1,5 +1,5 @@
 """
-fetch_option_chain.py — Fetch NIFTY50 option chain snapshot and store to DB.
+fetch_option_chain.py — Fetch NIFTY50 option chain snapshot and store to parquet.
 Run: python -m src.fetch_option_chain
 """
 import logging
@@ -12,8 +12,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-OPTION_DB = os.getenv("OPTION_DB", "data/option_chain.db")
-LOG_DIR   = os.getenv("LOG_DIR",   "data/logs")
+LOG_DIR = os.getenv("LOG_DIR", "data/logs")
 
 os.makedirs(LOG_DIR, exist_ok=True)
 os.makedirs("data", exist_ok=True)
@@ -53,7 +52,7 @@ def main() -> None:
         logger.error("Empty option chain — aborting")
         sys.exit(1)
 
-    insert_option_data(OPTION_DB, "NIFTY50", df, spot)
+    insert_option_data(None, "NIFTY50", df, spot)
     logger.info("=== Done ===")
 
 

@@ -3,16 +3,16 @@ import json
 import logging
 import math
 import os
-import sqlite3
 from datetime import datetime
 
+import pandas as pd
 import pytz
 
 logger = logging.getLogger(__name__)
 IST = pytz.timezone("Asia/Kolkata")
 
-_DB  = "data/option_chain.db"
 _OUT = "docs/data.json"
+_SNAPSHOTS = 10  # most recent timestamps to include
 
 
 def _safe(v):
@@ -25,68 +25,79 @@ def _safe(v):
         return None
 
 
-def generate(db: str = _DB, out: str = _OUT) -> None:
-    os.makedirs(os.path.dirname(out), exist_ok=True)
+def _load_recent_data() -> pd.DataFrame:
+    """Load rows from the most recent available parquet files."""
+    from src.database import list_available_dates, load_day
 
-    try:
-        with sqlite3.connect(db) as conn:
-            ts_rows = conn.execute(
-                "SELECT DISTINCT timestamp FROM nifty50_option_chain "
-                "ORDER BY timestamp DESC LIMIT 10"
-            ).fetchall()
-    except Exception:
-        logger.exception("dashboard_generator: failed to read DB")
+    dates = list_available_dates()
+    if not dates:
+        return pd.DataFrame()
+
+    # Load from most recent dates until we have enough timestamps
+    frames = []
+    for d in reversed(dates):
+        df = load_day(d)
+        if not df.empty:
+            frames.append(df)
+        if frames:
+            combined = pd.concat(frames, ignore_index=True)
+            n_ts = combined["timestamp"].nunique() if "timestamp" in combined.columns else 0
+            if n_ts >= _SNAPSHOTS:
+                break
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+def generate(out: str = _OUT) -> None:
+    os.makedirs(os.path.dirname(out) if os.path.dirname(out) else ".", exist_ok=True)
+
+    df = _load_recent_data()
+
+    if df.empty or "timestamp" not in df.columns:
         _write(out, {"updated": _now_str(), "snapshots": []})
         return
 
-    if not ts_rows:
-        _write(out, {"updated": _now_str(), "snapshots": []})
-        return
+    # Pick the most recent N distinct timestamps
+    top_ts = sorted(df["timestamp"].unique(), reverse=True)[:_SNAPSHOTS]
 
     snapshots = []
-    for (ts,) in ts_rows:
-        try:
-            with sqlite3.connect(db) as conn:
-                rows = conn.execute(
-                    "SELECT strike, option_type, expiry, ltp, oi, oi_chg, "
-                    "volume, iv, delta, gamma, theta, vega, rho, spot "
-                    "FROM nifty50_option_chain WHERE timestamp=? "
-                    "ORDER BY strike, option_type",
-                    (ts,),
-                ).fetchall()
-        except Exception:
+    for ts in sorted(top_ts, reverse=True):
+        rows_df = df[df["timestamp"] == ts]
+        if rows_df.empty:
             continue
 
-        if not rows:
-            continue
-
-        spot = _safe(rows[0][13]) if rows else None
-        expiries = sorted({r[2] for r in rows if r[2]})
+        spot = _safe(rows_df["spot"].iloc[0]) if "spot" in rows_df.columns else None
+        expiries = sorted(rows_df["expiry"].dropna().unique().tolist())
 
         chain: dict = {}
-        for strike, otype, expiry, ltp, oi, oi_chg, vol, iv, delta, gamma, theta, vega, rho, _ in rows:
-            key = f"{expiry}|{strike}"
+        for _, r in rows_df.iterrows():
+            key = f"{r.get('expiry')}|{r.get('strike')}"
             if key not in chain:
-                chain[key] = {"strike": _safe(strike), "expiry": expiry, "CE": None, "PE": None}
+                chain[key] = {
+                    "strike": _safe(r.get("strike")),
+                    "expiry": r.get("expiry"),
+                    "CE": None,
+                    "PE": None,
+                }
+            otype = str(r.get("option_type", "")).upper()
             chain[key][otype] = {
-                "ltp":    _safe(ltp),
-                "oi":     _safe(oi),
-                "oiChg":  _safe(oi_chg),
-                "volume": _safe(vol),
-                "iv":     _safe(iv),
-                "delta":  _safe(delta),
-                "gamma":  _safe(gamma),
-                "theta":  _safe(theta),
-                "vega":   _safe(vega),
-                "rho":    _safe(rho),
+                "ltp":    _safe(r.get("ltp")),
+                "oi":     _safe(r.get("oi")),
+                "oiChg":  _safe(r.get("oi_chg")),
+                "volume": _safe(r.get("volume")),
+                "iv":     _safe(r.get("iv")),
+                "delta":  _safe(r.get("delta")),
+                "gamma":  _safe(r.get("gamma")),
+                "theta":  _safe(r.get("theta")),
+                "vega":   _safe(r.get("vega")),
+                "rho":    _safe(r.get("rho")),
             }
 
         snapshots.append({
             "timestamp": ts,
-            "label": _fmt_ts(ts),
-            "spot": spot,
-            "expiries": expiries,
-            "rows": sorted(chain.values(), key=lambda x: (x["expiry"], x["strike"])),
+            "label":     _fmt_ts(ts),
+            "spot":      spot,
+            "expiries":  expiries,
+            "rows":      sorted(chain.values(), key=lambda x: (x["expiry"], x["strike"])),
         })
 
     _write(out, {"updated": _now_str(), "snapshots": snapshots})

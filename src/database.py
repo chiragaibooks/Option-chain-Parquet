@@ -1,6 +1,9 @@
-"""database.py — SQLite helpers for option_chain.db."""
+"""database.py — Parquet-only storage for option chain snapshots.
+
+Each trading day gets its own file: data/option_chain_YYYYMMDD.parquet
+No SQLite is used.
+"""
 import os
-import sqlite3
 import logging
 from datetime import datetime
 
@@ -10,6 +13,8 @@ import pytz
 logger = logging.getLogger(__name__)
 IST = pytz.timezone("Asia/Kolkata")
 
+DATA_DIR = "data"
+
 _OC_COLS = [
     "timestamp", "symbol", "expiry", "strike", "option_type",
     "spot", "ltp",
@@ -17,45 +22,8 @@ _OC_COLS = [
     "delta", "gamma", "theta", "vega", "rho",
 ]
 
-_OC_DDL = """
-CREATE TABLE IF NOT EXISTS nifty50_option_chain (
-    timestamp TEXT, symbol TEXT, expiry TEXT, strike REAL, option_type TEXT,
-    spot REAL, ltp REAL,
-    volume REAL, oi REAL, oi_chg REAL, iv REAL,
-    delta REAL, gamma REAL, theta REAL, vega REAL, rho REAL,
-    PRIMARY KEY (timestamp, strike, option_type, expiry)
-)
-"""
-
 _MARKET_OPEN  = (9, 0)
 _MARKET_CLOSE = (15, 30)
-
-
-def init_option_db(db: str) -> None:
-    with sqlite3.connect(db) as conn:
-        conn.execute(_OC_DDL)
-        conn.commit()
-    _migrate_drop_ohlc(db)
-    logger.info("Option DB initialised: %s", db)
-
-
-def _migrate_drop_ohlc(db: str) -> None:
-    """Drop open/high/low/close columns if they still exist (one-time migration)."""
-    with sqlite3.connect(db) as conn:
-        cols = [r[1] for r in conn.execute("PRAGMA table_info(nifty50_option_chain)").fetchall()]
-        if not any(c in cols for c in ("open", "high", "low", "close")):
-            return
-        keep = [c for c in cols if c not in ("open", "high", "low", "close")]
-        keep_sql = ", ".join(keep)
-        conn.executescript(f"""
-            BEGIN;
-            CREATE TABLE nifty50_option_chain_new AS
-                SELECT {keep_sql} FROM nifty50_option_chain;
-            DROP TABLE nifty50_option_chain;
-            ALTER TABLE nifty50_option_chain_new RENAME TO nifty50_option_chain;
-            COMMIT;
-        """)
-    logger.info("Migration: dropped open/high/low/close columns from nifty50_option_chain")
 
 
 def _is_market_hours() -> bool:
@@ -66,87 +34,98 @@ def _is_market_hours() -> bool:
     return _MARKET_OPEN <= hm <= _MARKET_CLOSE
 
 
-def _last_snapshot_age_mins(db: str) -> float:
+def _parquet_path(date_prefix: str) -> str:
+    return os.path.join(DATA_DIR, f"option_chain_{date_prefix}.parquet")
+
+
+def _last_snapshot_age_mins(date_prefix: str) -> float:
+    """Return minutes since the last stored snapshot for today, or inf if none."""
+    path = _parquet_path(date_prefix)
+    if not os.path.exists(path):
+        return float("inf")
     try:
-        with sqlite3.connect(db) as conn:
-            row = conn.execute(
-                "SELECT MAX(timestamp) FROM nifty50_option_chain"
-            ).fetchone()
-        if row and row[0]:
-            last = datetime.strptime(row[0], "%Y%m%d%H%M").replace(tzinfo=IST)
-            return (datetime.now(IST) - last).total_seconds() / 60
+        df = pd.read_parquet(path, columns=["timestamp"])
+        if df.empty:
+            return float("inf")
+        last_ts = df["timestamp"].max()
+        last = datetime.strptime(str(last_ts), "%Y%m%d%H%M").replace(tzinfo=IST)
+        return (datetime.now(IST) - last).total_seconds() / 60
     except Exception:
-        pass
-    return float("inf")
+        return float("inf")
 
 
 def insert_option_data(db: str, symbol: str, df: pd.DataFrame, spot: float) -> None:
+    """
+    Append a snapshot to the daily parquet file.
+
+    `db` is accepted for API compatibility but ignored — all data goes to parquet.
+    """
     if df.empty:
         return
     if not _is_market_hours():
         logger.info("[%s] Outside market hours — skipping insert", symbol)
         return
-    init_option_db(db)
-    if _last_snapshot_age_mins(db) < 1:
+
+    now = datetime.now(IST)
+    date_prefix = now.strftime("%Y%m%d")
+    ts = now.strftime("%Y%m%d%H%M")
+
+    if _last_snapshot_age_mins(date_prefix) < 1:
         logger.info("[%s] Skipping insert — last snapshot < 1 min ago", symbol)
         return
-    ts = datetime.now(IST).strftime("%Y%m%d%H%M")
+
     df = df.copy()
     df["timestamp"] = ts
-    df["symbol"] = symbol
-    df["spot"] = spot
+    df["symbol"]    = symbol
+    df["spot"]      = spot
+
+    # Normalise ltp from nse_scraper column name if needed
+    if "ltp" not in df.columns and "close" in df.columns:
+        df["ltp"] = df["close"]
 
     for col in _OC_COLS:
         if col not in df.columns:
             df[col] = None
 
-    sql = (
-        f"INSERT OR REPLACE INTO nifty50_option_chain ({', '.join(_OC_COLS)}) "
-        f"VALUES ({', '.join(['?'] * len(_OC_COLS))})"
-    )
-    with sqlite3.connect(db) as conn:
-        conn.executemany(sql, df[_OC_COLS].values.tolist())
-        conn.commit()
-    logger.info("[%s] Stored %d option rows", symbol, len(df))
+    new_rows = df[_OC_COLS].copy()
 
+    path = _parquet_path(date_prefix)
+    os.makedirs(DATA_DIR, exist_ok=True)
 
-def flush_day_to_parquet(db: str, trade_date: datetime) -> None:
-    """
-    Read all rows for `trade_date` from SQLite, merge with any existing
-    parquet for that day, deduplicate, and overwrite the parquet file.
-    Safe to call multiple times — always produces a complete file.
-    """
-    date_prefix = trade_date.strftime("%Y%m%d")
-    parquet_path = os.path.join("data", f"option_chain_{date_prefix}.parquet")
-
-    try:
-        with sqlite3.connect(db) as conn:
-            df_db = pd.read_sql_query(
-                "SELECT * FROM nifty50_option_chain WHERE substr(timestamp,1,8)=?",
-                conn,
-                params=(date_prefix,),
-            )
-    except Exception:
-        logger.exception("flush_day_to_parquet: DB read failed for %s", date_prefix)
-        return
-
-    if df_db.empty:
-        logger.info("flush_day_to_parquet: no rows for %s — skipping", date_prefix)
-        return
-
-    # Merge with existing parquet to recover any previously missing minutes
-    if os.path.exists(parquet_path):
+    if os.path.exists(path):
         try:
-            df_existing = pd.read_parquet(parquet_path)
-            df_db = pd.concat([df_existing, df_db], ignore_index=True)
+            existing = pd.read_parquet(path)
+            combined = pd.concat([existing, new_rows], ignore_index=True)
         except Exception:
-            logger.warning("flush_day_to_parquet: could not read existing parquet, overwriting")
+            logger.warning("Could not read existing parquet — overwriting: %s", path)
+            combined = new_rows
+    else:
+        combined = new_rows
 
-    df_db = df_db.drop_duplicates(
+    combined = combined.drop_duplicates(
         subset=["timestamp", "strike", "option_type", "expiry"]
     ).sort_values("timestamp").reset_index(drop=True)
 
-    os.makedirs("data", exist_ok=True)
-    df_db.to_parquet(parquet_path, index=False)
-    logger.info("Flushed %d rows (%d timestamps) → %s",
-                len(df_db), df_db['timestamp'].nunique(), parquet_path)
+    combined.to_parquet(path, index=False)
+    logger.info("[%s] Stored %d rows → %s", symbol, len(new_rows), path)
+
+
+def list_available_dates() -> list[str]:
+    """Return sorted list of date strings (YYYYMMDD) that have a parquet file."""
+    if not os.path.exists(DATA_DIR):
+        return []
+    dates = []
+    for fname in os.listdir(DATA_DIR):
+        if fname.startswith("option_chain_") and fname.endswith(".parquet"):
+            date_part = fname[len("option_chain_"):-len(".parquet")]
+            if len(date_part) == 8 and date_part.isdigit():
+                dates.append(date_part)
+    return sorted(dates)
+
+
+def load_day(date_prefix: str) -> pd.DataFrame:
+    """Load all rows for a given date from its parquet file."""
+    path = _parquet_path(date_prefix)
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    return pd.read_parquet(path)

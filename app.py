@@ -13,8 +13,8 @@ from dotenv import load_dotenv
 load_dotenv()
 sys.path.insert(0, os.path.dirname(__file__))
 
-OPTION_DB = os.getenv("OPTION_DB", "data/option_chain.db")
-IST       = pytz.timezone("Asia/Kolkata")
+# OPTION_DB kept for backward-compat env var reads but is no longer used
+IST = pytz.timezone("Asia/Kolkata")
 
 app = Flask(__name__, template_folder="frontend/templates", static_folder="frontend/static")
 
@@ -71,7 +71,7 @@ def api_option_chain():
         return jsonify({"error": "No option chain data available"}), 404
 
     try:
-        insert_option_data(OPTION_DB, symbol, df, spot)
+        insert_option_data(None, symbol, df, spot)
     except Exception:
         pass
 
@@ -111,22 +111,12 @@ def api_option_chain():
     })
 
 
-_OC_TABLES = {"NIFTY50": "nifty50_option_chain"}
-
-
 @app.route("/api/dates")
 def api_dates():
-    symbol = request.args.get("symbol", "NIFTY50")
-    table  = _OC_TABLES.get(symbol)
-    if not table:
-        return jsonify([])
     try:
-        import sqlite3
-        with sqlite3.connect(OPTION_DB) as conn:
-            rows = conn.execute(
-                f"SELECT DISTINCT substr(timestamp,1,8) AS d FROM {table} ORDER BY d DESC LIMIT 30"
-            ).fetchall()
-        dates = [r[0] for r in rows]
+        from src.database import list_available_dates
+        dates = list_available_dates()[-30:]  # most recent 30
+        dates = sorted(dates, reverse=True)
         return jsonify([f"{d[:4]}-{d[4:6]}-{d[6:]}" for d in dates])
     except Exception as e:
         return jsonify({"error": str(e)}), 500
@@ -134,36 +124,42 @@ def api_dates():
 
 @app.route("/api/history")
 def api_history():
-    symbol   = request.args.get("symbol", "NIFTY50")
+    from collections import defaultdict
+    from src.database import list_available_dates, load_day
+
     date_str = request.args.get("date", "")
     interval = int(request.args.get("interval", 1))
-    table    = _OC_TABLES.get(symbol)
-    if not table:
-        return jsonify([])
-
     date_filter = date_str.replace("-", "") if date_str else ""
 
     try:
-        import sqlite3
-        from collections import defaultdict
+        if date_filter:
+            df = load_day(date_filter)
+        else:
+            # Load all available dates
+            all_dates = list_available_dates()
+            if not all_dates:
+                return jsonify([])
+            frames = [load_day(d) for d in all_dates]
+            df = __import__("pandas").concat(
+                [f for f in frames if not f.empty], ignore_index=True
+            )
 
-        with sqlite3.connect(OPTION_DB) as conn:
-            if date_filter:
-                rows = conn.execute(
-                    f"SELECT timestamp, spot FROM {table} "
-                    f"WHERE substr(timestamp,1,8)=? GROUP BY timestamp ORDER BY timestamp",
-                    (date_filter,)
-                ).fetchall()
-            else:
-                rows = conn.execute(
-                    f"SELECT timestamp, spot FROM {table} GROUP BY timestamp ORDER BY timestamp"
-                ).fetchall()
+        if df.empty or "timestamp" not in df.columns or "spot" not in df.columns:
+            return jsonify([])
 
-        minute_candles = []
-        for ts, spot in rows:
-            if not spot or spot <= 0:
-                continue
-            minute_candles.append({"close": float(spot), "ts": ts})
+        # One spot value per timestamp
+        per_ts = (
+            df[["timestamp", "spot"]]
+            .dropna(subset=["spot"])
+            .drop_duplicates("timestamp")
+            .sort_values("timestamp")
+        )
+
+        minute_candles = [
+            {"close": float(r["spot"]), "ts": str(r["timestamp"])}
+            for _, r in per_ts.iterrows()
+            if float(r["spot"]) > 0
+        ]
 
         if not minute_candles:
             return jsonify([])
