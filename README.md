@@ -1,8 +1,8 @@
-<!-- auto-updated: 25 Aug 2026 20:42:54 IST -->
+<!-- auto-updated: 25 Aug 2026 20:43:38 IST -->
 
 # 📋 NIFTY50 Option Chain — Parquet Data
 
-**Updated:** 25 Aug 2026 20:42:54 IST
+**Updated:** 25 Aug 2026 20:43:38 IST
 
 ---
 
