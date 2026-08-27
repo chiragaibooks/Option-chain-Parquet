@@ -2,8 +2,7 @@ name: Stock Data Cronjob
 
 on:
   schedule:
-    # Trigger early so runner delay doesn't cause missed 9:15 start
-    - cron: "30 3 * * 1-5"   # 03:30 UTC = 09:00 IST (15 min buffer before market open)
+    - cron: "30 3 * * 1-5"   # 03:30 UTC = 09:00 IST
   workflow_dispatch:
 
 concurrency:
@@ -23,13 +22,11 @@ jobs:
         with:
           fetch-depth: 1
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
+      - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
 
-      - name: Cache pip
-        uses: actions/cache@v4
+      - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
@@ -45,21 +42,20 @@ jobs:
 
       - name: Run per-minute loop
         env:
-          TV_USERNAME: ${{ secrets.TV_USERNAME }}
-          TV_PASSWORD: ${{ secrets.TV_PASSWORD }}
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           python - <<'EOF'
-          import subprocess, sys, time
+          import subprocess, sys, time, os
           from datetime import datetime
           import pytz
 
-          IST = pytz.timezone("Asia/Kolkata")
-          INTERVAL   = 60   # fetch every 60 seconds
-          PUSH_EVERY = 1    # push to git every N fetches (1 = every minute)
+          IST          = pytz.timezone("Asia/Kolkata")
+          INTERVAL     = 60  # fetch every 60 seconds
+          PUSH_EVERY   = 5   # push to git every N fetches
           push_counter = 0
 
           def git_sync():
+              subprocess.run(["git", "add", "-f", "data/option_chain.db"], check=False)
               subprocess.run("git add -f data/*.parquet", shell=True, check=False)
               subprocess.run(["git", "add", "README.md"], check=False)
               result = subprocess.run(["git", "diff", "--cached", "--quiet"])
@@ -76,43 +72,55 @@ jobs:
                   subprocess.run(["git", "rebase", "--abort"], check=False)
                   time.sleep(10)
 
+          def rollover_db_if_large():
+              import shutil
+              db = "data/option_chain.db"
+              if not os.path.exists(db):
+                  return
+              if os.path.getsize(db) / (1024 * 1024) >= 90:
+                  archive = f"data/option_chain_{datetime.now(IST).strftime('%Y%m%d')}.db"
+                  shutil.move(db, archive)
+                  print(f"DB archived to {archive}", flush=True)
+
           def run_and_sync():
               global push_counter
+              rollover_db_if_large()
               subprocess.run([sys.executable, "-m", "src.fetch_option_chain"], timeout=90)
+              from src.database import flush_day_to_parquet
+              flush_day_to_parquet("data/option_chain.db", datetime.now(IST))
               push_counter += 1
               if push_counter >= PUSH_EVERY:
                   subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
-                  subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
                   git_sync()
                   push_counter = 0
 
           print("Loop started", flush=True)
-          now = datetime.now(IST)
-          if now.weekday() >= 5:
-              print(f"[{now.strftime('%H:%M IST')}] Weekend — nothing to do", flush=True)
+          if datetime.now(IST).weekday() >= 5:
+              print("Weekend - nothing to do", flush=True)
               sys.exit(0)
 
           while True:
               now = datetime.now(IST)
               hm  = now.hour * 100 + now.minute
               if hm > 1530:
-                  print(f"[{now.strftime('%H:%M IST')}] Market closed — final push", flush=True)
+                  print(f"[{now.strftime('%H:%M IST')}] Market closed - final sync", flush=True)
+                  from src.database import flush_day_to_parquet
+                  flush_day_to_parquet("data/option_chain.db", now)
                   subprocess.run([sys.executable, "-m", "src.readme_generator"], timeout=30)
-                  subprocess.run([sys.executable, "-m", "src.dashboard_generator"], timeout=30)
                   git_sync()
                   break
               if hm < 915:
                   wait = (9 * 60 + 15 - now.hour * 60 - now.minute) * 60 - now.second
-                  print(f"[{now.strftime('%H:%M IST')}] Pre-market, sleeping {wait}s until 9:15", flush=True)
+                  print(f"[{now.strftime('%H:%M IST')}] Pre-market, sleeping {wait}s", flush=True)
                   time.sleep(max(wait, 0))
                   continue
 
               next_run = time.monotonic() + INTERVAL
-              print(f"[{now.strftime('%H:%M:%S IST')}] Running pipeline...", flush=True)
+              print(f"[{now.strftime('%H:%M:%S IST')}] Fetching...", flush=True)
               try:
                   run_and_sync()
               except Exception as e:
-                  print(f"Pipeline error: {e}", flush=True)
+                  print(f"Error: {e}", flush=True)
 
               sleep_for = next_run - time.monotonic()
               if sleep_for > 0:
