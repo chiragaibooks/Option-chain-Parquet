@@ -22,6 +22,9 @@ from scipy.stats import norm
 
 logger = logging.getLogger(__name__)
 
+# RBI repo rate — update when RBI changes policy rate
+RISK_FREE_RATE = 0.065  # 6.5%
+
 
 def _d1_d2(spot: float, strike: float, tte: float, r: float, iv: float):
     if tte <= 0 or iv <= 0:

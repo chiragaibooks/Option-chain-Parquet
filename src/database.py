@@ -22,8 +22,8 @@ _OC_COLS = [
     "delta", "gamma", "theta", "vega", "rho",
 ]
 
-_MARKET_OPEN  = (9, 0)
-_MARKET_CLOSE = (15, 30)
+_MARKET_OPEN  = (9, 15)   # NSE opens 09:15 IST
+_MARKET_CLOSE = (15, 30)  # NSE closes 15:30 IST
 
 
 def _is_market_hours() -> bool:

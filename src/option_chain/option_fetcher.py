@@ -7,11 +7,11 @@ import pandas as pd
 
 from src.option_chain.expiry_handler import current_weekly_expiry, next_expiries
 from src.option_chain.strike_selector import strikes_around_atm
-from src.option_chain.greeks import compute_greeks
+from src.option_chain.greeks import compute_greeks, RISK_FREE_RATE
 
 logger = logging.getLogger(__name__)
 
-_RISK_FREE_RATE = 0.065
+_RISK_FREE_RATE = RISK_FREE_RATE
 _STRIKE_GAP: Dict[str, float] = {
     "NIFTY50":     50,
     "BANKNIFTY":   100,

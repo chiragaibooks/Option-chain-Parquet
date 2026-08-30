@@ -12,11 +12,11 @@ from typing import List, Optional
 
 import pandas as pd
 
-from src.option_chain.greeks import compute_greeks
+from src.option_chain.greeks import compute_greeks, RISK_FREE_RATE
 
 logger = logging.getLogger(__name__)
 
-_RISK_FREE = 0.065
+_RISK_FREE = RISK_FREE_RATE
 _SYM_MAP = {"NIFTY50": "NIFTY"}
 
 _NSE_OC_TYPE = {"NIFTY50": "Indices"}
