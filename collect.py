@@ -6,9 +6,8 @@ Does everything in one place:
   2. Fetch expiry dates (nselib -> computed Thursdays fallback)
   3. Scrape live NSE option chain (v3 API -> bhav copy fallback)
   4. Solve IV from LTP when NSE doesn't provide it (Black-Scholes + bisection)
-  5. Compute Greeks (delta, gamma, theta, vega, rho)
-  6. Store a per-minute snapshot to data/option_chain_YYYYMMDD.parquet
-  7. Update README.md with the latest snapshots
+  5. Store a per-minute snapshot to data/option_chain_YYYYMMDD.parquet
+  6. Update README.md with the latest snapshots
 
 Usage:
     python collect.py            # fetch one snapshot and store it
@@ -50,7 +49,6 @@ _OC_COLS = [
     "timestamp", "symbol", "expiry", "strike", "option_type",
     "spot", "ltp",
     "volume", "oi", "oi_chg", "iv",
-    "delta", "gamma", "theta", "vega", "rho",
 ]
 
 _NSE_OC_V3_URL = "https://www.nseindia.com/api/option-chain-v3?type={typ}&symbol={sym}&expiry={expiry}"
@@ -94,18 +92,15 @@ def _to_float_nonneg(val) -> Optional[float]:
 
 
 # ──────────────────────────────────────────────────────────────────────────────
-# Black-Scholes: pricing, IV solver, Greeks
+# Black-Scholes IV solver (used only to fill IV when NSE doesn't provide it)
 # ──────────────────────────────────────────────────────────────────────────────
-
-def _d1_d2(S: float, K: float, t: float, r: float, iv: float):
-    d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * math.sqrt(t))
-    return d1, d1 - iv * math.sqrt(t)
-
 
 def bs_price(flag: str, S: float, K: float, t: float, iv: float) -> float:
     """Black-Scholes option price. flag: 'c' = call, 'p' = put."""
-    d1, d2 = _d1_d2(S, K, t, RISK_FREE_RATE, iv)
     r = RISK_FREE_RATE
+    sq = math.sqrt(t)
+    d1 = (math.log(S / K) + (r + 0.5 * iv ** 2) * t) / (iv * sq)
+    d2 = d1 - iv * sq
     if flag == "c":
         return S * norm.cdf(d1) - K * math.exp(-r * t) * norm.cdf(d2)
     return K * math.exp(-r * t) * norm.cdf(-d2) - S * norm.cdf(-d1)
@@ -129,46 +124,6 @@ def iv_from_price(flag: str, S: float, K: float, t: float, price: float) -> Opti
         return round(iv, 4) if 0.001 < iv < 10 else None
     except Exception:
         return None
-
-
-def compute_greeks(S: float, K: float, t: float, iv: float, option_type: str) -> dict:
-    """
-    Return all five Greeks.
-      - delta : CE ∈ (0,1) | PE ∈ (-1,0)
-      - gamma : same for CE and PE
-      - theta : per calendar day (÷365)
-      - vega  : per 1% IV move (÷100)
-      - rho   : per 1% rate move (÷100)
-    """
-    null = {k: None for k in ("delta", "gamma", "theta", "vega", "rho")}
-    if not (S and K and t and iv and S > 0 and K > 0 and t > 0 and iv > 0):
-        return null
-    try:
-        r = RISK_FREE_RATE
-        d1, d2 = _d1_d2(S, K, t, r, iv)
-        pdf_d1 = norm.pdf(d1)
-        gamma  = pdf_d1 / (S * iv * math.sqrt(t))
-        vega   = S * pdf_d1 * math.sqrt(t) / 100
-        t_decay = -(S * pdf_d1 * iv) / (2 * math.sqrt(t))
-        disc    = r * K * math.exp(-r * t)
-        if option_type == "CE":
-            delta = norm.cdf(d1)
-            theta = (t_decay - disc * norm.cdf(d2)) / 365
-            rho   = K * t * math.exp(-r * t) * norm.cdf(d2) / 100
-        else:
-            delta = norm.cdf(d1) - 1
-            theta = (t_decay + disc * norm.cdf(-d2)) / 365
-            rho   = -K * t * math.exp(-r * t) * norm.cdf(-d2) / 100
-        return {
-            "delta": round(delta, 4),
-            "gamma": round(gamma, 6),
-            "theta": round(theta, 4),
-            "vega":  round(vega, 4),
-            "rho":   round(rho, 4),
-        }
-    except Exception:
-        logger.debug("greeks failed for K=%s %s", K, option_type)
-        return null
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -287,18 +242,10 @@ def fetch_option_chain(spot: float) -> pd.DataFrame:
                     iv_dec_fb = iv_from_price(flag, use_spot, strike, tte, ltp)
                     iv_pct = round(iv_dec_fb * 100, 2) if iv_dec_fb else None
 
-                iv_dec = iv_pct / 100 if iv_pct else None
-                greeks = (
-                    compute_greeks(use_spot, strike, tte, iv_dec, otype)
-                    if (iv_dec and tte and use_spot > 0 and strike > 0)
-                    else {k: None for k in ("delta", "gamma", "theta", "vega", "rho")}
-                )
-
                 record = {
                     "expiry": expiry, "strike": strike, "option_type": otype,
                     "spot": use_spot, "ltp": ltp if ltp is not None else 0.0,
                     "volume": vol, "oi": oi, "oi_chg": chg_oi, "iv": iv_pct,
-                    **greeks,
                 }
                 if _valid(record):
                     all_rows.append(record)
